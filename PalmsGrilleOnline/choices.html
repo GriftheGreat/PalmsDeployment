@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Palms Dev</title> <!-- DON'T FORGET TO CHANGE -->
+
+    <!-- Bootstrap stylesheet-->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom stylesheet-->
+    <link href="customStyle.css" rel="stylesheet" />
+
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- Toggle food images when user clicks on category header -->
+    <script>
+        $(document).ready(function () {
+            // Set the first category to show images by default
+            $(".sandwichButton").click(function () {
+                $("#sandwichImages").toggle();
+                $("#wrapImages").hide();
+                $("#paniniImages").hide();
+            });
+
+            // Toggle the images by default
+            $("#wrapImages").hide();
+
+            $(".wrapsButton").click(function () {
+                $("#wrapImages").toggle();
+                $("#sandwichImages").hide();
+                $("#paniniImages").hide()
+            });
+
+            // Toggle the images by default
+            $("#paniniImages").hide();
+
+            $(".paniniButton").click(function () {
+                $("#paniniImages").toggle();
+                $("#wrapImages").hide();
+                $("#sandwichImages").hide();
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+
+    <!-- Logic behind a flippable image or card -->
+
+    <!-- <div class="flip">
+            <div class="front">
+                <img src="/path/to/image.jpg" alt="" />
+            </div>
+            <div class="back">
+                <h3>Some Text in the Back!</h3>
+            </div>
+        </div>                                                -->
+
+
+
+
+
+
+
+
+
+    <!-- Navigation beginning -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html"><img alt="Palms" src="images/Asset1.png"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Home</a></li> <!-- add class="active" to make the page active -->
+                    <li><a href="choices.html">Choices</a></li>
+                    <li><a href="#">Pizza</a></li>
+                    <li><a href="#">Cart</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Navigation ending -->
+    
+
+    <!-- -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="sandwichesHeader"><button class="sandwichButton">Sandwiches</button></div>
+            </div>
+        </div>
+    </div>       
+    
+    
+    
+     
+    <div class="container" id="sandwichImages">
+        <div class="row">
+            <div class="col-xm-5 col-sm-4 col-md-3 col-lg-2 flip-containers">
+
+                <div class="flippers">
+                    <div class="frontSide"> <!-- front content -->
+                        <h1>Front side</h1>
+                    </div>
+                    <div class="backSide"> <!-- back content -->
+                        <h1>Back side</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xm-5 col-sm-4 col-md-3 col-lg-2 flip-containers">
+
+                <div class="flippers">
+                    <div class="frontSide">
+                        <!-- front content -->
+                        <h1>Front side</h1>
+                    </div>
+                    <div class="backSide">
+                        <!-- back content -->
+                        <h1>Back side</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xm-5 col-sm-4 col-md-3 col-lg-2">
+                <div class="sandwichesImage"></div>
+            </div>
+            <div class="col-xm-5 col-sm-4 col-md-3 col-lg-2">
+                <div class="sandwichesImage"></div>
+            </div>
+            <div class="col-xm-5 col-sm-4 col-md-3 col-lg-2">
+                <div class="sandwichesImage"></div>
+            </div>
+            <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2">
+                <div class="sandwichesImage"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="wrapsHeader"><button class="wrapsButton">Wraps</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="wrapImages">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="wrapImages"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="paniniHeader"><button class="paniniButton">Panini</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="paniniImages">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+            <div class="col-md-2">
+                <div class="paniniImages"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+   
+
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

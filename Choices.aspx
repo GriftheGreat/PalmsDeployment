@@ -18,26 +18,27 @@
         ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
         ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
         SelectCommand="SELECT ft.food_type_name, ft.food_type_id_pk,
-                                CASE LOWER(ft.food_type_name)
-                                    WHEN 'breakfast sandwiches'           THEN 1
-                                    WHEN 'breakfast sides'                THEN 2
-                                    WHEN 'bakery'                         THEN 3
-                                    WHEN 'beverages'                      THEN 4
-                                    WHEN 'burgers'                        THEN 5
-                                    WHEN 'sides'                          THEN 6
-                                    WHEN 'soups ' || chr(38) || ' salads' THEN 7
-                                    WHEN 'sandwiches'                     THEN 8
-                                    WHEN 'paninis'                        THEN 9
-                                    WHEN 'quesadillas'                    THEN 10
-                                    WHEN 'wraps'                          THEN 12
-                                    WHEN 'appetizers'                     THEN 13
-                                    WHEN 'ice cream'                      THEN 14
-                                    WHEN 'pizza'                          THEN 15
-                                    WHEN 'sides'                          THEN 16
-                                    WHEN 'desserts'                       THEN 17
-                                    ELSE 18 END AS sort
-                        FROM food_type ft
-                    ORDER BY sort">
+                              CASE LOWER(ft.food_type_name)
+                                   WHEN 'breakfast sandwiches'           THEN 1
+                                   WHEN 'breakfast sides'                THEN 2
+                                   WHEN 'bakery'                         THEN 3
+                                   WHEN 'beverages'                      THEN 4
+                                   WHEN 'burgers'                        THEN 5
+                                   WHEN 'sides'                          THEN 6
+                                   WHEN 'soups ' || chr(38) || ' salads' THEN 7
+                                   WHEN 'sandwiches'                     THEN 8
+                                   WHEN 'paninis'                        THEN 9
+                                   WHEN 'quesadillas'                    THEN 10
+                                   WHEN 'wraps'                          THEN 12
+                                   WHEN 'appetizers'                     THEN 13
+                                   WHEN 'ice cream'                      THEN 14
+                                   WHEN 'pizza'                          THEN 15
+                                   WHEN 'sides'                          THEN 16
+                                   WHEN 'desserts'                       THEN 17
+                                   ELSE 18
+                              END AS sort
+                         FROM food_type ft
+                     ORDER BY sort">
     </asp:SqlDataSource>
 
     <!-- flip-container = card

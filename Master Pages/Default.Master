@@ -23,11 +23,11 @@
 <body>
    <form id="form1" runat="server">
       <header>
-            <a href="../Default.aspx" >Home</a>
-            <a href="../Cart.aspx"    >Cart</a>
-            <a href="../Choices.aspx" >Choices</a>
-            <a href="../Pizza.aspx"   >Customize Pizza</a>
-            <a href="../Test.aspx"    >Test</a>
+            <a href="Default.aspx" >Home</a>
+            <a href="Cart.aspx"    >Cart</a>
+            <a href="Choices.aspx" >Choices</a>
+            <a href="Pizza.aspx"   >Customize Pizza</a>
+            <a href="Test.aspx"    >Test</a>
       </header>
       <div>
          <asp:ContentPlaceHolder ID="Content" runat="server">

@@ -7,7 +7,6 @@
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
-    <link type="text/css" rel="stylesheet" href="Includes/stylesheets/ChoicesStyles.css" />
 </asp:Content>
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">

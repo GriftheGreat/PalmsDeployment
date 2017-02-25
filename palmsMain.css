@@ -1,0 +1,159 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.headerWrapper {
+	width: 100%;
+	text-align: center;
+	background-color: rgba(13,86,55, .9);
+	padding: 25px 0px 25px 0px;
+}
+
+ul.navBar {
+	display: inline-block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	width: 100%;
+}
+
+ul.navBar li {
+	display: inline-block;
+}
+
+ul.navBar li a {
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	transition: 0.3s;
+	font-size:   1.6em;
+	font-family: 'Josefin Sans', sans-serif;
+	color: rgba(255,255,255, .99); /* white */
+	padding: 0px 18px 0px 18px;
+	transition: .3s background-color;
+	
+}
+ 
+/* unvisited link */
+ul.navBar a:link {
+	color: rgba(255,255,255, .99); /* white */
+}
+
+/* visited link */
+ul.navBar a:visited {
+    
+}
+ 
+/* mouse over link */
+ul.navBar a:hover {
+	color: rgba(272,120,75, .99);
+}
+
+/* selected link */
+ul.navBar a:active {
+	color: red;
+}
+
+/* Hide the list item that contains the link that 
+should open and close the topnav on small screens */
+ul.navBar li.icon {
+	display: none;
+}
+
+
+#bigImageButtons {
+	border-collapse: collapse;
+	width: 100%;
+	height: 600px;
+	overflow: hidden;
+}
+
+#papaJohnImage {
+	background-image: url(images/PapaJohnImage.png);
+	background-size: 100% 100%;
+	width: 49%;
+}
+
+#palmsImage {
+	background-image: url(images/palmsImage.png);
+	background-size: 100% 100%;
+	width: 49%;
+}
+
+#papaJohnImage:hover {
+	background-color: rgba(108,122,137,.3);
+}
+
+#palmsImage:hover {
+	background-color: rgba(108,122,137,.3);
+}
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+    body {
+        background-color: orange;
+    }
+	
+	/* ul.navBar { */
+		/* width: 100%; */
+		/* text-align: center; */
+	/* } */
+	
+	ul.navBar li {
+		display: block;
+		padding: 0;
+		text-align:center;
+		width: 100%;
+		
+	}
+	
+	ul.navBar:hover {
+		width:100%;
+		text-align: center;
+	}
+	
+	ul.navBar li a:hover {
+		background-color: red;
+		transition: .3s background-color;
+		width: 100%;
+		padding: 0;
+	}
+	
+	.headerWrapper {
+		padding: 2px 0px 2px 0px;
+		text-align:center;
+		width: 100%;
+	}
+	
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .verticalBar { */
+	/* width: 1px; */
+	/* background-color: rgba(211,211,211, .9); */
+	/* position: absolute; */
+	/* top: 10.2%; */
+	/* bottom: 2%; */
+	/* left: 50%; */
+	/* clear: clear; */
+  
+/* } */

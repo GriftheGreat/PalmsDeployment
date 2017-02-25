@@ -1,0 +1,42 @@
+﻿<%@ Master Language="C#"
+           AutoEventWireup="true"
+           CodeFile="Default.Master.cs"
+           Inherits="WebApplication1.Master_Pages.Default" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+   <title></title>
+    <style type="text/css">
+        header a {
+            display: inline-block;
+        }
+    </style>
+   
+   <asp:ContentPlaceHolder ID="Styles" runat="server">
+   </asp:ContentPlaceHolder>
+   
+   <asp:ContentPlaceHolder ID="Scripts" runat="server">
+   </asp:ContentPlaceHolder>
+</head>
+<body>
+   <form id="form1" runat="server">
+      <header>
+            <a href="../Default.aspx" >Home</a>
+            <a href="../Cart.aspx"    >Cart</a>
+            <a href="../Choices.aspx" >Choices</a>
+            <a href="../Pizza.aspx"   >Customize Pizza</a>
+            <a href="../Test.aspx"    >Test</a>
+      </header>
+      <div>
+         <asp:ContentPlaceHolder ID="Content" runat="server">
+            
+         </asp:ContentPlaceHolder>
+      </div>
+      <footer>
+            
+      </footer>
+   </form>
+</body>
+</html>

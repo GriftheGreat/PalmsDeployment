@@ -1,0 +1,33 @@
+﻿<%@ Master Language="C#"
+           AutoEventWireup="true"
+           CodeFile="Manager.Master.cs"
+           Inherits="WebApplication1.Master_Pages.Manager" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+   <title></title>
+   
+   <asp:ContentPlaceHolder ID="Styles" runat="server">
+   </asp:ContentPlaceHolder>
+   
+   <asp:ContentPlaceHolder ID="Scripts" runat="server">
+   </asp:ContentPlaceHolder>
+</head>
+<body>
+   <form id="form1" runat="server">
+      <header>
+            
+      </header>
+      <div>
+         <asp:ContentPlaceHolder ID="Content" runat="server">
+            
+         </asp:ContentPlaceHolder>
+      </div>
+      <footer>
+            
+      </footer>
+   </form>
+</body>
+</html>

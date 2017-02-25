@@ -42,7 +42,9 @@ name atrribute of both radio buttons will be "pic".
 --------------------------------------------------------------------------------
 A change in the food table: adding a field called bbgroup (2/24)
 
-The employee interface views all the food in the queue, but they will need to be
-organized in specific groups, because thats how the current employee interface 
-of Palm's Grille does it. We will just store the group names for every food so 
-the appcode can organize food by the bbgoup value.
+(aka Bump Board Group)
+
+The food prep employees use the Bump Boards to view the food in the queue, but 
+the food will need to be organized in specific groups, because thats how the 
+current Bump Boards of Palm's Grille do it. We will just store the group names 
+for every food so the appcode can organize food by the bbgoup value.

@@ -1,0 +1,49 @@
+﻿<%@ Master Language="C#"
+           AutoEventWireup="true"
+           CodeFile="Default.Master.cs"
+           Inherits="WebApplication1.Master_Pages.Default" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head runat="server">
+    <title></title>
+
+	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><%-- Latest compiled and minified CSS --%>
+	<link rel="stylesheet" type="text/css" href="~/Includes/stylesheets/palmsMain.css" /><%--                                  Custom css --%>
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans" /><%--                  Google fonts --%>
+    <asp:ContentPlaceHolder ID="Styles" runat="server">
+    </asp:ContentPlaceHolder>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script><%--    jQuery library --%>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><%-- Latest compiled JavaScript --%>
+    <asp:ContentPlaceHolder ID="Scripts" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <header>
+	        <div class="headerWrapper">
+		        <ul class="navBar">
+			        <li><a href="Default.aspx" title="Home"   >Home</a></li>
+			        <li><a href="Choices.aspx" title="Choices">Choices</a></li>
+			        <li><a href="Pizza.aspx"   title="Pizza"  >Pizza</a></li>
+			        <li><a href="Cart.aspx"    title="Cart"   >Cart</a></li>
+		        </ul>
+	        </div>
+        </header>
+        <div>
+            <asp:ContentPlaceHolder ID="Content" runat="server">
+            
+            </asp:ContentPlaceHolder>
+        </div>
+        <footer>
+            
+        </footer>
+    </form>
+</body>
+</html>

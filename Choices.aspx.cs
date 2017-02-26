@@ -24,11 +24,10 @@ public partial class Choices : System.Web.UI.Page
             {
                 if (myOrder == null)
                 {
-                    myOrder = new Order();
+                    myOrder = new Order(getType());
                 }
 
-                //myOrder.Order_Element.Add(new Order_Element("", "", new List<Detail>, FoodID, "", "", 0.0f));
-                //https://github.com/GriftheGreat/PalmsDeployment.git
+                myOrder.Order_Element.Add(new Order_Element(FoodID));
             }
             else
             {
@@ -39,5 +38,10 @@ public partial class Choices : System.Web.UI.Page
         {
             // Error
         }
+    }
+
+    private string getType()
+    {
+        return "Deliverable";
     }
 }

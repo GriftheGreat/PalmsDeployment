@@ -66,17 +66,5 @@ public partial class _Default : System.Web.UI.Page
 
     protected void btnHI_click(object sender, EventArgs e)
     {
-        using (WebClient wb = new WebClient())
-        {
-            NameValueCollection data = new NameValueCollection();
-            //data["id"]       = "myID";
-            //data["password"] = "myPassword";
-            //data["amount"]   = "theAmount";
-            data["fname"] = "Ryan";
-
-            byte[] response = wb.UploadValues("http://www.w3schools.com/asp/showasp.asp?filename=demo_simpleform", "POST", data);
-            Response.Write(response);
-        }
-        //http://www.w3schools.com/asp/showasp.asp?filename=demo_simpleform
     }
 }

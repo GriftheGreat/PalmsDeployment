@@ -27,7 +27,7 @@ public partial class Choices : System.Web.UI.Page
                     myOrder = new Order(getType());
                 }
 
-                myOrder.Order_Element.Add(new Order_Element(FoodID));
+                myOrder.Order_Elements.Add(new Order_Element(FoodID));
             }
             else
             {

@@ -14,9 +14,9 @@
         function send_click() {
             $.ajax({
                 type: "POST",
-                data: "{name : \"Jacob\"}",
+                data: "{}",
                 dataType: "json",
-                url: "http://localhost:50168/Services/CreditCard.asmx/HelloWorld2",
+                url: "http://localhost:50168/Services/CreditCard.asmx/HelloWorld",
                 contentType: "application/json; charset=utf-8",
                 success: function (msg) {
                     alert(msg.d);

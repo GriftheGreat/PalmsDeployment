@@ -22,19 +22,12 @@ public class CreditCard
         Random rnd = new Random();
         String status = rnd.Next(100) < 50 ? "Y" : "N"; // 0 <= number < 100
 
-        return "Y";
+        return status;
     }
 
     [WebMethod]
     public string HelloWorld()
     {
-        return "Hello World";
+        return "CreditCard says Hello World";
     }
-
-    [WebMethod]
-    public string HelloWorld2(string name)
-    {
-        return "Hello "+ name;
-    }
-
 }

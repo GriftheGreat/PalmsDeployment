@@ -224,7 +224,7 @@ public class Database_Queries
     [WebMethod]
     public string Menu()
     {
-        DataTable menu;
+        DataTable menu = new DataTable();
         string query_string = @"SELECT * FROM food";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);

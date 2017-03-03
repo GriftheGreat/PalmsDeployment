@@ -24,8 +24,8 @@ public partial class Cart : System.Web.UI.Page
         this.rptItems.DataBind();
     }
 
-    protected void btnHI_click(object sender, EventArgs e)
-    {
-        this.gdvstuff.Visible = !this.gdvstuff.Visible;
-    }
+    //protected void btnHI_click(object sender, EventArgs e)
+    //{
+    //    this.gdvstuff.Visible = !this.gdvstuff.Visible;
+    //}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 public partial class Choices : System.Web.UI.Page
@@ -25,9 +26,11 @@ public partial class Choices : System.Web.UI.Page
                 if (myOrder == null)
                 {
                     myOrder = new Order(getType());
+                    myOrder.Order_Elements = new List<Order_Element>();
                 }
 
                 myOrder.Order_Elements.Add(new Order_Element(FoodID));
+                Session["order"] = myOrder;
             }
             else
             {

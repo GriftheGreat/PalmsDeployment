@@ -19,9 +19,9 @@ public partial class Cart : System.Web.UI.Page
         if (Session["order"] != null)
         {
             myOrder = (Order)Session["order"];
-
-            this.rptItems.DataSource = myOrder.Order_Elements;
         }
+        this.rptItems.DataSource = myOrder.Order_Elements;
+        this.rptItems.DataBind();
     }
 
     protected void btnHI_click(object sender, EventArgs e)

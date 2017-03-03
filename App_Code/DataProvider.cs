@@ -116,7 +116,6 @@ public static class Data_Provider
             {
                 result += (char)b;
             }
-            client.Dispose();
         }
         catch (Exception ex)
         {
@@ -133,7 +132,14 @@ public static class Data_Provider
                     result += k + ", " + v + "<br />";
                 }
             }
-
+        }
+        finally
+        {
+            try
+            {
+                client.Dispose();
+            }
+            catch (Exception) { }
         }
         return result;
     }

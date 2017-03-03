@@ -7,7 +7,20 @@ using Oracle.DataAccess.Client;
 
 public partial class Cart : System.Web.UI.Page
 {
-    Order myOrder;
+    #region Properties
+    private Order _myOrder;
+    public Order MyOrder
+    {
+        get
+        {
+            return Session["order"] != null ? (Order)Session["order"] : null;
+        }
+        set
+        {
+            Session["order"] = value;
+        }
+    }
+    #endregion
 
     protected void Page_Init(object sender, EventArgs e)
     {
@@ -16,16 +29,10 @@ public partial class Cart : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["order"] != null)
+        if (MyOrder != null && MyOrder.Order_Elements != null)
         {
-            myOrder = (Order)Session["order"];
+            this.rptItems.DataSource = MyOrder.Order_Elements;
+            this.rptItems.DataBind();
         }
-        this.rptItems.DataSource = myOrder.Order_Elements;
-        this.rptItems.DataBind();
     }
-
-    //protected void btnHI_click(object sender, EventArgs e)
-    //{
-    //    this.gdvstuff.Visible = !this.gdvstuff.Visible;
-    //}
 }

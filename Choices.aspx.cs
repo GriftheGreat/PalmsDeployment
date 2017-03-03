@@ -4,13 +4,26 @@ using System.Web.UI.WebControls;
 
 public partial class Choices : System.Web.UI.Page
 {
-    Order myOrder;
+    #region Properties
+    private Order _myOrder;
+    public Order MyOrder
+    {
+        get
+        {
+            return Session["order"] != null ? (Order)Session["order"] : null;
+        }
+        set
+        {
+            Session["order"] = value;
+        }
+    }
+    #endregion
 
     protected void Page_Load(object sender, EventArgs e)
     {
         if(Session["order"] != null)
         {
-            myOrder = (Order)Session["order"];
+            MyOrder = (Order)Session["order"];
         }
     }
 
@@ -23,14 +36,14 @@ public partial class Choices : System.Web.UI.Page
         {
             if (Int32.TryParse(FoodIDtext, out FoodID) && FoodID > 0)
             {
-                if (myOrder == null)
+                if (MyOrder == null)
                 {
-                    myOrder = new Order(getType());
-                    myOrder.Order_Elements = new List<Order_Element>();
+                    MyOrder = new Order(getType());
+                    MyOrder.Order_Elements = new List<Order_Element>();
                 }
 
-                myOrder.Order_Elements.Add(new Order_Element(FoodID));
-                Session["order"] = myOrder;
+                MyOrder.Order_Elements.Add(new Order_Element(FoodID));
+                Session["order"] = MyOrder;
             }
             else
             {

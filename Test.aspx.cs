@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.WebControls;
 
@@ -6,7 +7,7 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		this.me.Text = "Jacob" + DataProvider.mytext;
+		this.me.Text = "Jacob" + Data_Provider.mytext;
         this.lbl1.Text = null;
         this.lbl1.Text = this.lbl1.Text.Length.ToString();
 
@@ -22,6 +23,11 @@ public partial class Test : System.Web.UI.Page
     protected void btn1_Click(object sender, EventArgs e)
     {
         throw new Exception("my error", new Exception("my inner error"));
+    }
+
+    protected void btn2_Click(object sender, EventArgs e)
+    {
+        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444","05/17","123","0.00");
     }
 }
 

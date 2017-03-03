@@ -5,38 +5,68 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
-   <title></title>
-    <style type="text/css">
-        header a {
-            display: inline-block;
-        }
-    </style>
-   
-   <asp:ContentPlaceHolder ID="Styles" runat="server">
-   </asp:ContentPlaceHolder>
-   
-   <asp:ContentPlaceHolder ID="Scripts" runat="server">
-   </asp:ContentPlaceHolder>
+    <title></title>
+
+	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<%--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> Latest compiled and minified CSS --%>
+    <link rel="stylesheet" type="text/css" href="~/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="~/Includes/stylesheets/customStyle.css" /><%--                                  Custom css --%>
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans" /><%--                  Google fonts --%>
+    <asp:ContentPlaceHolder ID="Styles" runat="server">
+    </asp:ContentPlaceHolder>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script><%--    jQuery library --%>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <asp:ContentPlaceHolder ID="Scripts" runat="server">
+    </asp:ContentPlaceHolder>
 </head>
 <body>
-   <form id="form1" runat="server">
-      <header>
-            <a href="Default.aspx" >Home</a>
-            <a href="Cart.aspx"    >Cart</a>
-            <a href="Choices.aspx" >Choices</a>
-            <a href="Pizza.aspx"   >Customize Pizza</a>
-            <a href="Test.aspx"    >Test</a>
-      </header>
-      <div>
-         <asp:ContentPlaceHolder ID="Content" runat="server">
+    <form id="form1" runat="server">
+        <header>
+            <%-- Navigation beginning --%>
+            <nav class="navbar navbar-default navbar-fixed-top col-lg-12">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src="/Includes/images/Asset1.png" /></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="nav navbar-nav">
+                            <li><a href="Default.aspx" title="Home"   >Home</a></li> <!-- add class="active" to make the page active -->
+                            <li><a href="Choices.aspx" title="Choices">Choices</a></li>
+                            <li><a href="Pizza.aspx"   title="Pizza"  >Pizza</a></li>
+                            <li><a href="Cart.aspx"    title="Cart"   >Cart<span class="badge">3</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <%-- Navigation ending --%>
+        </header>
+        <div>
+            <asp:ContentPlaceHolder ID="Content" runat="server">
             
-         </asp:ContentPlaceHolder>
-      </div>
-      <footer>
-            
-      </footer>
-   </form>
+            </asp:ContentPlaceHolder>
+        </div>
+        <footer>
+            <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>
+			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+			<%-- Include all compiled plugins (below), or include individual files as needed --%>
+			<script type="text/javascript" src="//bootstrap/js/bootstrap.min.js"></script>
+        </footer>
+    </form>
 </body>
 </html>

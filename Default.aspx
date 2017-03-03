@@ -15,8 +15,13 @@
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
         <div class="row">
-            <div>Palms Grille</div>
-            <div>Papa John's</div>
+	        <table id="bigImageButtons">
+              <tr>
+                 <td id="papaJohnImage"></td>
+<%--		         <!-- <div id="verticalBar">&nbsp;</div> -->  <!-- Vertical bar -->--%>
+                 <td id="palmsImage"></td>
+              </tr>
+            </table>
         </div>
     </div>
 </asp:Content>

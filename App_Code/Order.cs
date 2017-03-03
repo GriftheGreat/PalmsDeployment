@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 /// <summary>
 /// Summary description for Order
@@ -45,10 +43,11 @@ public class Order
         {
             return _id;
         }
-        set
-        {
-            if (value >= 0) { _id = value; }
-        }
+        //REMOVED
+        //set
+        //{
+        //    if (value >= 0) { _id = value; }
+        //}
     }
 
     // What type?
@@ -72,22 +71,23 @@ public class Order
         {
             return _number;
         }
-        set
-        {
-            _number = value;
-        }
+        //REMOVED
+        //set
+        //{
+        //    _number = value;
+        //}
     }
 
-    private List<Order_Element> _order_Element;
-    public  List<Order_Element> Order_Element
+    private List<Order_Element> _order_Elements;
+    public  List<Order_Element> Order_Elements
     {
         get
         {
-            return _order_Element;
+            return _order_Elements;
         }
         set
         {
-            _order_Element = value;
+            _order_Elements = value;
         }
     }
 
@@ -128,7 +128,7 @@ public class Order
         }
         set
         {
-            _type = value;
+            if (value == null) { throw new Exception("Order Type cannot be null."); } else { _type = value; };
         }
     }
     #endregion End Properties
@@ -137,45 +137,35 @@ public class Order
     // Gets and Sets ... bla bla bla
     //
 
-    //
-    // TODO: get new id and new number
-    //
-    public Order()
+    public Order(string type)
     {
         this.CustomerFirstName = null;
         this.CustomerLastName  = null;
-        this.ID                = 0;
+        _id                    = 0;
         this.Location          = null;
-        this.Number            = 0;
-        this.Order_Element     = null;
+        _number                = 0;
+        this.Order_Elements    = null;
         this.Status            = null;
         this.Time              = DateTime.Now;
-        this.Type              = null;
+        this.Type              = type;
     }
 
     //public Order(int id)
     //{
+    //    this.ID = id;
+    //
+    // TODO: Load data...
+    //
     //    this.CustomerFirstName = null;
-    //    this.CustomerLastName = null;
-    //    this.ID = 0;
-    //    this.Location = null;
-    //    this.Number = 0;
-    //    this.Order_Element = new List<global::Order_Element>();
-    //    this.Status = null;
-    //    this.Time = DateTime.Now;
-    //    this.Type = null;
-    //}
-
-    //public Order(string firstName, string lastName, int id, string location, int number, List<Order_Element> orderElements, string status, DateTime time, string type)
-    //{
-    //    this.CustomerFirstName = firstName;
-    //    this.CustomerLastName  = lastName;
-    //    this.ID                = id;
-    //    this.Location          = location;
-    //    this.Number            = number;
-    //    this.Order_Element     = orderElements;
-    //    this.Status            = status;
-    //    this.Time              = time;
-    //    this.Type              = type;
+    //    this.CustomerLastName  = null;
+    //    this.Location          = null;
+    //    this.Number            = 0;
+    //    while(.Read())
+    //    {
+    //        this.Order_Elements.Add(new Order_Element(Convert.ToInt32(myReader["id"].ToString()) ));
+    //    }
+    //    this.Status            = null;
+    //    this.Time              = DateTime.Now;
+    //    this.Type              = null;
     //}
 }

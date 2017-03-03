@@ -1,0 +1,260 @@
+﻿body {
+    font-size: 22px;
+    font-family: 'Josefin Sans', sans-serif;
+    background-color: rgba(242,241,239, .9);
+}
+
+/* Navigation bar css code starts here */
+.navbar {
+    background-color: rgba(13,86,55, .9);
+    padding: 18px 0px 18px 0;
+    position: relative;
+    z-index: 5;
+}
+
+.navbar .nav li {
+    display: inline-block;
+    float: none;
+    
+}
+.navbar .nav {
+    float: none;
+}
+
+#myNavbar {
+    text-align: center;
+}
+
+ul.nav a {
+    font-size: 22px;
+    font-family: 'Josefin Sans', sans-serif;
+    color: rgb(255, 255, 255) !important;
+}
+
+ul.nav a:hover {
+    color: rgba(272,120,75, .99) !important;
+}
+
+.navbar-brand {
+    margin-top: -20px;  
+} 
+/* Navigation bar css code ends here */
+
+/* Home page */
+#papaJohnImage {
+    padding-top: 50px;
+    min-height: 400px;
+}
+
+#palmsImage {
+    padding-top:40px;
+    min-height: 400px;
+
+}
+
+#papaJohnImage:hover {
+     background-color: rgba(210,215,211, .99);
+}
+
+#palmsImage:hover {
+    background-color: rgba(210,215,211, .99);
+}
+
+/*************** Flippable code starts here ************************/
+.info-card {
+    padding-top: 20px;
+
+    perspective: 1000px;
+	-webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+}
+
+.front, .back {
+	border-radius: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189,195,199, .5);
+
+    transition: transform 1s;
+	transition: -webkit-transform 1s;
+    /*transition: -moz-transform 1s;*/
+
+    transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+
+    backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+}
+
+.front {
+	overflow: hidden;
+    width: 160px;
+    height: 200px;
+	position: absolute;
+    /*background-color: rgba(220,198,224, .99);*/
+    background-color: white;
+    z-index: 1;
+}
+
+.back {
+    width: 160px;
+	height: 200px;
+    transform: rotateY(-180deg);
+	-webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    /*background-color: rgba(52,73,94, .9);  Pickle bluewood*/
+    background-color: rgba(13,86,55, .8);
+}
+
+.info-card:hover .back {
+    transform: rotateY(0);
+	-webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+}
+
+.info-card:hover .front {
+    transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+}
+
+.productName {
+    color: white;
+}
+
+.productInfo {
+    color: white;
+    text-align: center;
+    padding: 0px 10px 0px 10px;
+}
+
+.addToCartButton {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+
+
+/*.createYourOwnHeading {
+    padding-top: 120px;
+    font-size: 50pt;
+    color: sandybrown;
+}*/
+
+.papaJohnProduct:hover {
+
+
+}
+
+
+.papaJohnFront, .papaJohnBack {
+    border-radius: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189,195,199, .8);
+
+    transition: transform 1s;
+	transition: -webkit-transform 1s;
+    /*transition: -moz-transform 1s;*/
+
+    transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+
+    backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+}
+
+
+.customPizzaHeader {
+    text-align: center;
+    font-weight: bold;
+    font-size: 38pt;
+}
+
+
+
+
+.modal-content {
+    background-color: sandybrown;
+}
+
+.modalButton {
+
+}
+
+.modal-dialog {
+   width: 720px; 
+}
+
+
+.modal-header {
+    border-bottom: none;
+    color: rgba(13,86,55, .9);
+    padding-bottom: 0;
+}
+
+.modal-title {
+    font-weight: bold;
+    font-size: 40pt;
+    border-bottom: none;
+}
+
+
+
+/* Add some padding between the buttons */
+.sizeEightWrapper {
+    padding-right: 10px;
+}
+
+.cheesePizzaWrapper, .sausagePizzaWrapper {
+    padding-right: 10px;
+}
+
+.sizeEightButton, .sizeSixteenButton, .cheesePizzaButton, 
+.sausagePizzaButton, .peperoniPizzaButton {
+    padding: 8px 15px 8px 15px;
+    font-size: 16pt;
+}
+
+.baconToppingButton, .peperoniToppingButton, .sausageToppingButton, .beefToppingButton,
+.italianSausageToppingButton, .canadianBacconToppingButton, .freshSlicedOnionsButton,
+.greenPepperButton, .romaTomatoesButton, .blackOlivesButton, .jalapenoPeppersButton,
+.bananaPeppersButton, .babyPortabellaButton, .mushroomsButton {
+    padding: 8px 15px 8px 15px;
+    font-size: 16pt;
+    margin-bottom: 10px;
+}
+
+.sizeEightButton:active, .sizeSixteenButton:active, .cheesePizzaButton:active, .sausagePizzaButton:active, .peperoniPizzaButton:active {
+    background-color: red;
+}
+
+.sizeEightButton:focus, .sizeSixteenButton:focus, .cheesePizzaButton:focus, .sausagePizzaButton:focus, .peperoniPizzaButton:focus {
+    background-color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* For the amount of products in the Cart */
+.badge {
+    background-color: indianred;
+}

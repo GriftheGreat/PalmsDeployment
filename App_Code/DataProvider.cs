@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public static class Data_Provider
 {
     public const string mytext = " got connected!";
-    public const string urlBase = "http://localhost:50168/";
-    //public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
+    //public const string urlBase = "http://localhost:50168/";
+    public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
 
     public static class Credit_Card_Interface
     {

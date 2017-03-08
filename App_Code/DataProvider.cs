@@ -31,9 +31,9 @@ public static class Data_Provider
         public static bool Save_Credit_Card_Info(string token)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("token", token);
+            //parameters.Add("token", token);
 
-            return sendWebRequest(parameters, urlBase + "Services/SaveCCInv.asmx/HelloWorld2").Contains("ERROR");
+            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/HelloWorld").Contains("ERROR");
         }
     }
 
@@ -55,11 +55,38 @@ public static class Data_Provider
 
         public static DataTable Get_Menu(string data)
         {
+            string result;
+            DataTable menu = new DataTable();
+            bool isNotFirstRow = true;
+            string[] rows;
+            List<DataColumn> columns = new List<DataColumn>();
+
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("data", data);
 
-            string result = sendWebRequest(parameters, urlBase + "");
-            return null;
+            result = sendWebRequest(parameters, urlBase + "");
+
+
+            rows = result.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string columnName in rows[0].Split(",".ToCharArray()))
+            {
+                columns.Add(new DataColumn(columnName));
+            }
+            menu.Columns.AddRange(columns.ToArray());
+
+            foreach (string row in rows)
+            {
+                if(isNotFirstRow)
+                {
+                    menu.Rows.Add(row.Split(",".ToCharArray()));
+                }
+                else
+                {
+                    isNotFirstRow = true;
+                }
+            }
+            return menu;
         }
 
         public static bool Send_Order_Info(string data)
@@ -89,7 +116,6 @@ public static class Data_Provider
             {
                 result += (char)b;
             }
-            client.Dispose();
         }
         catch (Exception ex)
         {
@@ -106,7 +132,14 @@ public static class Data_Provider
                     result += k + ", " + v + "<br />";
                 }
             }
-
+        }
+        finally
+        {
+            try
+            {
+                client.Dispose();
+            }
+            catch (Exception) { }
         }
         return result;
     }

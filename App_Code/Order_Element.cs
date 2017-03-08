@@ -146,9 +146,10 @@ public class Order_Element
                 this.Price = 0.0f;
             }
 
+            this.Details = new List<Detail>();
             foreach(DataRow row in Get_Details(this.ID).Rows)
             {
-                this.Details.Add(new Detail(Convert.ToSingle(row["detail_id_pk"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_cost"].ToString())));
+                this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString())));
             }
         }
     }

@@ -2,7 +2,10 @@
 using System;
 using System.Data;
 using System.Configuration;
+using System.Linq;
 using System.Web.Services;
+using System.Text;
+using System.Collections.Generic;
 
 // To allow this Web Service to be called from script, using ASP.NET AJAX, put the following line after
 //              [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -15,7 +18,7 @@ using System.Web.Services;
 /// </summary>
 [WebService(Namespace = "http://tempuri.org/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-public class ID_Card
+public class IDCard
 {
     [WebMethod]
     public char Process_ID_Card(string data)
@@ -60,6 +63,12 @@ public class ID_Card
 
         return 'Y';
     }
+
+    [WebMethod]
+    public string HelloWorld()
+    {
+        return "IDCard says Hello World";
+    }
 }
 
 /// <summary>
@@ -99,6 +108,12 @@ public class Bump_Board
         }
 
         return 'Y';
+    }
+
+    [WebMethod]
+    public string HelloWorld()
+    {
+        return "Bump_Board says Hello World";
     }
 }
 
@@ -207,9 +222,10 @@ public class Database_Queries
     //deleteDetail(p_detail_id_pk detail.detail_id_pk%TYPE);
 
     [WebMethod]
-    public void menu()
+    public string Menu()
     {
-        String query_string = @"SELECT * FROM food";
+        DataTable menu = new DataTable();
+        string query_string = @"SELECT * FROM food";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
@@ -219,6 +235,7 @@ public class Database_Queries
             myCommand.ExecuteReader();
 
             //...
+            //menu.load(...);
         }
         finally
         {
@@ -232,9 +249,27 @@ public class Database_Queries
             myConnection.Dispose();
         }
 
+        StringBuilder sb = new StringBuilder();
+
+        IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+        sb.AppendLine(string.Join(",", columnNames));
+        //AppendLine puts "\r\n" between rows?
+
+        foreach (DataRow row in menu.Rows)
+        {
+            IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+            sb.AppendLine(string.Join(",", fields));
+        }
+        return sb.ToString();
     }
 
     public void time_slot()
     {
+    }
+
+    [WebMethod]
+    public string HelloWorld()
+    {
+        return "Database_Queries says Hello World";
     }
 }

@@ -8,7 +8,6 @@ using Oracle.DataAccess.Client;
 public partial class Cart : System.Web.UI.Page
 {
     #region Properties
-    private Order _myOrder;
     public Order MyOrder
     {
         get
@@ -18,6 +17,7 @@ public partial class Cart : System.Web.UI.Page
         set
         {
             Session["order"] = value;
+            Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
     }
     #endregion

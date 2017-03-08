@@ -80,4 +80,15 @@
     <div style="background-color: ButtonFace;border: 1px solid ButtonShadow;display: inline-block;padding: 2px;cursor: pointer;" onclick="send_click();">Send_Credit_Card_Info AJAX</div>
     <br />
     <asp:Label ID="lbl2" runat="server" />
+    <br />
+    <br />
+
+    Request.Url.GetLeftPart(UriPartial.Authority) <pre><%= Request.Url.GetLeftPart(UriPartial.Authority) %></pre><br />
+    Request.ApplicationPath                       <pre><%= Request.ApplicationPath %></pre><br />
+    Request.Path                                  <pre><%= Request.Path %></pre><br />
+    Request.PhysicalPath                          <pre><%= Request.PhysicalPath %></pre><br />
+    Request.Url.AbsolutePath                      <pre><%= Request.Url.AbsolutePath %></pre><br />
+    Request.Url.AbsoluteUri                       <pre><%= Request.Url.AbsoluteUri %></pre><br />
+    Request.Url.GetLeftPart(UriPartial.Path)      <pre><%= Request.Url.GetLeftPart(UriPartial.Path) %></pre><br />
+    Request.Url.LocalPath                         <pre><%= Request.Url.LocalPath %></pre><br />
 </asp:Content>

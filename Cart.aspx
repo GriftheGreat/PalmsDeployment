@@ -18,8 +18,12 @@
     <asp:Repeater ID="rptItems" runat="server">
         <ItemTemplate>
             <div>
-                <h1><asp:Literal ID="litFoodName" runat="server" Text='<%# Eval("Name") %>' /></h1>
-                <asp:Label ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
+                <div class="front">
+<%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\">" %>
+                    <h1><asp:Literal ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' /></h1>
+                </div>
+                <asp:Label       ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
+                <asp:Label       ID="lblPrice"       runat="server" Text='<%# Eval("Price") %>' />
             <%--Deliverable
                 Description
                 Details

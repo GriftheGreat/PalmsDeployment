@@ -13,17 +13,22 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <h1>Hello World! This is the cart!</h1>
+    <br />
+    Hello World! This is the cart!
     <br />
     <asp:Repeater ID="rptItems" runat="server">
         <ItemTemplate>
             <div>
                 <div class="front">
-<%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\">" %>
-                    <h1><asp:Literal ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' /></h1>
+<%# string.IsNullOrEmpty(Eval("ImagePath").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\">" %>
+                    <h1><asp:Label ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' CssClass="card-front-name" /></h1>
                 </div>
-                <asp:Label       ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
-                <asp:Label       ID="lblPrice"       runat="server" Text='<%# Eval("Price") %>' />
+                <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
+                <asp:Label         ID="lblPrice"       runat="server" Text='<%# Eval("Price") %>' />
+                <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
+            <%-- if (this..hid1.Value == "Y") { --%>
+                <img alt="deliverable" src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "Includes/images/delivery/deliver icon 2.png\"" %> />
+            <%-- } --%>
             <%--Deliverable
                 Description
                 Details

@@ -36,7 +36,12 @@ ul.nav a:hover {
 }
 
 .navbar-brand {
-    margin-top: -20px;  
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: inherit !important;
+    float: none !important;
+    z-index: 10;
 } 
 /* Navigation bar css code ends here */
 
@@ -257,4 +262,6 @@ ul.nav a:hover {
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
+    margin-left: 5px;
+    vertical-align: bottom;
 }

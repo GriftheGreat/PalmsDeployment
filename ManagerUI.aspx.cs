@@ -1,19 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Data;
-using System.Configuration;
 using System.Linq;
-using System.Web.UI.WebControls;
+using System.Configuration;
 using Oracle.DataAccess.Client;
-
+using System.Web.UI.WebControls;
 
 public partial class ManagerUI : System.Web.UI.Page
 {
     #region Properties
+    private DataTable _dt;
     public DataTable dt
     {
         get
         {
-            return Session["Food_Table"] != null ? (dt)Session["Food_Table"] : null;
+            return Session["Food_Table"] != null ? (DataTable)Session["Food_Table"] : null;
         }
         set
         {
@@ -24,6 +25,10 @@ public partial class ManagerUI : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["Food_Table"] != null)
+        {
+            dt = (DataTable)Session["Food_Table"];
+        }
         if (!IsPostBack)
         {
             // Call FillGridView Method
@@ -34,10 +39,11 @@ public partial class ManagerUI : System.Web.UI.Page
     public DataTable Get_Food()
     {
         DataTable data = new DataTable();
-        string query_string = @"SELECT *
-                                  FROM food";
+        string query_string           = @"SELECT   * 
+                                              FROM food
+                                          ORDER BY food_name";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand myCommand       = new OracleCommand(query_string, myConnection);
 
         try
         {
@@ -64,6 +70,7 @@ public partial class ManagerUI : System.Web.UI.Page
     {
         try
         {
+            dt = Get_Food();
             GridView1.DataSource = dt;
             GridView1.DataBind();
         }
@@ -80,8 +87,7 @@ public partial class ManagerUI : System.Web.UI.Page
     protected void editRecord(object sender, GridViewEditEventArgs e)
     {
         // Get the image path for remove old image after update record
-        Image imgEditPhoto = GridView1.Rows[e.NewEditIndex].FindControl("imgPhoto") as Image;
-        imgEditPath = imgEditPhoto.ImageUrl;
+        Image imgEditPhoto  = GridView1.Rows[e.NewEditIndex].FindControl("imgPhoto") as Image;
         // Get the current row index for edit record
         GridView1.EditIndex = e.NewEditIndex;
         FillGridView();
@@ -117,13 +123,13 @@ public partial class ManagerUI : System.Web.UI.Page
             {
                 GridView1.ShowFooter = true;
                 DataRow dr = dt.NewRow();
-                dr["Name"] = "0";
-                dr["Description"] = 0;
-                dr["Cost"] = 0;
-                dr["IsDeliverable"] = "0";
-                dr["photopath"] = "0";
+                dr["Name"]                = "0";
+                dr["Description"]         = 0;
+                dr["Cost"]                = 0;
+                dr["IsDeliverable"]       = "0";
+                dr["photopath"]           = "0";
                 dt.Rows.Add(dr);
-                GridView1.DataSource = dt;
+                GridView1.DataSource      = dt;
                 GridView1.DataBind();
                 GridView1.Rows[0].Visible = false;
             }
@@ -158,22 +164,22 @@ public partial class ManagerUI : System.Web.UI.Page
             if (strName == "0")
             {
                 dt.Rows[0].Delete();
-                adap.Update(dt);
+                // GlobalClass.adap.Update(dt);   An OracleDataApater created to "push" changes up to the database.
             }
-            TextBox txtName = GridView1.FooterRow.FindControl("txtNewName") as TextBox;
-            TextBox txtDescr = GridView1.FooterRow.FindControl("txtNewDescr") as TextBox;
-            TextBox txtCost = GridView1.FooterRow.FindControl("txtNewCost") as TextBox;
+            TextBox txtName          = GridView1.FooterRow.FindControl("txtNewName") as TextBox;
+            TextBox txtDescr         = GridView1.FooterRow.FindControl("txtNewDescr") as TextBox;
+            TextBox txtCost          = GridView1.FooterRow.FindControl("txtNewCost") as TextBox;
             TextBox txtIsDeliverable = GridView1.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
-            FileUpload fuPhoto = GridView1.FooterRow.FindControl("fuNewPhoto") as FileUpload;
-            Guid FileName = Guid.NewGuid();
+            FileUpload fuPhoto       = GridView1.FooterRow.FindControl("fuNewPhoto") as FileUpload;
+            Guid FileName            = Guid.NewGuid();
             fuPhoto.SaveAs(Server.MapPath("~/Images/" + FileName + ".png"));
-            DataRow dr = dt.NewRow();
-            dr["name"] = txtName.Text.Trim();
-            dr["descr"] = txtDescr.Text.Trim();
-            dr["cost"] = txtCost.Text.Trim();
-            dr["photopath"] = "~/Images/" + FileName + ".png";
+            DataRow dr               = dt.NewRow();
+            dr["name"]               = txtName.Text.Trim();
+            dr["descr"]              = txtDescr.Text.Trim();
+            dr["cost"]               = txtCost.Text.Trim();
+            dr["photopath"]          = "~/Images/" + FileName + ".png";
             dt.Rows.Add(dr);
-            adap.Update(dt);
+            dt.AcceptChanges();
             GridView1.ShowFooter = false;
             FillGridView();
         }
@@ -192,23 +198,17 @@ public partial class ManagerUI : System.Web.UI.Page
     {
         try
         {
-            TextBox txtName = GridView1.Rows[e.RowIndex].FindControl("txtName") as TextBox;
-            TextBox txtAge = GridView1.Rows[e.RowIndex].FindControl("txtAge") as TextBox;
-            TextBox txtCost = GridView1.Rows[e.RowIndex].FindControl("txtCost") as TextBox;
+            TextBox txtName          = GridView1.Rows[e.RowIndex].FindControl("txtName") as TextBox;
+            TextBox txtAge           = GridView1.Rows[e.RowIndex].FindControl("txtAge") as TextBox;
+            TextBox txtCost          = GridView1.Rows[e.RowIndex].FindControl("txtCost") as TextBox;
             TextBox txtIsDeliverable = GridView1.Rows[e.RowIndex].FindControl("txtIsDeliverable") as TextBox;
-            FileUpload fuPhoto = GridView1.Rows[e.RowIndex].FindControl("fuPhoto") as FileUpload;
-            Guid FileName = Guid.NewGuid();
-            if (fuPhoto.FileName != "")
-            {
-                fuPhoto.SaveAs(Server.MapPath("~/Images/" + FileName + ".png"));
-                dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["photopath"] = "~/Images/" + FileName + ".png";
-                File.Delete(Server.MapPath(imgEditPath));
-            }
-            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["name"] = txtName.Text.Trim();
-            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["age"] = Convert.ToInt32(txtAge.Text.Trim());
-            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["cost"] = Convert.ToInt32(txtCost.Text.Trim());
+            FileUpload fuPhoto       = GridView1.Rows[e.RowIndex].FindControl("fuPhoto") as FileUpload;
+            Guid FileName            = Guid.NewGuid();
+            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["name"]           = txtName.Text.Trim();
+            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["age"]            = Convert.ToInt32(txtAge.Text.Trim());
+            dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["cost"]           = Convert.ToInt32(txtCost.Text.Trim());
             dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["is deliverable"] = txtIsDeliverable.Text.Trim();
-            adap.Update(dt);
+            dt.AcceptChanges();
             GridView1.EditIndex = -1;
             FillGridView();
         }
@@ -228,7 +228,7 @@ public partial class ManagerUI : System.Web.UI.Page
         try
         {
             dt.Rows[GridView1.Rows[e.RowIndex].RowIndex].Delete();
-            adap.Update(dt);
+            dt.AcceptChanges();
             // Get the image path for removing deleted's record image from server folder
             Image imgPhoto = GridView1.Rows[e.RowIndex].FindControl("imgPhoto") as Image;
             File.Delete(Server.MapPath(imgPhoto.ImageUrl));

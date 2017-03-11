@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Test"
          AutoEventWireup="true"
          CodeFile="Test.aspx.cs"
          Inherits="Test"

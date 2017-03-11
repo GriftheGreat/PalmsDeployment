@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Error"
          AutoEventWireup="true"
          CodeFile="Error.aspx.cs"
          Inherits="Errors" %>

@@ -35,4 +35,9 @@ public partial class Cart : System.Web.UI.Page
             this.rptItems.DataBind();
         }
     }
+
+    protected void lnk1_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/Payment.aspx", true);
+    }
 }

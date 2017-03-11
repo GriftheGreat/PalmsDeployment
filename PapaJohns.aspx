@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Menu | Papa John's"
          AutoEventWireup="true"
          CodeFile="PapaJohns.aspx.cs"
          Inherits="PapaJohns"

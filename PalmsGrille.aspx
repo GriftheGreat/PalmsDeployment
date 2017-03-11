@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Menu | Palms Grille"
          AutoEventWireup="true"
          CodeFile="PalmsGrille.aspx.cs"
          Inherits="PalmsGrille"

@@ -32,14 +32,16 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <asp:Label ID="lbl1" runat="server" />
-    <br />
-    <asp:GridView ID="gdvMenu1" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
-    <br />
-    <asp:GridView ID="gdvMenu2" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
-    <br />
-    <asp:GridView ID="gdvMenu3" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
-    <br />
+    <div id="stuff1" onclick="$(this).hide();">
+        <asp:Label ID="lbl1" runat="server" />
+        <br />
+        <asp:GridView ID="gdvMenu1" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+        <asp:GridView ID="gdvMenu2" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+        <asp:GridView ID="gdvMenu3" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+    </div>
 
     <asp:Button ID="btn1" runat="server" OnClick="btn1_Click" Text="Throw Error" />
     <br />

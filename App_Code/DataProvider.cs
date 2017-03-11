@@ -3,37 +3,41 @@ using System.Data;
 using System.Net;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public static class Data_Provider
 {
     public const string mytext = " got connected!";
-    public const string urlBase = "http://localhost:63555/";
+    public const string urlBase = "http://localhost:50168/";
     //public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
 
     public static class Credit_Card_Interface
     {
-        public static bool Validate_Credit_Card(string data)
+        public static bool Validate_Credit_Card(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
         {
-            return true;
+            Regex CCNumberCheck            = new Regex("^[0-9]{16,16}$");
+            Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/(0[1-9]|[1-2][0-9]|30|31)$");
+            Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
+            Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]*$");
+            Regex amountCheck              = new Regex("^[0-9]*.{0,1}[0-9]{0,2}$");
+
+            return CCNumberCheck.IsMatch           (CCNumber) &&
+                   expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
+                   cardSecurityCodeCheck.IsMatch   (cardSecurityCode) &&
+                   ownerNameCheck.IsMatch          (ownerName) &&
+                   amountCheck.IsMatch             (amount);
         }
 
-        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string amount)
+        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("CCNumber", CCNumber);
+            parameters.Add("CCNumber",            CCNumber);
             parameters.Add("expirationMonthDate", expirationMonthDate);
-            parameters.Add("cardSecurityCode", cardSecurityCode);
-            parameters.Add("amount", amount);
+            parameters.Add("cardSecurityCode",    cardSecurityCode);
+            parameters.Add("ownerName",           ownerName);
+            parameters.Add("amount",              amount);
 
             return sendWebRequest(parameters, urlBase + "Services/CreditCard.asmx/Process_Credit_Card");
-        }
-
-        public static bool Save_Credit_Card_Info(string token)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            //parameters.Add("token", token);
-
-            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/HelloWorld").Contains("ERROR");
         }
     }
 
@@ -44,22 +48,25 @@ public static class Data_Provider
             return true;
         }
 
-        public static bool Send_ID_Card_Info(string data)
+        public static bool Save_Credit_Card_Info(string order_id, string token, string confirmation_status)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
+            parameters.Add("p_cci_order_id_fk",         order_id);
+            parameters.Add("p_cci_token",               token);
+            parameters.Add("p_cci_confirmation_status", confirmation_status);
 
-            string result = sendWebRequest(parameters, urlBase + "");
-            return result.Length > 0;
+            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/createCCI").Contains("Pass:");
         }
 
-public static string Get_Menu2(string data)
-{
-    NameValueCollection parameters = new NameValueCollection();
-    //parameters.Add("data", data);
+        public static bool SendSave_ID_Card_Info(string data)
+        {
+            NameValueCollection parameters = new NameValueCollection()
+            parameters.Add("Order_ID", data);
+            parameters.Add("ID_Number", data);
+            parameters.Add("Password", data);
 
-    return sendWebRequest(parameters, urlBase + "Services/Menu.asmx/HelloWorld");
-}
+            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/Process_ID_Card").Contains("Pass:");
+        }
 
         public static List<DataTable> Get_Menu(string data)
         {

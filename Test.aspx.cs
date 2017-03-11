@@ -34,7 +34,7 @@ public partial class Test : System.Web.UI.Page
 
     protected void btn2_Click(object sender, EventArgs e)
     {
-        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444","05/17","123","0.00") == "Y" ? "Transaction Approved" : "Transaction Denied";
+        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444", "05/17", "123", "Jacob Harder", "0.00");//.Contains("Pass") ? "Transaction Approved" : "Transaction Denied";
     }
 }
 

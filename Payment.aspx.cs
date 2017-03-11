@@ -42,17 +42,37 @@ public partial class Payment : System.Web.UI.Page
 
     protected void lnkSubmit_Click(object sender, EventArgs e)
     {
-        //send payment data here
+        bool success = false;
+
+        if(true/*CC*/)
+        {
+            success = true;
+        }
+        else if(true/*idC*/)
+        {
+            success = true;
+        }
+        if (success)
+        {
+            Session.Remove("order");
+            Session.Remove("orderItemNumber");
+            Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/ThankYou.aspx", true);
+        }
+    }
+
+    private void choseCreditCard()
+    {
+        //validate?
+        string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this._.Text, "05/17", "123", "Jacob Harder", "0.00");
         //save payment data here
-        //if good
+        if(paymentResultString.Contains("Pass:"))
         {
             //send order data here
-            //if good
-            {
-                Session.Remove("order");
-                Session.Remove("orderItemNumber");
-                Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/ThankYou.aspx", true);
-            }
         }
+    }
+
+    private void choseIDCard()
+    {
+
     }
 }

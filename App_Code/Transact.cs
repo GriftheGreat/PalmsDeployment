@@ -14,40 +14,40 @@ using System.Collections.Generic;
 
 
 /// <summary>
-/// Summary description for ID_Card
+/// The ID_Card class is for simulation purposes and should only be call by transact entities or via web services.
 /// </summary>
-[WebService(Namespace = "http://tempuri.org/")]
+[WebService(Namespace = "http://csmain.studentnet.int/seproject/PalmsPP/App_Code/Transact.cs")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 public class IDCard
 {
     [WebMethod]
-    public char Process_ID_Card(string data)
+    public string Process_ID_Card(string Order_ID, string ID_Number, string Password)
     {
-        // Parse data
-        /* TODO */
-
+        string status;
+        string result;
 
         // Logic for checking amount of money student has goes here.
         // To simulate, the "check" will randomly pass or fail.
         Random rnd = new Random();
-        string status = rnd.Next(100) < 50 ? "Y" : "N"; // 0 <= number < 100
+        status = rnd.Next(100) < 50 ? "Pass:" : "Fail:balance has insufficient funds:"; // 0 <= number < 100
 
         // Retain invoice
-        string query_string = @"DECLARE
-                                    v_ NUMBER;
-                                BEGIN
-                                    v_ = TIA_invoice_package.createInvoice(p_order_id_fk         => :p_order_id_fk,
-                                                                            p_confirmation_status => :p_confirmation_status);
-                                END;";
+        string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
         try
         {
             myConnection.Open();
-            myCommand.Parameters.Add("p_order_id_fk",         1);
+            myCommand.Parameters.Add("p_order_id_fk", Order_ID);
             myCommand.Parameters.Add("p_confirmation_status", 'Y');
             myCommand.ExecuteNonQuery();
+
+            result = myCommand.Parameters["out"].Value.ToString();
+        }
+        catch (Exception ex)
+        {
+            result = "ERROR\n" + ex.Message;
         }
         finally
         {
@@ -61,20 +61,14 @@ public class IDCard
             myConnection.Dispose();
         }
 
-        return 'Y';
-    }
-
-    [WebMethod]
-    public string HelloWorld()
-    {
-        return "IDCard says Hello World";
+        return status + ID_Number + "," + Password + ":" + result;
     }
 }
 
 /// <summary>
-/// Summary description for Bump_Board
+/// The Bump_Board class is for simulation purposes and should only be call by transact entities or via web services.
 /// </summary>
-[WebService(Namespace = "http://tempuri.org/")]
+[WebService(Namespace = "http://csmain.studentnet.int/seproject/PalmsPP/App_Code/Transact.cs")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 public class Bump_Board
 {
@@ -109,12 +103,6 @@ public class Bump_Board
 
         return 'Y';
     }
-
-    [WebMethod]
-    public string HelloWorld()
-    {
-        return "Bump_Board says Hello World";
-    }
 }
 
 public static class Manager
@@ -122,16 +110,17 @@ public static class Manager
 }
 
 /// <summary>
-/// Summary description for Bump_Board
+/// The Database_Queries class is for simulation purposes and should only be call by transact entities or via web services.
 /// </summary>
-[WebService(Namespace = "http://tempuri.org/")]
+[WebService(Namespace = "http://csmain.studentnet.int/seproject/PalmsPP/App_Code/Transact.cs")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 public class Database_Queries
 {
-    public int createCCI(int p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
+    [WebMethod]
+    public string createCCI(string p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
     {
-        int result;
-        String query_string = @"BEGIN :out := createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status, ) END;";
+        string result;
+        string query_string = "BEGIN :out := createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status, ); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
@@ -144,7 +133,11 @@ public class Database_Queries
             myCommand.Parameters.Add("p_cci_confirmation_status", p_cci_confirmation_status);
             myCommand.ExecuteNonQuery();
 
-            result = (int)myCommand.Parameters["out"].Value;
+            result = "Pass:" + myCommand.Parameters["out"].Value.ToString();
+        }
+        catch (Exception ex)
+        {
+            result = "ERROR\n" + ex.Message;
         }
         finally
         {
@@ -307,11 +300,5 @@ public class Database_Queries
 
     public void time_slot()
     {
-    }
-
-    [WebMethod]
-    public string HelloWorld()
-    {
-        return "Database_Queries says Hello World";
     }
 }

@@ -225,6 +225,8 @@ public class Database_Queries
     public string Menu()
     {
         DataTable menu = new DataTable();
+        StringBuilder sb = new StringBuilder();
+
         string query_string = @"SELECT * FROM food";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
@@ -232,10 +234,22 @@ public class Database_Queries
         try
         {
             myConnection.Open();
-            myCommand.ExecuteReader();
+            menu.Load(myCommand.ExecuteReader());
 
-            //...
-            //menu.load(...);
+            IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+            sb.AppendLine(string.Join("-,-", columnNames));
+            //AppendLine puts "\r\n" between rows?
+
+            foreach (DataRow row in menu.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                sb.AppendLine(string.Join("-,-", fields));
+            }
+        }
+        catch (Exception ex)
+        {
+            sb.AppendLine("ERROR");
+            sb.AppendLine(ex.Message);
         }
         finally
         {
@@ -249,16 +263,44 @@ public class Database_Queries
             myConnection.Dispose();
         }
 
-        StringBuilder sb = new StringBuilder();
 
-        IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
-        sb.AppendLine(string.Join(",", columnNames));
-        //AppendLine puts "\r\n" between rows?
+        sb.Append("-;-");
 
-        foreach (DataRow row in menu.Rows)
+
+        string query_string2 = @"SELECT * FROM food_type";
+        OracleConnection myConnection2 = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+        OracleCommand myCommand2 = new OracleCommand(query_string2, myConnection2);
+
+        try
         {
-            IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-            sb.AppendLine(string.Join(",", fields));
+            myConnection2.Open();
+            menu.Load(myCommand2.ExecuteReader(), LoadOption.OverwriteChanges);
+
+            IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+            sb.AppendLine(string.Join("-,-", columnNames));
+            //AppendLine puts "\r\n" between rows?
+
+            foreach (DataRow row in menu.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                sb.AppendLine(string.Join("-,-", fields));
+            }
+        }
+        catch (Exception ex)
+        {
+            sb.AppendLine("ERROR");
+            sb.AppendLine(ex.Message);
+        }
+        finally
+        {
+            try
+            {
+                myCommand2.Dispose();
+            }
+            catch { }
+
+            myConnection2.Close();
+            myConnection2.Dispose();
         }
         return sb.ToString();
     }

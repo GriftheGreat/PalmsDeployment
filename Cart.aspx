@@ -9,6 +9,20 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
+        .cart-item
+        {
+            padding: 15px;
+            border: 1px solid rgb(192,192,192);
+            border-radius: 12px;
+        }
+
+        .card-front
+        {
+            position: inherit;
+            display: inline-block;
+            float: left;
+        }
+
         .card-front-name
         {
             position: absolute;
@@ -30,6 +44,47 @@
             background-color: rgba(255, 255, 255, .5);
             display: block;
         }
+
+
+        .remove-button
+        {
+            margin: 15px;
+            padding: 10px 30px 10px 30px;
+            border: 2px solid rgb(202, 41, 36);
+            border-radius: 10px;
+            color: rgb(202, 41, 36);
+            display: inline-block;
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+        }
+
+        .remove-button:hover
+        {
+            border: 2px solid rgb(157, 25, 25);
+            color: rgb(157, 25, 25);
+            text-decoration: none;
+        }
+
+
+
+        .payment-button
+        {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding: 10px 30px 10px 30px;
+            border: 2px solid rgb(36, 156, 202);
+            border-radius: 10px;
+            color: rgb(36, 156, 202);
+            display: inline-block;
+        }
+
+        .payment-button:hover
+        {
+            border: 2px solid rgb(25, 77, 157);
+            color: rgb(25, 77, 157);
+            text-decoration: none;
+        }
     </style>
 </asp:Content>
 
@@ -37,35 +92,50 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <br />
-    Hello World! This is the cart!
-    <br />
-    <asp:LinkButton ID="lnk1" runat="server" Text="Pay" OnClick="lnk1_Click" />
-    <br />
     <div class="container">
-        <asp:Repeater ID="rptItems" runat="server">
-            <ItemTemplate>
-                <div class="row">
-                    <div class="col-lg-12 cart-row">
-                        <div class="front">
-<%# string.IsNullOrEmpty(Eval("ImagePath").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" %>
-                            <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>'  CssClass="card-front-name" />
-                            <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
-                        </div>
-                        <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
-                        <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
-                        <asp:Literal       ID="lit1"           runat="server" Text='<%# Eval("Deliverable").ToString() == "Y" ? "<img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "Includes/images/delivery/deliver icon 2.png\" />" : "" %>' />
-<%# Eval("Deliverable").ToString() == "Y" ? "                        <img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" />" : "" %>
-                    <%--Deliverable
-                        Description
-                        Details
-                        ID
-                        Name
-                        Price
-                        ImagePath--%>
-                    </div>
+        <asp:PlaceHolder ID="plhNoItemsInOrder" runat="server">
+            <div class="row" style="text-align: center;">
+                <div class="col-lg-12" style="margin-bottom: 20px;">
+                    There are no items in your cart right now.
                 </div>
-            </ItemTemplate>
-        </asp:Repeater>
+            </div>
+        </asp:PlaceHolder>
+        <asp:PlaceHolder ID="plhItemsAreInOrder" runat="server">
+            <div class="row" style="text-align: center;">
+                <div class="col-lg-12" style="margin-bottom: 20px;">
+                    The Cart allows you to modify your food how you like. When you are done, click Pay at the bottom to proceed.
+                </div>
+            </div>
+            <asp:Repeater ID="rptItems" runat="server">
+                <ItemTemplate>
+                    <div class="row">
+                        <div class="col-lg-12 cart-item">
+                            <div class="front card-front">
+<%# string.IsNullOrEmpty(Eval("ImagePath").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" %>
+                                <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>'  CssClass="card-front-name" />
+                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
+                            </div>
+<%--                        <asp:Literal       ID="lit1"           runat="server" Text='<%# Eval("Deliverable").ToString() == "Y" ? "<img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" />" : "" %>' />--%>
+<%# Eval("Deliverable").ToString() == "Y" ? "                        <img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
+                            <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
+                            <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
+                        <%--Deliverable
+                            Description
+                            Details
+                            ID
+                            Name
+                            Price
+                            ImagePath--%>
+                            <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
+                        </div>
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+            <div class="row" style="text-align: center;">
+                <asp:Label      ID="lblfullprice" runat="server" />
+                <br />
+                <asp:LinkButton ID="lnkGoPay"     runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-button" />
+            </div>
+        </asp:PlaceHolder>
     </div>
 </asp:Content>

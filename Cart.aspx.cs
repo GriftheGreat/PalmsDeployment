@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Data;
 using System.Web.UI.WebControls;
-using System.Net;
-using System.Collections.Specialized;
-using Oracle.DataAccess.Client;
 
 public partial class Cart : System.Web.UI.Page
 {
@@ -29,15 +25,35 @@ public partial class Cart : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        int numItems = 0;
+
         if (MyOrder != null && MyOrder.Order_Elements != null)
         {
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
         }
+
+        if (Session["orderItemNumber"] == null || string.IsNullOrEmpty(Session["orderItemNumber"].ToString()) || !Int32.TryParse(Session["orderItemNumber"].ToString(), out numItems))
+        {
+            //MyOrder = null!!!!!!!!!
+            Session["orderItemNumber"] = MyOrder.Order_Elements != null ? MyOrder.Order_Elements.Count.ToString() : "0";
+        }
+
+        this.plhItemsAreInOrder.Visible = numItems != 0;
+        this.plhNoItemsInOrder.Visible  = numItems == 0;
     }
 
-    protected void lnk1_Click(object sender, EventArgs e)
+    protected void lnkGoPay_Click(object sender, EventArgs e)
     {
         Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/Payment.aspx", true);
+    }
+
+    protected void lnkRemoveItem_Click(object sender, EventArgs e)
+    {
+        Order temp = MyOrder;
+        temp.Order_Elements.RemoveAt(((RepeaterItem)((LinkButton)sender).NamingContainer).ItemIndex);
+        this.rptItems.DataSource = temp.Order_Elements;
+        this.rptItems.DataBind();
+        MyOrder = temp;
     }
 }

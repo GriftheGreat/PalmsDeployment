@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.WebControls;
@@ -7,10 +8,16 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		this.me.Text = "Jacob" + Data_Provider.mytext;
-        this.lbl1.Text = null;
-        this.lbl1.Text = this.lbl1.Text.Length.ToString();
+        List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("");
 
+        this.gdvMenu1.DataSource = j[0];
+        this.gdvMenu1.DataBind();
+
+        this.gdvMenu2.DataSource = j[1];
+        this.gdvMenu2.DataBind();
+
+        this.gdvMenu3.DataSource = j[1];
+        this.gdvMenu3.DataBind();
     }
 
     protected void Label4_DataBinding(object sender, EventArgs e)

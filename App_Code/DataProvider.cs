@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Net;
-using System.Collections.Specialized;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public static class Data_Provider
@@ -48,24 +48,24 @@ public static class Data_Provider
             return true;
         }
 
-        public static bool Save_Credit_Card_Info(string order_id, string token, string confirmation_status)
+        public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status)
         {
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("p_cci_order_id_fk",         order_id);
             parameters.Add("p_cci_token",               token);
             parameters.Add("p_cci_confirmation_status", confirmation_status);
 
-            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/createCCI").Contains("Pass:");
+            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/createCCI");
         }
 
-        public static bool SendSave_ID_Card_Info(string data)
+        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password)
         {
-            NameValueCollection parameters = new NameValueCollection()
-            parameters.Add("Order_ID", data);
-            parameters.Add("ID_Number", data);
-            parameters.Add("Password", data);
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("Order_ID", Order_ID);
+            parameters.Add("ID_Number", ID_Number);
+            parameters.Add("Password", Password);
 
-            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/Process_ID_Card").Contains("Pass:");
+            return sendWebRequest(parameters, urlBase + "Services/IDCard.asmx/Process_ID_Card");
         }
 
         public static List<DataTable> Get_Menu(string data)
@@ -118,12 +118,13 @@ public static class Data_Provider
             return menuTables;
         }
 
-        public static bool Send_Order_Info(string data)
+        public static bool Send_Order_Info(Order data)
         {
+            //data. pull apart
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
+            //parameters.Add("data", data);
 
-            string result = sendWebRequest(parameters, urlBase + "");
+            string result = sendWebRequest(parameters, urlBase + "Services/Order.asmx/_");
             return result.Length > 0;
         }
     }

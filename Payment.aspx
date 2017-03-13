@@ -188,19 +188,19 @@
                     <table>
                         <tr>
                             <td>Credit Card Number:</td>
-                            <td><asp:TextBox ID="txt1" runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardNumber" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
-                            <td><asp:TextBox ID="txt2" runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardSecurityCode" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
-                            <td><asp:TextBox ID="txt3" runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardExpDate" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
-                            <td><asp:TextBox ID="txt4" runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardOwnerName" runat="server" /></td>
                         </tr>
                     </table>
                 </div>
@@ -208,11 +208,11 @@
                     <table>
                         <tr>
                             <td>ID Number:</td>
-                            <td><asp:TextBox ID="txt5" runat="server" /></td>
+                            <td><asp:TextBox ID="txtIDNumber" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Password:</td>
-                            <td><asp:TextBox ID="txt6" runat="server" /></td>
+                            <td><asp:TextBox ID="txtPassword" runat="server" TextMode="Password" /></td>
                         </tr>
                     </table>
                 </div>

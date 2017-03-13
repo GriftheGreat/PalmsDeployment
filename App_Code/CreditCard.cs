@@ -1,6 +1,4 @@
-﻿using Oracle.DataAccess.Client;
-using System;
-using System.Configuration;
+﻿using System;
 using System.Web.Services;
 using System.Text.RegularExpressions;
 

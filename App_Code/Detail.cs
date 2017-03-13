@@ -1,6 +1,6 @@
-﻿using System.Configuration;
+﻿using Oracle.DataAccess.Client;
+using System.Configuration;
 using System.Data;
-using Oracle.DataAccess.Client;
 
 /// <summary>
 /// Summary description for Detail

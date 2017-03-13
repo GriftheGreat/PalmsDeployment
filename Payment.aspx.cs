@@ -24,7 +24,7 @@ public partial class Payment : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["order"] == null)
+        if (MyOrder == null)
         {
             Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/Cart.aspx", true);
         }
@@ -46,33 +46,36 @@ public partial class Payment : System.Web.UI.Page
 
         if(true/*CC*/)
         {
-            success = true;
+            //validate?
+            string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text);
+            string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info(MyOrder.ID.ToString(), paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N");
+
+            success = paymentResultString.Contains("Pass:") && saveResultString.Contains("Pass:");
         }
         else if(true/*idC*/)
         {
-            success = true;
+            //validate?
+            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info(MyOrder.ID.ToString(), this.txtIDNumber.Text, this.txtPassword.Text);
+
+            success = paymentResultString.Contains("Pass:");
         }
+        else
+        {
+            //neither of the tabs are chosen...?
+        }
+
         if (success)
         {
-            Session.Remove("order");
-            Session.Remove("orderItemNumber");
-            Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/ThankYou.aspx", true);
+            if (Data_Provider.Transact_Interface.Send_Order_Info(MyOrder))
+            {
+                Session.Remove("order");
+                Session.Remove("orderItemNumber");
+                Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/ThankYou.aspx", true);
+            }
+            else
+            {
+                //order was not sent correctly...?
+            }
         }
-    }
-
-    private void choseCreditCard()
-    {
-        //validate?
-        string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this._.Text, "05/17", "123", "Jacob Harder", "0.00");
-        //save payment data here
-        if(paymentResultString.Contains("Pass:"))
-        {
-            //send order data here
-        }
-    }
-
-    private void choseIDCard()
-    {
-
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Configuration;
-using System.Collections.Generic;
-using System.Data;
-using Oracle.DataAccess.Client;
+﻿using Oracle.DataAccess.Client;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 
 /// <summary>
 /// Summary description for Order_Element

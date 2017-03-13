@@ -10,6 +10,8 @@ public partial class ManagerUI : System.Web.UI.Page
 {
     #region Properties
     private DataTable _dt;
+    private string imgEditPath;
+
     public DataTable dt
     {
         get
@@ -88,6 +90,7 @@ public partial class ManagerUI : System.Web.UI.Page
     {
         // Get the image path for remove old image after update record
         Image imgEditPhoto  = GridView1.Rows[e.NewEditIndex].FindControl("imgPhoto") as Image;
+        imgEditPath = imgEditPhoto.ImageUrl;
         // Get the current row index for edit record
         GridView1.EditIndex = e.NewEditIndex;
         FillGridView();
@@ -172,12 +175,12 @@ public partial class ManagerUI : System.Web.UI.Page
             TextBox txtIsDeliverable = GridView1.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
             FileUpload fuPhoto       = GridView1.FooterRow.FindControl("fuNewPhoto") as FileUpload;
             Guid FileName            = Guid.NewGuid();
-            fuPhoto.SaveAs(Server.MapPath("~/Images/" + FileName + ".png"));
+            fuPhoto.SaveAs(Server.MapPath("~/Includes/images/" + FileName));
             DataRow dr               = dt.NewRow();
             dr["name"]               = txtName.Text.Trim();
             dr["descr"]              = txtDescr.Text.Trim();
             dr["cost"]               = txtCost.Text.Trim();
-            dr["photopath"]          = "~/Images/" + FileName + ".png";
+            dr["photopath"]          = "~/Includes/Images/" + FileName;
             dt.Rows.Add(dr);
             dt.AcceptChanges();
             GridView1.ShowFooter = false;
@@ -204,6 +207,12 @@ public partial class ManagerUI : System.Web.UI.Page
             TextBox txtIsDeliverable = GridView1.Rows[e.RowIndex].FindControl("txtIsDeliverable") as TextBox;
             FileUpload fuPhoto       = GridView1.Rows[e.RowIndex].FindControl("fuPhoto") as FileUpload;
             Guid FileName            = Guid.NewGuid();
+            if (fuPhoto.FileName != "")
+            {
+                fuPhoto.SaveAs(Server.MapPath("~/Images/" + FileName + ".png"));
+                dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["photopath"] = "~/Images/" + FileName + ".png";
+                File.Delete(Server.MapPath(imgEditPath));
+            }
             dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["name"]           = txtName.Text.Trim();
             dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["age"]            = Convert.ToInt32(txtAge.Text.Trim());
             dt.Rows[GridView1.Rows[e.RowIndex].RowIndex]["cost"]           = Convert.ToInt32(txtCost.Text.Trim());

@@ -103,16 +103,16 @@
                 <asp:TemplateField>
                     <HeaderTemplate>Photo</HeaderTemplate>
                     <ItemTemplate>
-                        <asp:Image ID="imgPhoto" Width="100px" Height="100px" runat="server" text="Photo" ImageUrl='<%#Bind("IMAGE_PATH") %>' />
+                        <asp:Image ID="imgPhoto" Width="100px" Height="100px" runat="server" text="Photo" src="<%# "Includes/images/Menu Items/" + Eval("image_path").ToString() %>" />
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:FileUpload ID="fuPhoto" runat="server" ToolTip="select Employee Photo" />
-                        <asp:RegularExpressionValidator ID="revfuPhoto" runat="server" Text="*" ToolTip="ImDescr formate only" ControlToValidate="fuPhoto" ValidationExpression="[a-zA-Z0_9].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG|.mpp|.MPP|.gif|.GIF)\b" />
+                        <asp:RegularExpressionValidator ID="revfuPhoto" runat="server" Text="*" ToolTip="Image format only" ControlToValidate="fuPhoto" ValidationExpression="[a-zA-Z0_9].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG|.mpp|.MPP|.gif|.GIF)\b" />
                     </EditItemTemplate>
                     <FooterTemplate>
                         <asp:FileUpload ID="fuNewPhoto" runat="server" ToolTip="select Employee Photo" />
                         <asp:RequiredFieldValidator ID="rfvfuNewPhoto" runat="server" ErrorMessage="*" ToolTip="Select Photo" ControlToValidate="fuNewPhoto" />
-                        <asp:RegularExpressionValidator ID="revfuNewPhoto" runat="server" Text="*" ToolTip="ImDescr formate only" ControlToValidate="fuNewPhoto" ValidationExpression="[a-zA-Z0_9].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG)\b" />
+                        <asp:RegularExpressionValidator ID="revfuNewPhoto" runat="server" Text="*" ToolTip="Image formate only" ControlToValidate="fuNewPhoto" ValidationExpression="[a-zA-Z0_9].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG)\b" />
                     </FooterTemplate>
                 </asp:TemplateField>
 

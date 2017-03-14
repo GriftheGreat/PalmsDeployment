@@ -1,1 +1,1 @@
-﻿<%@ WebService Language="C#" CodeBehind="~/App_Code/CreditCardInvoice.cs" Class="CreditCardInvoice" %>
+﻿<%@ WebService Language="C#" CodeBehind="~/App_Code/Transact.cs" Class="CreditCardInvoice" %>

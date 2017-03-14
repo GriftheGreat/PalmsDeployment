@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Test"
          AutoEventWireup="true"
          CodeFile="Test.aspx.cs"
          Inherits="Test"
@@ -31,45 +32,18 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <h1>Hello World!</h1>
-    <asp:Label ID="me" runat="server" />
-
-    <asp:SqlDataSource ID="sqlTestSelect" runat="server"
-        ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
-        ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
-        SelectCommand="SELECT CASE WHEN COUNT(*) &gt; 0 THEN 'good'
-                                   ELSE 'bad'
-                              END AS status
-                         FROM dual
-                    UNION ALL
-                       SELECT CASE WHEN COUNT(*) &gt; 0 THEN 'good'
-                                    ELSE 'bad'
-                               END AS status
-                         FROM dual">
-    </asp:SqlDataSource>
-
-    <asp:Repeater ID="repTestDisplay" runat="server" DataSourceID="sqlTestSelect">
-        <ItemTemplate>
-            <br />
-            The Connection to the Oracle SEI Database is
-            <%-- 5 ways (runs with "errors" lol)--%> 
-            <%# Eval("status") %>
-            <asp:Label ID="Label1" runat="server" Text=<%# Eval("status") %> />
-            <asp:Label ID="Label2" runat="server" Text='<%# Eval("status") %>' />
-            <asp:Label ID="Label4" runat="server" OnDataBinding="Label4_DataBinding" /> <%-- see code behind --%>
-            <%-- All double quotes like... Text="<%# Eval("status") %>" ...does not work because...
-                       _______          __
-                      /       \        /  \
-                Text="<%# Eval("status") %>"
-
-            is wrong syntax. :-) --%>
-            <br />
-        </ItemTemplate>
-    </asp:Repeater>
-    <br />
-
-    <asp:Label ID="lbl1" runat="server" />
-    <br />
+    <div id="stuff1" onclick="$(this).hide();">
+        <asp:Label ID="lbl1" runat="server" />
+        <br />
+        <asp:GridView ID="gdvMenu1" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+        <asp:GridView ID="gdvMenu2" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+        <asp:GridView ID="gdvMenu3" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+        <asp:GridView ID="gdvMenu4" runat="server" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true"></asp:GridView>
+        <br />
+    </div>
 
     <asp:Button ID="btn1" runat="server" OnClick="btn1_Click" Text="Throw Error" />
     <br />

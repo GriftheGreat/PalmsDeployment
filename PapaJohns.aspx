@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Menu | Papa John's"
          AutoEventWireup="true"
          CodeFile="PapaJohns.aspx.cs"
          Inherits="PapaJohns"
@@ -8,31 +9,6 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
-        /* Choices page css code starts here */
-        /*.burgerHeader, .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            color: rgba(13,86,55, .9);
-            background-color: sandybrown;
-            font-weight: bold;   
-        }
-
-                       .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            margin-top: 20px;
-        }
-
-        .burgerButton, .wrapsButton, .paniniButton, .quesadillaButton, .saladButton, .pizzaButton
-        {
-            border: none;
-            outline:none;
-            text-decoration: none;
-            width: 100%;
-            height: 100%;
-            background-color: sandybrown;
-            display: inline-block;
-            text-align: center;
-        }*/
-
         .HeaderButton
         {
             margin-top: 20px;
@@ -154,7 +130,7 @@
                         <ItemTemplate>
                             <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
                                 <div class="front">
-<%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\">" %>
+<%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>'      CssClass="card-front-name" />
                                     <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost") %>'      CssClass="card-front-price" />
                                 </div>

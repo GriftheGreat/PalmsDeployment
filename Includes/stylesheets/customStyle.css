@@ -36,7 +36,12 @@ ul.nav a:hover {
 }
 
 .navbar-brand {
-    margin-top: -20px;  
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: inherit !important;
+    float: none !important;
+    z-index: 10;
 } 
 /* Navigation bar css code ends here */
 
@@ -248,6 +253,7 @@ ul.nav a:hover {
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
+<<<<<<< HEAD
 }
 
 
@@ -255,10 +261,37 @@ ul.nav a:hover {
 
 
 .slideImages {
-    height: 500px;
+    width: 100%;
+        min-height: 680px; 
+    position: relative;
+    
 }
 
-.slideShowWrapper {
-     height: 500px;
+#myCarousel {
+
 }
 
+
+.carousel-indicators {
+    bottom: 0;
+}
+
+.carousel .item {
+    min-height: 680px; 
+    height: 100%;
+    width:100%; 
+}
+
+
+
+.carousel-caption h3:first-child {
+  animation-delay: 1s;
+}
+
+.carousel-caption h3:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.carousel-caption button {
+  animation-delay: 3s;
+}

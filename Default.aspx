@@ -25,22 +25,22 @@
         </ol>   
         <!-- Wrapper for carousel items -->
         <div class="carousel-inner">
-            <div class="active item">
-                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/palmsImage.png\"" %> alt="First Slide" class="slideImages" />
+            <div class="item active">
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/slideShow/crowneCentre2.jpg\"" %> alt="First Slide" class="slideImages" />
          		<div class="carousel-caption">
                   <h3>First slide label</h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
             </div>
             <div class="item">
-                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/PapaJohnImage1.png\"" %> class="slideImages" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/\"" %> class="slideImages" />
                 <div class="carousel-caption">
                   <h3>Second slide label</h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
             </div>
             <div class="item">
-                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/PapaJohnImage.png\"" %> class="slideImages" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/\"" %> class="slideImages" />
                 <div class="carousel-caption">
                   <h3>Third slide label</h3>
                   <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>

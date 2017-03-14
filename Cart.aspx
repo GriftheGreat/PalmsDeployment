@@ -106,7 +106,7 @@
                     The Cart allows you to modify your food how you like. When you are done, click Pay at the bottom to proceed.
                 </div>
             </div>
-            <asp:Repeater ID="rptItems" runat="server">
+            <asp:Repeater ID="rptItems" runat="server" OnItemDataBound="rptItems_ItemDataBound">
                 <ItemTemplate>
                     <div class="row">
                         <div class="col-lg-12 cart-item">
@@ -126,6 +126,12 @@
                             Name
                             Price
                             ImagePath--%>
+                            <br />
+                            <asp:Repeater ID="rptDetails" runat="server">
+                                <ItemTemplate>
+                                    <asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' /><br />
+                                </ItemTemplate>
+                            </asp:Repeater>
                             <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
                         </div>
                     </div>

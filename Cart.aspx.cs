@@ -31,16 +31,21 @@ public partial class Cart : System.Web.UI.Page
         {
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
-        }
 
-        if (Session["orderItemNumber"] == null || string.IsNullOrEmpty(Session["orderItemNumber"].ToString()) || !Int32.TryParse(Session["orderItemNumber"].ToString(), out numItems))
-        {
-            //MyOrder = null!!!!!!!!!
-            Session["orderItemNumber"] = MyOrder.Order_Elements != null ? MyOrder.Order_Elements.Count.ToString() : "0";
+            if (!Int32.TryParse(Session["orderItemNumber"].ToString(), out numItems))
+            {
+                numItems = 0;
+            }
         }
-
         this.plhItemsAreInOrder.Visible = numItems != 0;
         this.plhNoItemsInOrder.Visible  = numItems == 0;
+    }
+
+    protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
+        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+        rpt.DataBind();
     }
 
     protected void lnkGoPay_Click(object sender, EventArgs e)

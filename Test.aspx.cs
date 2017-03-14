@@ -16,8 +16,11 @@ public partial class Test : System.Web.UI.Page
         this.gdvMenu2.DataSource = j[1];
         this.gdvMenu2.DataBind();
 
-        this.gdvMenu3.DataSource = j[1];
+        this.gdvMenu3.DataSource = j[2];
         this.gdvMenu3.DataBind();
+
+        this.gdvMenu4.DataSource = j[3];
+        this.gdvMenu4.DataBind();
     }
 
     protected void Label4_DataBinding(object sender, EventArgs e)

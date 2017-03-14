@@ -75,7 +75,7 @@ public static class Data_Provider
             DataTable menu;
             bool isNotFirstRow = false;
             string[] rows;
-            List<DataColumn> columns = new List<DataColumn>();
+            List<DataColumn> columns;
 
             NameValueCollection parameters = new NameValueCollection();
             //parameters.Add("data", data);
@@ -85,6 +85,7 @@ public static class Data_Provider
             foreach (string resultTable in result.Split(new string[] { "-;-" }, StringSplitOptions.None))
             {
                 menu = new DataTable();
+                columns = new List<DataColumn>();
                 if (resultTable.Contains("ERROR") || string.IsNullOrEmpty(resultTable))
                 {
                     menu.Columns.Add(new DataColumn("ERROR"));

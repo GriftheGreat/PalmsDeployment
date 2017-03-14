@@ -116,83 +116,77 @@ public class Menu_Data
     [WebMethod]
     public string Menu()
     {
+        string[] queries = new string[4];
+        queries[0] = @"SELECT * FROM food";
+        queries[1] = @"SELECT * FROM food_type";
+        queries[2] = @"SELECT * FROM food_detail_line";
+        queries[3] = @"SELECT * FROM detail";
+
         DataTable menu = new DataTable();
         StringBuilder sb = new StringBuilder();
-
-        string query_string = @"SELECT * FROM food";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand myCommand;
 
         try
         {
             myConnection.Open();
-            menu.Load(myCommand.ExecuteReader());
 
-            IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
-            sb.AppendLine(string.Join("-,-", columnNames));
-            //AppendLine puts "\r\n" between rows?
-
-            foreach (DataRow row in menu.Rows)
+            foreach (string query in queries)
             {
-                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-                sb.AppendLine(string.Join("-,-", fields));
+                menu = new DataTable();
+                myCommand = new OracleCommand(query, myConnection);
+
+                if (sb.Length > 0)
+                {
+                    sb.Append("-;-");
+                }
+
+                try
+                {
+                    menu.Load(myCommand.ExecuteReader());
+
+                    IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+                    sb.AppendLine(string.Join("-,-", columnNames));
+                    //AppendLine puts "\r\n" between rows
+
+                    foreach (DataRow row in menu.Rows)
+                    {
+                        IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                        sb.AppendLine(string.Join("-,-", fields));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    sb.AppendLine("ERROR");
+                    sb.AppendLine(ex.Message);
+                }
+                finally
+                {
+                    try
+                    {
+                        myCommand.Dispose();
+                    }
+                    catch { }
+                }
             }
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
-            sb.AppendLine("ERROR");
-            sb.AppendLine(ex.Message);
+            while (sb.ToString().Split(new string[] {"-;-"}, StringSplitOptions.None).Length < queries.Length)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.Append("-;-");
+                }
+
+                sb.AppendLine("ERROR");
+                sb.AppendLine(ex.Message);
+            }
         }
         finally
         {
-            try
-            {
-                myCommand.Dispose();
-            }
-            catch { }
-
             myConnection.Close();
             myConnection.Dispose();
-        }
-
-
-        sb.Append("-;-");
-
-
-        string query_string2 = @"SELECT * FROM food_type";
-        OracleConnection myConnection2 = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand2 = new OracleCommand(query_string2, myConnection2);
-
-        try
-        {
-            myConnection2.Open();
-            menu.Load(myCommand2.ExecuteReader(), LoadOption.OverwriteChanges);
-
-            IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
-            sb.AppendLine(string.Join("-,-", columnNames));
-            //AppendLine puts "\r\n" between rows?
-
-            foreach (DataRow row in menu.Rows)
-            {
-                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-                sb.AppendLine(string.Join("-,-", fields));
-            }
-        }
-        catch (Exception ex)
-        {
-            sb.AppendLine("ERROR");
-            sb.AppendLine(ex.Message);
-        }
-        finally
-        {
-            try
-            {
-                myCommand2.Dispose();
-            }
-            catch { }
-
-            myConnection2.Close();
-            myConnection2.Dispose();
         }
         return sb.ToString();
     }

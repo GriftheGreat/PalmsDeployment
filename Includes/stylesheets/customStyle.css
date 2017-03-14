@@ -49,7 +49,6 @@ ul.nav a:hover {
 #palmsImage {
     padding-top:40px;
     min-height: 400px;
-
 }
 
 #papaJohnImage:hover {
@@ -63,7 +62,6 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-
     perspective: 1000px;
 	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
@@ -140,13 +138,6 @@ ul.nav a:hover {
     width: 100%;
     bottom: 10px;
 }
-
-
-/*.createYourOwnHeading {
-    padding-top: 120px;
-    font-size: 50pt;
-    color: sandybrown;
-}*/
 
 .papaJohnProduct:hover {
 
@@ -263,15 +254,11 @@ ul.nav a:hover {
 
 
 
+.slideImages {
+    height: 500px;
+}
 
-.carousel{
-    background: #2f4357;
-    margin-top: 200px;
-    position: absolute;
+.slideShowWrapper {
+     height: 500px;
 }
-.carousel .item img{
-    margin: 0 auto; /* Align slide image horizontally center */
-}
-.bs-example{
-	margin: 20px;
-}
+

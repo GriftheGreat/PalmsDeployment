@@ -13,7 +13,9 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <div class="bs-example">
+
+
+    <div class="slideShowWrapper">
     <div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
     	<!-- Carousel indicators -->
         <ol class="carousel-indicators">
@@ -24,21 +26,21 @@
         <!-- Wrapper for carousel items -->
         <div class="carousel-inner">
             <div class="active item">
-                <img src="../images/slide1.png" alt="First Slide" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/palmsImage.png\"" %> alt="First Slide" class="slideImages" />
          		<div class="carousel-caption">
                   <h3>First slide label</h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
             </div>
             <div class="item">
-                <img src="../images/slide2.png" alt="Second Slide" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/PapaJohnImage1.png\"" %> class="slideImages" />
                 <div class="carousel-caption">
                   <h3>Second slide label</h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
             </div>
             <div class="item">
-                <img src="../images/slide3.png" alt="Third Slide" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/PapaJohnImage.png\"" %> class="slideImages" />
                 <div class="carousel-caption">
                   <h3>Third slide label</h3>
                   <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
@@ -53,6 +55,9 @@
             <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
     </div>
+
+
+
 </div>
 
 

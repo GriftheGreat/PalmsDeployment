@@ -8,31 +8,6 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
-        /* Choices page css code starts here */
-        /*.burgerHeader, .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            color: rgba(13,86,55, .9);
-            background-color: sandybrown;
-            font-weight: bold;   
-        }
-
-                       .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            margin-top: 20px;
-        }
-
-        .burgerButton, .wrapsButton, .paniniButton, .quesadillaButton, .saladButton, .pizzaButton
-        {
-            border: none;
-            outline:none;
-            text-decoration: none;
-            width: 100%;
-            height: 100%;
-            background-color: sandybrown;
-            display: inline-block;
-            text-align: center;
-        }*/
-
         .HeaderButton
         {
             margin-top: 20px;
@@ -127,7 +102,7 @@
                                        WHEN 'quesadillas'                    THEN 8
                                        WHEN 'wraps'                          THEN 9
                                        WHEN 'palms grille sides'             THEN 11
-                                       WHEN 'soups ' || chr(38) || ' salads' THEN 12
+                                       WHEN 'soups ' || chr(38) || ' salads' THEN 12 --chr(38) -> &
                                        WHEN 'ice cream'                      THEN 11
                                        WHEN 'beverages'                      THEN 13
                                        ELSE 14

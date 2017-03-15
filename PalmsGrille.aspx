@@ -112,7 +112,7 @@
                             WHERE food_type_vendor = 'PG'
                          ORDER BY sort">
         </asp:SqlDataSource>
-        <asp:Repeater ID="rptCategories" runat="server" DataSourceID="SqlCategories">
+        <asp:Repeater ID="rptCategories" runat="server"  OnItemDataBound="rptCategories_ItemDataBound">
             <ItemTemplate>
                 <div class="row">
                     <div class="col-lg-12">
@@ -134,7 +134,7 @@
                             <asp:ControlParameter ControlID="hidFoodTypeID" Name="food_type_id_pk" DefaultValue="-1" PropertyName="Value" />
                         </SelectParameters>
                     </asp:SqlDataSource>
-                    <asp:Repeater ID="rptFood" runat="server" DataSourceID="sqlFood">
+                    <asp:Repeater ID="rptFood" runat="server" >
                         <ItemTemplate>
                             <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
                                 <div class="front">

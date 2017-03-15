@@ -149,7 +149,7 @@ public class Order_Element
             this.Details = new List<Detail>();
             foreach(DataRow row in Get_Details(this.ID).Rows)
             {
-                this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString())));
+                this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString()), row["group_name"].ToString()));
             }
         }
     }
@@ -198,7 +198,7 @@ public class Order_Element
     public DataTable Get_Details(int food_id)
     {
         DataTable data = new DataTable();
-        string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost
+        string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
                                   FROM detail d
                                   JOIN food_detail_line fdl
                                     ON fdl.detail_id_fk = d.detail_id_pk

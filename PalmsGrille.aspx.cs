@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Web.UI.WebControls;
 
 public partial class PalmsGrille : System.Web.UI.Page
@@ -19,9 +21,46 @@ public partial class PalmsGrille : System.Web.UI.Page
     }
     #endregion
 
+    public List<DataTable> MenuData;
+    //queries[0] = @"SELECT * FROM food";
+    //queries[1] = @"SELECT * FROM food_type";
+    //queries[2] = @"SELECT * FROM food_detail_line";
+    //queries[3] = @"SELECT * FROM detail";
+
+    protected void Page_Init(object sender, EventArgs e)
+    {
+        if (MenuData == null)
+        {
+            MenuData = Data_Provider.Transact_Interface.Get_Menu("");
+        }
+    }
+
     protected void Page_Load(object sender, EventArgs e)
     {
+        string menu = "PG";
 
+        if (Request.QueryString["menu"] == "PapaJohns")
+        {
+            menu = "PJ";
+        }
+
+        EnumerableRowCollection<DataRow> selectedRows = MenuData[1].AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu);
+        if (selectedRows.Count() > 0)
+        {
+            this.rptCategories.DataSource = selectedRows.CopyToDataTable();
+            this.rptCategories.DataBind();
+        }
+    }
+
+    protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
+        EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString());
+        if (selectedRows.Count() > 0)
+        {
+            rpt.DataSource = selectedRows.CopyToDataTable();
+            rpt.DataBind();
+        }
     }
 
     protected void btnAdd_Click(object sender, EventArgs e)

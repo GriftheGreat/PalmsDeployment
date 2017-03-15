@@ -48,6 +48,20 @@ public class Detail
             if (value >= 0) { _id = value; }
         }
     }
+
+    // can we dynamically check DB varchar2 length of field?
+    private string _groupName;
+    public string GroupName
+    {
+        get
+        {
+            return _groupName;
+        }
+        set
+        {
+            _groupName = value;
+        }
+    }
     #endregion End Properties
     //
     // TODO: Add /// comments to each Property
@@ -59,6 +73,7 @@ public class Detail
         this.Cost        = 0.0f;
         this.Description = null;
         this.ID          = 0;
+        this.GroupName   = "";
     }
 
     public Detail(int id)
@@ -72,6 +87,7 @@ public class Detail
         if (element.Rows.Count == 1)
         {
             this.Description = element.Rows[0]["detail_descr"].ToString();
+            this.GroupName   = element.Rows[0]["group_name"].ToString();;
 
             if (float.TryParse(element.Rows[0]["detail_cost"].ToString(), out cost))
             {
@@ -84,17 +100,18 @@ public class Detail
         }
     }
 
-    public Detail(float cost, string description, int id)
+    public Detail(float cost, string description, int id, string groupName)
     {
         this.Cost        = cost;
         this.Description = description;
         this.ID          = id;
+        this.GroupName   = groupName;
     }
 
     public DataTable Get_Detail(int id)
     {
         DataTable data = new DataTable();
-        string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost
+        string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
                                   FROM detail d
                                  WHERE d.detail_id_pk = :detail_id_pk";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);

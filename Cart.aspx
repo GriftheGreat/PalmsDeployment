@@ -45,6 +45,14 @@
             display: block;
         }
 
+        .item-detail-list
+        {
+            border: 1px solid rgb(128, 128, 128);
+            width: 300px;
+            height: 150px;
+            overflow: auto;
+        }
+
 
         .remove-button
         {
@@ -127,11 +135,17 @@
                             Price
                             ImagePath--%>
                             <br />
-                            <asp:Repeater ID="rptDetails" runat="server">
-                                <ItemTemplate>
-                                    <asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' /><br />
-                                </ItemTemplate>
-                            </asp:Repeater>
+                            <div class="item-detail-list">
+                                <asp:Repeater ID="rptDetails" runat="server">
+                                    <ItemTemplate>
+                                        <asp:CheckBox      ID="chbAdded"    runat="server" Text='<%# Eval("Description") %>' Checked="true" />
+                                        <%--<asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' />--%>
+                                        <asp:Label         ID="Label1" runat="server" Text='<%# "$" + Eval("Cost").ToString() %>' />
+                                        <asp:Label         ID="Label2" runat="server" Text='<%# Eval("GroupName") %>' />
+                                        <asp:HiddenField   ID="hid1"   runat="server" Value='<%# Eval("ID") %>' /><br />
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
                             <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
                         </div>
                     </div>

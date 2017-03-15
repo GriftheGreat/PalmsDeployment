@@ -49,7 +49,7 @@ public partial class Payment : System.Web.UI.Page
             //validate?
             string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text);
             string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info(MyOrder.ID.ToString(), paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N");
-
+Response.Write(paymentResultString = "\n<br />\n<br />" + saveResultString);
             success = paymentResultString.Contains("Pass:") && saveResultString.Contains("Pass:");
         }
         else if(true/*idC*/)

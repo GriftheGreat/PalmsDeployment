@@ -34,11 +34,11 @@ public partial class Cart : System.Web.UI.Page
 
     protected void Page_PreRender(object sender, EventArgs e)
     {
-        int numItems;
+        int numItems = 0;
 
-        if (!Int32.TryParse(Session["orderItemNumber"].ToString(), out numItems))
+        if (Session["orderItemNumber"] != null)
         {
-            numItems = 0;
+            numItems = Convert.ToInt32(Session["orderItemNumber"].ToString());
         }
 
         this.plhItemsAreInOrder.Visible = numItems != 0;

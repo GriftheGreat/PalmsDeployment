@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web.UI.WebControls;
 
-public partial class PalmsGrille : System.Web.UI.Page
+public partial class Menu : System.Web.UI.Page
 {
     #region Properties
     public Order MyOrder
@@ -38,10 +38,13 @@ public partial class PalmsGrille : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         string menu = "PG";
+        this.plhCreateYourOwnPizza.Visible = false;
 
         if (Request.QueryString["menu"] == "PapaJohns")
         {
             menu = "PJ";
+            this.Title = "Menu | Papa John's";
+            this.plhCreateYourOwnPizza.Visible = true;
         }
 
         EnumerableRowCollection<DataRow> selectedRows = MenuData[1].AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu);
@@ -55,7 +58,8 @@ public partial class PalmsGrille : System.Web.UI.Page
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
-        EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString());
+        EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString())
+                                                                                  .OrderBy(row => row["food_name"].ToString());
         if (selectedRows.Count() > 0)
         {
             rpt.DataSource = selectedRows.CopyToDataTable();

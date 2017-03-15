@@ -1,9 +1,9 @@
 ﻿<%@ Page Language="C#"
          Title="Menu | Palms Grille"
          AutoEventWireup="true"
-         CodeFile="PalmsGrille.aspx.cs"
-         Inherits="PalmsGrille"
-         MasterPageFile="~/Master Pages/Default.Master" %>
+         CodeFile="Menu.aspx.cs"
+         Inherits="Menu"
+         MasterPageFile="~/Master Pages/Default.Master" %><%-- Title changed in Page_Load --%>
 
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
@@ -88,7 +88,7 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-        <asp:SqlDataSource ID="SqlCategories" runat="server"
+        <%--<asp:SqlDataSource ID="SqlCategories" runat="server"
             ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
             ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
             SelectCommand="SELECT ft.food_type_name, ft.food_type_id_pk,
@@ -111,8 +111,8 @@
                              FROM food_type ft
                             WHERE food_type_vendor = 'PG'
                          ORDER BY sort">
-        </asp:SqlDataSource>
-        <asp:Repeater ID="rptCategories" runat="server"  OnItemDataBound="rptCategories_ItemDataBound">
+        </asp:SqlDataSource>--%>
+        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound"><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
                 <div class="row">
                     <div class="col-lg-12">
@@ -123,18 +123,7 @@
                     </div>
                 </div>
                 <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
-                    <asp:SqlDataSource ID="sqlFood" runat="server"
-                        ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
-                        ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
-                        SelectCommand="SELECT f.food_id_pk, f.food_name, f.food_descr, f.food_cost, f.is_deliverable, f.image_path
-                                         FROM food f
-                                        WHERE f.food_type_id_fk = :food_type_id_pk
-                                     ORDER BY f.food_name">
-                        <SelectParameters>
-                            <asp:ControlParameter ControlID="hidFoodTypeID" Name="food_type_id_pk" DefaultValue="-1" PropertyName="Value" />
-                        </SelectParameters>
-                    </asp:SqlDataSource>
-                    <asp:Repeater ID="rptFood" runat="server" >
+                    <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
                         <ItemTemplate>
                             <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
                                 <div class="front">
@@ -155,7 +144,7 @@
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
-                                        <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
+                                        <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
                                     </div>
                                 </div>
                             </div>
@@ -165,4 +154,108 @@
             </ItemTemplate>
         </asp:Repeater>
     </div>
+
+    <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
+        <%-- Trigger the modal with a button --%>
+        <div class="create-your-own-container">
+            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#myModal">Create Your Own</button>
+        </div>
+
+        <%-- Modal --%>
+        <div id="myModal" class="modal fade text-center" role="dialog">
+            <div class="modal-dialog">
+
+                <%-- Modal content--%>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title">Create Your Own</h3>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <!-- Sizes -->
+                        <h1>Select size:</h1>
+                        <span class="sizeEightWrapper">
+                            <button class="btn sizeEightButton">8"</button>
+                        </span>
+                        <span class="sizeSixteenWrapper">
+                            <button class="btn sizeSixteenButton">16"</button>
+                        </span>
+
+                        <!-- Types -->
+                        <!--<h1>Select type:</h1>
+                        <span class="cheesePizzaWrapper">
+                            <button class="btn cheesePizzaButton">Cheese</button>
+                        </span>
+                        <span class="sausagePizzaWrapper">
+                            <button class="btn sausagePizzaButton">Sausage</button>
+                        </span>
+                        <span class="peperoniPizzaWrapper">
+                            <button class="btn peperoniPizzaButton">Peperoni</button>
+                        </span>-->
+
+                        <!-- Toppings -->
+                        <h1>Choose Your Toppings:</h1>
+
+                        <h3>Real Meat</h3>
+                        <span class="cheesePizzaWrapper">
+                            <button class="btn baconToppingButton">Bacon</button>
+                        </span>
+                        <span class="peperoniPizzaWrapper">
+                            <button class="btn peperoniToppingButton">Peperoni</button>
+                        </span>
+                        <span class="sausageToppingWrapper">
+                            <button class="btn sausageToppingButton">Sausage</button>
+                        </span>
+                        <br />
+                        <span class="beefToppingWrapper">
+                            <button class="btn beefToppingButton">Beef</button>
+                        </span>
+                        <span class="italianSausageWrapper">
+                            <button class="btn italianSausageToppingButton">Italian Sausage</button>
+                        </span>
+                        <span class="CanaDianBaconToppingWrapper">
+                            <button class="btn canadianBacconToppingButton">Canadian Bacon</button>
+                        </span>
+
+                        <h3>Fresh Vegetables</h3>
+                        <span class="freshSlicedOnions">
+                            <button class="btn freshSlicedOnionsButton">Fresh-Sliced Onions</button>
+                        </span>
+                        <span class="greenPepper">
+                            <button class="btn greenPepperButton">Green Pepper</button>
+                        </span>
+                        <span class="romaTomatoes">
+                            <button class="btn romaTomatoesButton">Roma Tomatoes</button>
+                        </span>
+                        <span class="blackOlives">
+                            <button class="btn blackOlivesButton">Black Olives</button>
+                        </span>
+                        <br />
+
+                        <span class="jalapenoPeppers">
+                            <button class="btn jalapenoPeppersButton">Jalapeno Peppers</button>
+                        </span>
+
+                        <span class="bananaPeppers">
+                            <button class="btn bananaPeppersButton">Banana Peppers</button>
+                        </span>
+
+                        <span class="babyPortabella">
+                            <button class="btn babyPortabellaButton">Baby Portabella</button>
+                        </span>
+
+                        <span class="mushrooms">
+                            <button class="btn mushroomsButton">Mushrooms</button>
+                        </span>
+
+                        <div>
+                            <button type="button" class="btn btn-danger">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </asp:PlaceHolder>
 </asp:Content>

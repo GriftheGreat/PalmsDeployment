@@ -117,52 +117,25 @@ public class Order_Element
         this.Description = null;
         this.Details     = null;
         this.ID          = 0;
+        this.ImagePath   = null;
         this.Name        = null;
         this.Price       = 0.0f;
-        this.ImagePath   = null;
     }
 
-    public Order_Element(int id)
+    public Order_Element(string deliverable, int id, string imagePath, string description, List<string> detailIDs, string name, float price)
     {
-        DataTable element;
-        float price;
-        this.ID = id;
-
-        element = Get_Order_Element(this.ID);
-
-        if (element.Rows.Count == 1)
-        {
-            this.Deliverable = element.Rows[0]["is_deliverable"].ToString();
-            this.Description = element.Rows[0]["food_descr"].ToString();
-            this.ImagePath   = element.Rows[0]["image_path"].ToString();
-            this.Name        = element.Rows[0]["food_name"].ToString();
-
-            if (float.TryParse(element.Rows[0]["food_cost"].ToString(), out price))
-            {
-                this.Price = price;
-            }
-            else
-            {
-                this.Price = 0.0f;
-            }
-
-            this.Details = new List<Detail>();
-            foreach(DataRow row in Get_Details(this.ID).Rows)
-            {
-                this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString()), row["group_name"].ToString()));
-            }
-        }
-    }
-
-    public Order_Element(string deliverable, string description, List<Detail> details, int id, string imagePath, string name, float price)
-    {
-        if (deliverable.Length == 0 || deliverable.Length == 1) { this.Deliverable = deliverable; }
+        this.Deliverable = deliverable;
         this.Description = description;
-        this.Details     = details;
-        if (id >= 0) { _id = id; }
+        this.Details     = new List<Detail>();
+        this.ID          = id;
         this.ImagePath   = imagePath;
         this.Name        = name;
         this.Price       = price;
+
+        foreach(DataRow row in Get_Details(this.ID).Rows)
+        {
+            this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString()), row["group_name"].ToString()));
+        }
     }
 
     public DataTable Get_Order_Element(int food_id)

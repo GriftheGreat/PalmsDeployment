@@ -51,6 +51,7 @@
             width: 300px;
             height: 150px;
             overflow: auto;
+            text-align: left;
         }
 
 

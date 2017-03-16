@@ -51,6 +51,17 @@
             background-color: rgba(255, 255, 255, .5);
             display: block;
         }
+
+
+
+        .item-detail-list
+        {
+            border: 1px solid rgb(128, 128, 128);
+            width: 300px;
+            height: 150px;
+            overflow: auto;
+            text-align: left;
+        }
     </style>
 </asp:Content>
 
@@ -58,7 +69,40 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('div[AccordionControl]').first().show();
+
+            if($('#<%= this.hidOrderType.ClientID %>').val() == "")
+            {
+                alert('1');
+                $('body').one("click", 'input[mymodal="here"]', function ()
+                {
+                    $('#modalOrderType').modal('show');
+                    $('input[mymodal="here"]').on("click", function ()
+                    {
+                        $('#modalFoodDetails').modal('show');
+                    });
+                });
+            }
+            else
+            {
+                alert('2');
+                $('input[mymodal="here"]').on("click", function ()
+                {
+                    $('#modalFoodDetails').modal('show');
+                });
+            }
+
+            $('#modalOrderType').on("hidden.bs.modal", function ()
+            {
+                $('#modalFoodDetails').modal('show');
+            });
         });
+
+        function ClickOrderTypeChosen(type)
+        {
+            $('#<%= this.hidOrderType.ClientID %>').val(type);
+            $('#modalOrderType').modal('hide');
+            //this    $('#modalFoodDetails').modal('show');    handled by    $('#modalOrderType').on("hidden.bs.modal", function ()
+        }
 
         function AccordionTrigger(open)
         {
@@ -83,6 +127,11 @@
                 }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
             }
         }
+
+        //function putOptionsOnModal()
+        //{
+        //    $('#modalFoodDetails').modal('show');
+        //}
     </script>
 </asp:Content>
 
@@ -127,7 +176,7 @@
                         <ItemTemplate>
                             <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
                                 <div class="front">
-<%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
+                                    <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>'      CssClass="card-front-name" />
                                     <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost") %>'      CssClass="card-front-price" />
                                 </div>
@@ -145,6 +194,7 @@
                                     </div>
                                     <div class="addToCartButton">
                                         <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
+                                        <input           id="Button2"             runat="server" value="Purchase"   type="button"             class="btn btn-sm btn-danger text-center" mymodal="here"/>
                                     </div>
                                 </div>
                             </div>
@@ -158,104 +208,131 @@
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
         <%-- Trigger the modal with a button --%>
         <div class="create-your-own-container">
-            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#myModal">Create Your Own</button>
+            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalFoodDetails">Create Your Own</button>
         </div>
+    </asp:PlaceHolder>
 
-        <%-- Modal --%>
-        <div id="myModal" class="modal fade text-center" role="dialog">
-            <div class="modal-dialog">
+    <%-- Modal --%>
+    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog">
+            <%-- Modal content--%>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Create Your Own</h3>
+                </div>
+                <div class="modal-body">
+                    <%--<!-- Sizes -->
+                    <h1>Select size:</h1>
+                    <span class="sizeEightWrapper">
+                        <button class="btn sizeEightButton">8"</button>
+                    </span>
+                    <span class="sizeSixteenWrapper">
+                        <button class="btn sizeSixteenButton">16"</button>
+                    </span>
 
-                <%-- Modal content--%>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h3 class="modal-title">Create Your Own</h3>
+                    <!-- Types -->
+                    <!--<h1>Select type:</h1>
+                    <span class="cheesePizzaWrapper">
+                        <button class="btn cheesePizzaButton">Cheese</button>
+                    </span>
+                    <span class="sausagePizzaWrapper">
+                        <button class="btn sausagePizzaButton">Sausage</button>
+                    </span>
+                    <span class="peperoniPizzaWrapper">
+                        <button class="btn peperoniPizzaButton">Peperoni</button>
+                    </span>-->
+
+                    <!-- Toppings -->
+                    <h1>Choose Your Toppings:</h1>
+
+                    <h3>Real Meat</h3>
+                    <span class="cheesePizzaWrapper">
+                        <button class="btn baconToppingButton">Bacon</button>
+                    </span>
+                    <span class="peperoniPizzaWrapper">
+                        <button class="btn peperoniToppingButton">Peperoni</button>
+                    </span>
+                    <span class="sausageToppingWrapper">
+                        <button class="btn sausageToppingButton">Sausage</button>
+                    </span>
+                    <br />
+                    <span class="beefToppingWrapper">
+                        <button class="btn beefToppingButton">Beef</button>
+                    </span>
+                    <span class="italianSausageWrapper">
+                        <button class="btn italianSausageToppingButton">Italian Sausage</button>
+                    </span>
+                    <span class="CanaDianBaconToppingWrapper">
+                        <button class="btn canadianBacconToppingButton">Canadian Bacon</button>
+                    </span>
+
+                    <h3>Fresh Vegetables</h3>
+                    <span class="freshSlicedOnions">
+                        <button class="btn freshSlicedOnionsButton">Fresh-Sliced Onions</button>
+                    </span>
+                    <span class="greenPepper">
+                        <button class="btn greenPepperButton">Green Pepper</button>
+                    </span>
+                    <span class="romaTomatoes">
+                        <button class="btn romaTomatoesButton">Roma Tomatoes</button>
+                    </span>
+                    <span class="blackOlives">
+                        <button class="btn blackOlivesButton">Black Olives</button>
+                    </span>
+                    <br />
+
+                    <span class="jalapenoPeppers">
+                        <button class="btn jalapenoPeppersButton">Jalapeno Peppers</button>
+                    </span>
+
+                    <span class="bananaPeppers">
+                        <button class="btn bananaPeppersButton">Banana Peppers</button>
+                    </span>
+
+                    <span class="babyPortabella">
+                        <button class="btn babyPortabellaButton">Baby Portabella</button>
+                    </span>
+
+                    <span class="mushrooms">
+                        <button class="btn mushroomsButton">Mushrooms</button>
+                    </span>--%>
+
+                    <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
+
+                    <div class="item-detail-list">
+                        <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
+                            <ItemTemplate>
+                                <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' Checked="false" />
+                                <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' /><br />
+                            </ItemTemplate>
+                        </asp:Repeater>
                     </div>
-
-                    <div class="modal-body">
-
-                        <!-- Sizes -->
-                        <h1>Select size:</h1>
-                        <span class="sizeEightWrapper">
-                            <button class="btn sizeEightButton">8"</button>
-                        </span>
-                        <span class="sizeSixteenWrapper">
-                            <button class="btn sizeSixteenButton">16"</button>
-                        </span>
-
-                        <!-- Types -->
-                        <!--<h1>Select type:</h1>
-                        <span class="cheesePizzaWrapper">
-                            <button class="btn cheesePizzaButton">Cheese</button>
-                        </span>
-                        <span class="sausagePizzaWrapper">
-                            <button class="btn sausagePizzaButton">Sausage</button>
-                        </span>
-                        <span class="peperoniPizzaWrapper">
-                            <button class="btn peperoniPizzaButton">Peperoni</button>
-                        </span>-->
-
-                        <!-- Toppings -->
-                        <h1>Choose Your Toppings:</h1>
-
-                        <h3>Real Meat</h3>
-                        <span class="cheesePizzaWrapper">
-                            <button class="btn baconToppingButton">Bacon</button>
-                        </span>
-                        <span class="peperoniPizzaWrapper">
-                            <button class="btn peperoniToppingButton">Peperoni</button>
-                        </span>
-                        <span class="sausageToppingWrapper">
-                            <button class="btn sausageToppingButton">Sausage</button>
-                        </span>
-                        <br />
-                        <span class="beefToppingWrapper">
-                            <button class="btn beefToppingButton">Beef</button>
-                        </span>
-                        <span class="italianSausageWrapper">
-                            <button class="btn italianSausageToppingButton">Italian Sausage</button>
-                        </span>
-                        <span class="CanaDianBaconToppingWrapper">
-                            <button class="btn canadianBacconToppingButton">Canadian Bacon</button>
-                        </span>
-
-                        <h3>Fresh Vegetables</h3>
-                        <span class="freshSlicedOnions">
-                            <button class="btn freshSlicedOnionsButton">Fresh-Sliced Onions</button>
-                        </span>
-                        <span class="greenPepper">
-                            <button class="btn greenPepperButton">Green Pepper</button>
-                        </span>
-                        <span class="romaTomatoes">
-                            <button class="btn romaTomatoesButton">Roma Tomatoes</button>
-                        </span>
-                        <span class="blackOlives">
-                            <button class="btn blackOlivesButton">Black Olives</button>
-                        </span>
-                        <br />
-
-                        <span class="jalapenoPeppers">
-                            <button class="btn jalapenoPeppersButton">Jalapeno Peppers</button>
-                        </span>
-
-                        <span class="bananaPeppers">
-                            <button class="btn bananaPeppersButton">Banana Peppers</button>
-                        </span>
-
-                        <span class="babyPortabella">
-                            <button class="btn babyPortabellaButton">Baby Portabella</button>
-                        </span>
-
-                        <span class="mushrooms">
-                            <button class="btn mushroomsButton">Mushrooms</button>
-                        </span>
-
-                        <div>
-                            <button type="button" class="btn btn-danger">Add to Cart</button>
-                        </div>
-                    </div>
+                    <asp:Button ID="btnAdd2" runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
                 </div>
             </div>
         </div>
-    </asp:PlaceHolder>
+    </div>
+
+    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
+
+    <%-- Modal --%>
+    <div id="modalOrderType" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog">
+            <%-- Modal content--%>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Delivery or Pick-Up?</h3>
+                </div>
+                <div class="modal-body">
+                    <input id="btnDelivery" name="btnDelivery" type="button" value="Delivery"     class="btn btn-danger" onclick="ClickOrderTypeChosen('Delivery');" />
+                    <input id="btnPickUp"   name="btnPickUp"   type="button" value="Pick-Up"      class="btn btn-danger" onclick="ClickOrderTypeChosen('Pick-Up');" />
+                    <input id="Button1"     name="Button1"     type="button" value="Choose Later" class="btn btn-danger" onclick="ClickOrderTypeChosen('');" />
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>

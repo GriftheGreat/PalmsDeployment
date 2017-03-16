@@ -33,12 +33,22 @@ public partial class Menu : System.Web.UI.Page
         {
             MenuData = Data_Provider.Transact_Interface.Get_Menu("");
         }
+
+        if(MenuData.Count == 1 && MenuData[0].Columns.Count == 1 && MenuData[0].Rows.Count == 0)
+        {
+            throw new Exception(MenuData[0].Columns[0].ColumnName); // error to be caught on the error page.
+        }
     }
 
     protected void Page_Load(object sender, EventArgs e)
     {
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
+
+        if (MyOrder != null)
+        {
+            this.hidOrderType.Value = MyOrder.Type;
+        }
 
         if (Request.QueryString["menu"] == "PapaJohns")
         {
@@ -47,12 +57,23 @@ public partial class Menu : System.Web.UI.Page
             this.plhCreateYourOwnPizza.Visible = true;
         }
 
+        // must select where either "PG" or "PJ"
         EnumerableRowCollection<DataRow> selectedRows = MenuData[1].AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu);
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();
             this.rptCategories.DataBind();
         }
+
+        // put all details in repeater (no where clause needed)
+        if (selectedRows.Count() > 0)
+        {
+            this.rptDetailList.DataSource = MenuData[3];
+            this.rptDetailList.DataBind();
+        }
+        //**************************************
+        // DataTable food_detail_line
+        //**************************************
     }
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -70,8 +91,9 @@ public partial class Menu : System.Web.UI.Page
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         Order  tempOrder = MyOrder;
-        string FoodIDtext = ((sender as Button).NamingContainer.FindControl("hidFoodID") as HiddenField).Value;
+        string FoodIDtext = this.hidChosenFoodId.Value;
         int    FoodID;
+        Response.Write(this.hidOrderType.Value);
 
         if (!string.IsNullOrEmpty(FoodIDtext))
         {
@@ -79,7 +101,7 @@ public partial class Menu : System.Web.UI.Page
             {
                 if (tempOrder == null)
                 {
-                    tempOrder = new Order(getType());
+                    tempOrder = new Order(this.hidOrderType.Value);
                     tempOrder.Order_Elements = new List<Order_Element>();
                 }
                 tempOrder.Order_Elements.Add(new Order_Element(FoodID));
@@ -94,10 +116,5 @@ public partial class Menu : System.Web.UI.Page
         {
             // Error
         }
-    }
-
-    private string getType()
-    {
-        return "Deliverable";
     }
 }

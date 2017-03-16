@@ -7,7 +7,6 @@ using System.Collections.Generic;
 public class Order
 {
     #region Properties
-    // can we dynamically check DB varchar2 length of field?
     private string _customerFirstName;
     public  string CustomerFirstName
     {
@@ -21,7 +20,6 @@ public class Order
         }
     }
 
-    // can we dynamically check DB varchar2 length of field?
     private string _customerLastName;
     public  string CustomerLastName
     {
@@ -35,22 +33,6 @@ public class Order
         }
     }
 
-    // On error do what?
-    private int _id;
-    public  int ID
-    {
-        get
-        {
-            return _id;
-        }
-        //REMOVED
-        //set
-        //{
-        //    if (value >= 0) { _id = value; }
-        //}
-    }
-
-    // What type?
     private string _location;
     public  string Location
     {
@@ -62,20 +44,6 @@ public class Order
         {
             _location = value;
         }
-    }
-
-    private int _number;
-    public  int Number
-    {
-        get
-        {
-            return _number;
-        }
-        //REMOVED
-        //set
-        //{
-        //    _number = value;
-        //}
     }
 
     private List<Order_Element> _order_Elements;
@@ -91,7 +59,6 @@ public class Order
         }
     }
 
-    // What type?
     private string _status;
     public  string Status
     {
@@ -118,7 +85,6 @@ public class Order
         }
     }
 
-    // What type?
     private string _type;
     public  string Type
     {
@@ -141,31 +107,10 @@ public class Order
     {
         this.CustomerFirstName = null;
         this.CustomerLastName  = null;
-        _id                    = 0;
         this.Location          = null;
-        _number                = 0;
         this.Order_Elements    = null;
         this.Status            = null;
         this.Time              = DateTime.Now;
         this.Type              = type;
     }
-
-    //public Order(int id)
-    //{
-    //    this.ID = id;
-    //
-    // TODO: Load data...
-    //
-    //    this.CustomerFirstName = null;
-    //    this.CustomerLastName  = null;
-    //    this.Location          = null;
-    //    this.Number            = 0;
-    //    while(.Read())
-    //    {
-    //        this.Order_Elements.Add(new Order_Element(Convert.ToInt32(myReader["id"].ToString()) ));
-    //    }
-    //    this.Status            = null;
-    //    this.Time              = DateTime.Now;
-    //    this.Type              = null;
-    //}
 }

@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Data;
 
 /// <summary>
-/// Summary description for Order_Element
+/// A food on an order.
 /// </summary>
 public class Order_Element
 {
@@ -20,7 +20,7 @@ public class Order_Element
         }
         set
         {
-            if (value.Length == 0 || value.Length == 1) { _deliverable = value; }
+            _deliverable = value;
         }
     }
 

@@ -108,7 +108,7 @@ public class Order
         this.CustomerFirstName = null;
         this.CustomerLastName  = null;
         this.Location          = null;
-        this.Order_Elements    = null;
+        this.Order_Elements    = new List<Order_Element>();
         this.Status            = null;
         this.Time              = DateTime.Now;
         this.Type              = type;

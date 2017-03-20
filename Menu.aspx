@@ -67,41 +67,65 @@
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">
     <script type="text/javascript">
+        var foodID;// global variable
+
         $(document).ready(function () {
             $('div[AccordionControl]').first().show();
 
             if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
                 alert('1');
-                $('body').one("click", 'input[mymodal="here"]', function ()
+                $('body').one("click", 'input[chooseDetail]', function ()
                 {
                     $('#modalOrderType').modal('show');
-                    $('input[mymodal="here"]').on("click", function ()
-                    {
-                        $('#modalFoodDetails').modal('show');
-                    });
+                    $('input[chooseDetail]').on("click", normalPurchaseClick);
+
+                    var purchaseButton = $(this);
+                    var hidFoodID = purchaseButton.attr("chooseDetail");
+                    foodID = $('#' + hidFoodID).val();// assign global variable
                 });
             }
             else
             {
                 alert('2');
-                $('input[mymodal="here"]').on("click", function ()
-                {
-                    $('#modalFoodDetails').modal('show');
-                });
+                $('input[chooseDetail]').on("click", normalPurchaseClick);
             }
 
             $('#modalOrderType').on("hidden.bs.modal", function ()
             {
+                putOptionsOnModal();// needs global variable
                 $('#modalFoodDetails').modal('show');
             });
         });
 
-        function ClickOrderTypeChosen(type)
+        function normalPurchaseClick()
         {
-            $('#<%= this.hidOrderType.ClientID %>').val(type);
-            $('#modalOrderType').modal('hide');
-            //this    $('#modalFoodDetails').modal('show');    handled by    $('#modalOrderType').on("hidden.bs.modal", function ()
+            // get the foodID from hidFoodID from <this> purchase button
+            var purchaseButton = $(this);
+            var hidFoodID = purchaseButton.attr("chooseDetail");
+            foodID = $('#' + hidFoodID).val();// assign global variable
+
+            putOptionsOnModal();// needs global variable
+            
+            // show modal
+            $('#modalFoodDetails').modal('show');
+        }
+
+        function putOptionsOnModal() {
+            $('div[detail]').each(function () {
+                var DetailDiv = $(this);
+                var hidFoodIds = DetailDiv.attr("detail");
+alert(foodID + ' find in: \n' + $('#' + hidFoodIds).val() + '\n is: ' + $('#' + hidFoodIds).val().includes(' ' + foodID + ' '));
+if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
+                {
+                    DetailDiv.show();
+                }
+                else
+                {
+                    DetailDiv.hide();
+                }
+            });
+            foodID = null;// clear global variable
         }
 
         function AccordionTrigger(open)
@@ -128,10 +152,12 @@
             }
         }
 
-        //function putOptionsOnModal()
-        //{
-        //    $('#modalFoodDetails').modal('show');
-        //}
+        function ClickOrderTypeChosen(type)
+        {
+            $('#<%= this.hidOrderType.ClientID %>').val(type);
+            $('#modalOrderType').modal('hide');
+            //$('#modalFoodDetails').modal('show');  REMOVED because this is handled by   $('#modalOrderType').on("hidden.bs.modal", function ()
+        }
     </script>
 </asp:Content>
 
@@ -194,7 +220,7 @@
                                     </div>
                                     <div class="addToCartButton">
                                         <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
-                                        <input           id="Button2"             runat="server" value="Purchase"   type="button"             class="btn btn-sm btn-danger text-center" mymodal="here"/>
+                                        <input           id="Button2"             runat="server" value="Purchase"   type="button"             class="btn btn-sm btn-danger text-center" chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>'/>
                                     </div>
                                 </div>
                             </div>
@@ -303,10 +329,13 @@
                     <div class="item-detail-list">
                         <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
                             <ItemTemplate>
-                                <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' Checked="false" />
-                                <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
-                                <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' /><br />
+                                <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
+                                    <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                    <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' Checked="false" />
+                                    <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                    <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
+                                    <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
+                                </div>
                             </ItemTemplate>
                         </asp:Repeater>
                     </div>

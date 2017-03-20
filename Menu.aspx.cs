@@ -65,15 +65,29 @@ public partial class Menu : System.Web.UI.Page
             this.rptCategories.DataBind();
         }
 
-        // put all details in repeater (no where clause needed)
-        if (selectedRows.Count() > 0)
+        // make temp detail table with added column of foodIDs
+        DataTable detailsAndCorrespondingFoodIDs = MenuData[3];
+        detailsAndCorrespondingFoodIDs.Columns.Add("FoodIDs");
+
+        // find foodIDs corresponding to a details (yes the backward relationship)
+        foreach (DataRow row in detailsAndCorrespondingFoodIDs.Rows)
         {
-            this.rptDetailList.DataSource = MenuData[3];
+            row["FoodIDs"] = " "; // preceeding space used to match
+            foreach (DataRow row2 in MenuData[2].Rows)
+            {
+                if(row["detail_id_pk"].ToString() == row2["detail_id_fk"].ToString())
+                {
+                    row["FoodIDs"] += row2["food_id_fk"].ToString() + " "; // following space used to match
+                }
+            }
+        }
+
+        // use temp detail table with added column of foodIDs
+        if (detailsAndCorrespondingFoodIDs.Rows.Count > 0)
+        {
+            this.rptDetailList.DataSource = detailsAndCorrespondingFoodIDs;
             this.rptDetailList.DataBind();
         }
-        //**************************************
-        // DataTable food_detail_line
-        //**************************************
     }
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -91,30 +105,28 @@ public partial class Menu : System.Web.UI.Page
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         Order  tempOrder = MyOrder;
-        string FoodIDtext = this.hidChosenFoodId.Value;
-        int    FoodID;
-        Response.Write(this.hidOrderType.Value);
+        //string FoodIDtext = this.hidChosenFoodId.Value;
+        //int    FoodID;
 
-        if (!string.IsNullOrEmpty(FoodIDtext))
-        {
-            if (Int32.TryParse(FoodIDtext, out FoodID) && FoodID > 0)
-            {
+        //if (!string.IsNullOrEmpty(FoodIDtext))
+        //{
+            //if (Int32.TryParse(FoodIDtext, out FoodID) && FoodID > 0)
+            //{
                 if (tempOrder == null)
                 {
                     tempOrder = new Order(this.hidOrderType.Value);
-                    tempOrder.Order_Elements = new List<Order_Element>();
                 }
-                tempOrder.Order_Elements.Add(new Order_Element(FoodID));
+                tempOrder.Order_Elements.Add(new Order_Element());
                 MyOrder = tempOrder;
-            }
-            else
-            {
-                // Error
-            }
-        }
-        else
-        {
-            // Error
-        }
+            //}
+            //else
+            //{
+            //    // Error
+            //}
+        //}
+        //else
+        //{
+        //    // Error
+        //}
     }
 }

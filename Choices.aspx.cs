@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 public partial class Choices : System.Web.UI.Page
 {
+
     #region Properties
+     
+    public int meal_count = 0;
+    public string[] meals = new string[] {"Breakfast", "Lunch & Dinner" };
+
     private Order _myOrder;
     public Order MyOrder
     {
@@ -21,7 +27,10 @@ public partial class Choices : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["order"] != null)
+        Repeater0.DataSource = meals;
+        Repeater0.DataBind();
+
+        if (Session["order"] != null)
         {
             MyOrder = (Order)Session["order"];
         }

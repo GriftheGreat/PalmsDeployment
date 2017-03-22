@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 public static class Data_Provider
 {
     public const string mytext = " got connected!";
-    public const string urlBase = "http://localhost:50168/";
+    public const string urlBase = "http://localhost:58123/";
     //public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
 
     public static class Credit_Card_Interface
@@ -73,7 +73,7 @@ public static class Data_Provider
             List<DataTable> menuTables = new List<DataTable>();
             string result;
             DataTable menu;
-            bool isNotFirstRow = false;
+            bool isNotFirstRow;
             string[] rows;
             List<DataColumn> columns;
 
@@ -84,8 +84,10 @@ public static class Data_Provider
 
             foreach (string resultTable in result.Split(new string[] { "-;-" }, StringSplitOptions.None))
             {
+                isNotFirstRow = false;
                 menu = new DataTable();
                 columns = new List<DataColumn>();
+
                 if (resultTable.Contains("ERROR") || string.IsNullOrEmpty(resultTable))
                 {
                     menu.Columns.Add(new DataColumn("ERROR"));

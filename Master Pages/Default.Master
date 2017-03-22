@@ -46,10 +46,10 @@
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav">
-                            <li><a href="Default.aspx"     title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
-                            <li><a href="PalmsGrille.aspx" title="Palms Grille">Palms Grille</a></li>
-                            <li><a href="PapaJohns.aspx"   title="Papa John's" >Papa John's</a></li>
-                            <li><a href="Cart.aspx"        title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
+                            <li><a href="Default.aspx"               title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
+                            <li><a href="Menu.aspx?menu=PalmsGrille" title="Palms Grille">Palms Grille</a></li>
+                            <li><a href="Menu.aspx?menu=PapaJohns"   title="Papa John's" >Papa John's</a></li>
+                            <li><a href="Cart.aspx"                  title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
                         </ul>
                     </div>
                 </div>

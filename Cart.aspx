@@ -45,6 +45,15 @@
             display: block;
         }
 
+        .item-detail-list
+        {
+            border: 1px solid rgb(128, 128, 128);
+            width: 300px;
+            height: 150px;
+            overflow: auto;
+            text-align: left;
+        }
+
 
         .remove-button
         {
@@ -111,12 +120,12 @@
                     <div class="row">
                         <div class="col-lg-12 cart-item">
                             <div class="front card-front">
-<%# string.IsNullOrEmpty(Eval("ImagePath").ToString()) ? "" : "                                    <img class=\"card-image\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" %>
+<%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "                                    <img class=\"card-image\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
                                 <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>'  CssClass="card-front-name" />
                                 <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
                             </div>
 <%--                        <asp:Literal       ID="lit1"           runat="server" Text='<%# Eval("Deliverable").ToString() == "Y" ? "<img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" />" : "" %>' />--%>
-<%# Eval("Deliverable").ToString() == "Y" ? "                        <img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
+<%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "                        <img alt=\"deliverable\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
                         <%--Deliverable
@@ -127,11 +136,18 @@
                             Price
                             ImagePath--%>
                             <br />
-                            <asp:Repeater ID="rptDetails" runat="server">
-                                <ItemTemplate>
-                                    <asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' /><br />
-                                </ItemTemplate>
-                            </asp:Repeater>
+                            <div class="item-detail-list">
+                                <asp:Repeater ID="rptDetails" runat="server">
+                                    <ItemTemplate>
+                                        <%# Eval("Chosen").ToString() %>
+                                        <asp:CheckBox      ID="chbAdded"    runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
+                                        <%--<asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' />--%>
+                                        <asp:Label         ID="Label1" runat="server" Text='<%# "$" + Eval("Cost").ToString() %>' />
+                                        <asp:Label         ID="Label2" runat="server" Text='<%# Eval("GroupName") %>' />
+                                        <asp:HiddenField   ID="hid1"   runat="server" Value='<%# Eval("ID") %>' /><br />
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
                             <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
                         </div>
                     </div>

@@ -115,14 +115,14 @@ public class Order_Element
     {
         this.Deliverable = null;
         this.Description = null;
-        this.Details     = null;
+        this.Details     = new List<Detail>();
         this.ID          = 0;
         this.ImagePath   = null;
         this.Name        = null;
         this.Price       = 0.0f;
     }
 
-    public Order_Element(string deliverable, int id, string imagePath, string description, List<string> detailIDs, string name, float price)
+    public Order_Element(string deliverable, int id, string imagePath, string description, DataTable details, string name, float price)
     {
         this.Deliverable = deliverable;
         this.Description = description;
@@ -132,71 +132,76 @@ public class Order_Element
         this.Name        = name;
         this.Price       = price;
 
-        foreach(DataRow row in Get_Details(this.ID).Rows)
+        foreach(DataRow row in details.Rows)
         {
-            this.Details.Add(new Detail(Convert.ToSingle(row["detail_cost"].ToString()), row["detail_descr"].ToString(), Convert.ToInt32(row["detail_id_pk"].ToString()), row["group_name"].ToString()));
+            //float cost, string description, int id, string groupName
+            this.Details.Add(new Detail(row["chosen"].ToString() == "Y",
+                                        Convert.ToSingle(row["cost"].ToString()),
+                                        row["description"].ToString(),
+                                        Convert.ToInt32(row["id"].ToString()),
+                                        row["groupName"].ToString() ));
         }
     }
 
-    public DataTable Get_Order_Element(int food_id)
-    {
-        DataTable data = new DataTable();
-        string query_string = @"SELECT f.food_id_pk, f.food_name, f.food_descr, f.food_cost, f.is_deliverable, f.image_path
-                                  FROM food f
-                                 WHERE f.food_id_pk = :food_id_pk";
-        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+    //public DataTable Get_Order_Element(int food_id)
+    //{
+    //    DataTable data = new DataTable();
+    //    string query_string = @"SELECT f.food_id_pk, f.food_name, f.food_descr, f.food_cost, f.is_deliverable, f.image_path
+    //                              FROM food f
+    //                             WHERE f.food_id_pk = :food_id_pk";
+    //    OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+    //    OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
-        try
-        {
-            myConnection.Open();
+    //    try
+    //    {
+    //        myConnection.Open();
 
-            myCommand.Parameters.Add("food_id_pk", food_id);
-            data.Load(myCommand.ExecuteReader());
-        }
-        finally
-        {
-            try
-            {
-                myCommand.Dispose();
-            }
-            catch { }
+    //        myCommand.Parameters.Add("food_id_pk", food_id);
+    //        data.Load(myCommand.ExecuteReader());
+    //    }
+    //    finally
+    //    {
+    //        try
+    //        {
+    //            myCommand.Dispose();
+    //        }
+    //        catch { }
 
-            myConnection.Close();
-            myConnection.Dispose();
-        }
-        return data;
-    }
+    //        myConnection.Close();
+    //        myConnection.Dispose();
+    //    }
+    //    return data;
+    //}
 
-    public DataTable Get_Details(int food_id)
-    {
-        DataTable data = new DataTable();
-        string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
-                                  FROM detail d
-                                  JOIN food_detail_line fdl
-                                    ON fdl.detail_id_fk = d.detail_id_pk
-                                 WHERE fdl.food_id_fk = :food_id_fk";
-        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+    //public DataTable Get_Details(int food_id)
+    //{
+    //    DataTable data = new DataTable();
+    //    string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
+    //                              FROM detail d
+    //                              JOIN food_detail_line fdl
+    //                                ON fdl.detail_id_fk = d.detail_id_pk
+    //                             WHERE fdl.food_id_fk = :food_id_fk";
+    //    OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+    //    OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
-        try
-        {
-            myConnection.Open();
+    //    try
+    //    {
+    //        myConnection.Open();
 
-            myCommand.Parameters.Add("food_id_fk", food_id);
-            data.Load(myCommand.ExecuteReader());
-        }
-        finally
-        {
-            try
-            {
-                myCommand.Dispose();
-            }
-            catch { }
+    //        myCommand.Parameters.Add("food_id_fk", food_id);
+    //        data.Load(myCommand.ExecuteReader());
+    //    }
+    //    finally
+    //    {
+    //        try
+    //        {
+    //            myCommand.Dispose();
+    //        }
+    //        catch { }
 
-            myConnection.Close();
-            myConnection.Dispose();
-        }
-        return data;
-    }
+    //        myConnection.Close();
+    //        myConnection.Dispose();
+    //    }
+    //    return data;
+    //}
 }

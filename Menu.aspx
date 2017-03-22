@@ -74,7 +74,7 @@
 
             if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
-                alert('1');
+                //alert('1');
                 $('body').one("click", 'input[chooseDetail]', function ()
                 {
                     $('#modalOrderType').modal('show');
@@ -87,7 +87,7 @@
             }
             else
             {
-                alert('2');
+                //alert('2');
                 $('input[chooseDetail]').on("click", normalPurchaseClick);
             }
 
@@ -115,8 +115,8 @@
             $('div[detail]').each(function () {
                 var DetailDiv = $(this);
                 var hidFoodIds = DetailDiv.attr("detail");
-alert(foodID + ' find in: \n' + $('#' + hidFoodIds).val() + '\n is: ' + $('#' + hidFoodIds).val().includes(' ' + foodID + ' '));
-if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
+
+                if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
                 {
                     DetailDiv.show();
                 }
@@ -124,7 +124,11 @@ if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variabl
                 {
                     DetailDiv.hide();
                 }
+
+                DetailDiv.children()[1].checked = false;
             });
+            $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
+
             foodID = null;// clear global variable
         }
 
@@ -219,7 +223,6 @@ if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variabl
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
-                                        <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
                                         <input           id="Button2"             runat="server" value="Purchase"   type="button"             class="btn btn-sm btn-danger text-center" chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>'/>
                                     </div>
                                 </div>
@@ -248,82 +251,6 @@ if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variabl
                     <h3 class="modal-title">Create Your Own</h3>
                 </div>
                 <div class="modal-body">
-                    <%--<!-- Sizes -->
-                    <h1>Select size:</h1>
-                    <span class="sizeEightWrapper">
-                        <button class="btn sizeEightButton">8"</button>
-                    </span>
-                    <span class="sizeSixteenWrapper">
-                        <button class="btn sizeSixteenButton">16"</button>
-                    </span>
-
-                    <!-- Types -->
-                    <!--<h1>Select type:</h1>
-                    <span class="cheesePizzaWrapper">
-                        <button class="btn cheesePizzaButton">Cheese</button>
-                    </span>
-                    <span class="sausagePizzaWrapper">
-                        <button class="btn sausagePizzaButton">Sausage</button>
-                    </span>
-                    <span class="peperoniPizzaWrapper">
-                        <button class="btn peperoniPizzaButton">Peperoni</button>
-                    </span>-->
-
-                    <!-- Toppings -->
-                    <h1>Choose Your Toppings:</h1>
-
-                    <h3>Real Meat</h3>
-                    <span class="cheesePizzaWrapper">
-                        <button class="btn baconToppingButton">Bacon</button>
-                    </span>
-                    <span class="peperoniPizzaWrapper">
-                        <button class="btn peperoniToppingButton">Peperoni</button>
-                    </span>
-                    <span class="sausageToppingWrapper">
-                        <button class="btn sausageToppingButton">Sausage</button>
-                    </span>
-                    <br />
-                    <span class="beefToppingWrapper">
-                        <button class="btn beefToppingButton">Beef</button>
-                    </span>
-                    <span class="italianSausageWrapper">
-                        <button class="btn italianSausageToppingButton">Italian Sausage</button>
-                    </span>
-                    <span class="CanaDianBaconToppingWrapper">
-                        <button class="btn canadianBacconToppingButton">Canadian Bacon</button>
-                    </span>
-
-                    <h3>Fresh Vegetables</h3>
-                    <span class="freshSlicedOnions">
-                        <button class="btn freshSlicedOnionsButton">Fresh-Sliced Onions</button>
-                    </span>
-                    <span class="greenPepper">
-                        <button class="btn greenPepperButton">Green Pepper</button>
-                    </span>
-                    <span class="romaTomatoes">
-                        <button class="btn romaTomatoesButton">Roma Tomatoes</button>
-                    </span>
-                    <span class="blackOlives">
-                        <button class="btn blackOlivesButton">Black Olives</button>
-                    </span>
-                    <br />
-
-                    <span class="jalapenoPeppers">
-                        <button class="btn jalapenoPeppersButton">Jalapeno Peppers</button>
-                    </span>
-
-                    <span class="bananaPeppers">
-                        <button class="btn bananaPeppersButton">Banana Peppers</button>
-                    </span>
-
-                    <span class="babyPortabella">
-                        <button class="btn babyPortabellaButton">Baby Portabella</button>
-                    </span>
-
-                    <span class="mushrooms">
-                        <button class="btn mushroomsButton">Mushrooms</button>
-                    </span>--%>
-
                     <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
 
                     <div class="item-detail-list">
@@ -331,7 +258,7 @@ if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variabl
                             <ItemTemplate>
                                 <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
                                     <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                    <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' Checked="false" />
+                                    <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
                                     <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
                                     <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
                                     <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />

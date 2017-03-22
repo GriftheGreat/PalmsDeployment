@@ -42,6 +42,7 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        //Response.Write("Page_Load<br />\n");
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
@@ -104,29 +105,56 @@ public partial class Menu : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-        Order  tempOrder = MyOrder;
-        //string FoodIDtext = this.hidChosenFoodId.Value;
-        //int    FoodID;
+        string correspondingDetails = " "; // preceeding space used to match
+        Order tempOrder   = MyOrder;
+        DataRow food      = MenuData[0].AsEnumerable().Where(row => row["food_id_pk"].ToString() == this.hidChosenFoodId.Value).CopyToDataTable().Rows[0];
+        DataTable details = new DataTable();
+        details.Columns.Add("chosen");
+        details.Columns.Add("cost");
+        details.Columns.Add("description");
+        details.Columns.Add("id");
+        details.Columns.Add("groupName");
 
-        //if (!string.IsNullOrEmpty(FoodIDtext))
-        //{
-            //if (Int32.TryParse(FoodIDtext, out FoodID) && FoodID > 0)
-            //{
-                if (tempOrder == null)
-                {
-                    tempOrder = new Order(this.hidOrderType.Value);
-                }
-                tempOrder.Order_Elements.Add(new Order_Element());
-                MyOrder = tempOrder;
-            //}
-            //else
-            //{
-            //    // Error
-            //}
-        //}
-        //else
-        //{
-        //    // Error
-        //}
+        // find all details allowed for chosen food
+        foreach (DataRow row in MenuData[2].Rows)
+        {
+            if (row["food_id_fk"].ToString() == this.hidChosenFoodId.Value)
+            {
+                correspondingDetails += row["detail_id_fk"].ToString() + " "; // following space used to match
+            }
+        }
+
+        foreach (RepeaterItem item in this.rptDetailList.Items)
+        {
+            //Response.Write(((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "-");
+            if(correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
+            {
+                DataRow newRow        = details.NewRow();
+                newRow["chosen"]      = ((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "N";
+                newRow["cost"]        = ((Label)item.FindControl("lblDetailCost")).Text.Replace("$", "");
+                newRow["description"] = ((CheckBox)item.FindControl("chbChooseDetail")).Text;
+                newRow["id"]          = ((HiddenField)item.FindControl("hidDetailID")).Value;
+                newRow["groupName"]   = ((HiddenField)item.FindControl("hidGroupmName")).Value;
+                details.Rows.Add(newRow);
+            }
+        }
+
+        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
+        //j.DataSource = null;
+        //j.DataBind();
+
+        if (tempOrder == null)
+        {
+            tempOrder = new Order(this.hidOrderType.Value);
+        }
+
+        tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
+                                                       Convert.ToInt32(this.hidChosenFoodId.Value),
+                                                       food["image_path"].ToString(),
+                                                       food["food_descr"].ToString(),
+                                                       details,
+                                                       food["food_name"].ToString(),
+                                                       Convert.ToSingle(food["food_cost"].ToString()) ));
+         MyOrder = tempOrder;
     }
 }

@@ -1,0 +1,12 @@
+delete from credit_card_inv;
+delete from detail;
+delete from food;
+delete from food_detail_line;
+delete from food_type;
+delete from "location";
+delete from "order";
+delete from order_detail;
+delete from order_element;
+delete from pcc_account_inv;
+delete from ticket;
+delete from time_slot;

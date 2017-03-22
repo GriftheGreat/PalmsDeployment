@@ -1,0 +1,1 @@
+select * from FOOD_DETAIL_LINE fdl join food f on f.FOOD_ID_PK = fdl.FOOD_ID_FK join detail d on d.DETAIL_ID_PK = fdl.DETAIL_ID_FK order by f.FOOD_TYPE_ID_FK

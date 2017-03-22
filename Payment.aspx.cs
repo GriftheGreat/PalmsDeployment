@@ -26,7 +26,7 @@ public partial class Payment : System.Web.UI.Page
     {
         if (MyOrder == null)
         {
-            Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/Cart.aspx", true);
+            Response.Redirect(URL.root(Request) + "Cart.aspx", true);
         }
         else
         {
@@ -47,15 +47,15 @@ public partial class Payment : System.Web.UI.Page
         if(true/*CC*/)
         {
             //validate?
-            string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text);
-            string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N");
+            string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text, Request);
+            string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N", Request);
 Response.Write(paymentResultString = "\n<br />\n<br />" + saveResultString);
             success = paymentResultString.Contains("Pass:") && saveResultString.Contains("Pass:");
         }
         else if(true/*idC*/)
         {
             //validate?
-            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, this.txtIDNumber.Text, this.txtPassword.Text);
+            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, this.txtIDNumber.Text, this.txtPassword.Text, Request);
 
             success = paymentResultString.Contains("Pass:");
         }
@@ -66,11 +66,11 @@ Response.Write(paymentResultString = "\n<br />\n<br />" + saveResultString);
 
         if (success)
         {
-            if (Data_Provider.Transact_Interface.Send_Order_Info(MyOrder))
+            if (Data_Provider.Transact_Interface.Send_Order_Info(MyOrder, Request))
             {
                 Session.Remove("order");
                 Session.Remove("orderItemNumber");
-                Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/ThankYou.aspx", true);
+                Response.Redirect(URL.root(Request) + "ThankYou.aspx", true);
             }
             else
             {

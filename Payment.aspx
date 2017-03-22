@@ -166,7 +166,7 @@
                     <asp:Repeater ID="rptItems" runat="server">
                         <ItemTemplate>
                             <div class="front payment-item">
-<%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "                                    <img class=\"card-image\" src=\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\">" : "" %>
+<%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "                                    <img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\">" : "" %>
                                 <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' CssClass="card-front-name" />
                                 <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
                             </div>

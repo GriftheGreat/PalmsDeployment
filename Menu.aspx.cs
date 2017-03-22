@@ -31,7 +31,7 @@ public partial class Menu : System.Web.UI.Page
     {
         if (MenuData == null)
         {
-            MenuData = Data_Provider.Transact_Interface.Get_Menu("");
+            MenuData = Data_Provider.Transact_Interface.Get_Menu("", Request);
         }
 
         if(MenuData.Count == 1 && MenuData[0].Columns.Count == 1 && MenuData[0].Rows.Count == 0)

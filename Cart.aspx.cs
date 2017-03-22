@@ -54,7 +54,7 @@ public partial class Cart : System.Web.UI.Page
 
     protected void lnkGoPay_Click(object sender, EventArgs e)
     {
-        Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + "/Payment.aspx", true);
+        Response.Redirect(URL.root(Request) + "Payment.aspx", true);
     }
 
     protected void lnkRemoveItem_Click(object sender, EventArgs e)

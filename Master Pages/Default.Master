@@ -14,8 +14,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<%--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> Latest compiled and minified CSS --%>
-    <link rel="stylesheet" type="text/css" href=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/bootstrap/css/bootstrap.min.css\"" %> />
-	<link rel="stylesheet" type="text/css" href=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/stylesheets/customStyle.css\"" %> /><%-- Custom css --%>
+    <link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "bootstrap/css/bootstrap.min.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/customStyle.css\"" %> /><%-- Custom css --%>
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans" /><%-- Google fonts --%>
     <asp:ContentPlaceHolder ID="Styles" runat="server">
     </asp:ContentPlaceHolder>
@@ -65,7 +65,7 @@
             <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 			<%-- Include all compiled plugins (below), or include individual files as needed --%>
-			<script type="text/javascript" src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/bootstrap/js/bootstrap.min.js\"" %>></script>
+			<script type="text/javascript" src=<%= "\"" + URL.root(Request) + "bootstrap/js/bootstrap.min.js\"" %>></script>
         </footer>
     </form>
 </body>

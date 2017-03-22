@@ -4,13 +4,10 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web;
 
 public static class Data_Provider
 {
-    public const string mytext = " got connected!";
-    public const string urlBase = "http://localhost:58123/";
-    //public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
-
     public static class Credit_Card_Interface
     {
         public static bool Validate_Credit_Card(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
@@ -28,7 +25,7 @@ public static class Data_Provider
                    amountCheck.IsMatch             (amount);
         }
 
-        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
+        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("CCNumber",            CCNumber);
@@ -37,7 +34,7 @@ public static class Data_Provider
             parameters.Add("ownerName",           ownerName);
             parameters.Add("amount",              amount);
 
-            return sendWebRequest(parameters, urlBase + "Services/CreditCard.asmx/Process_Credit_Card");
+            return sendWebRequest(parameters, URL.root(request) + "Services/CreditCard.asmx/Process_Credit_Card");
         }
     }
 
@@ -48,27 +45,27 @@ public static class Data_Provider
             return true;
         }
 
-        public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status)
+        public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("p_cci_order_id_fk",         order_id);
             parameters.Add("p_cci_token",               token);
             parameters.Add("p_cci_confirmation_status", confirmation_status);
 
-            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/createCCI");
+            return sendWebRequest(parameters, URL.root(request) + "Services/CreditCardInvoice.asmx/createCCI");
         }
 
-        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password)
+        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("Order_ID", Order_ID);
             parameters.Add("ID_Number", ID_Number);
             parameters.Add("Password", Password);
 
-            return sendWebRequest(parameters, urlBase + "Services/IDCard.asmx/Process_ID_Card");
+            return sendWebRequest(parameters, URL.root(request) + "Services/IDCard.asmx/Process_ID_Card");
         }
 
-        public static List<DataTable> Get_Menu(string data)
+        public static List<DataTable> Get_Menu(string data, HttpRequest request)
         {
             List<DataTable> menuTables = new List<DataTable>();
             string result;
@@ -80,7 +77,7 @@ public static class Data_Provider
             NameValueCollection parameters = new NameValueCollection();
             //parameters.Add("data", data);
 
-            result = sendWebRequest(parameters, urlBase + "Services/Menu.asmx/Menu");
+            result = sendWebRequest(parameters, URL.root(request) + "Services/Menu.asmx/Menu");
 
             foreach (string resultTable in result.Split(new string[] { "-;-" }, StringSplitOptions.None))
             {
@@ -121,13 +118,13 @@ public static class Data_Provider
             return menuTables;
         }
 
-        public static bool Send_Order_Info(Order data)
+        public static bool Send_Order_Info(Order data, HttpRequest request)
         {
             //data. pull apart
             NameValueCollection parameters = new NameValueCollection();
             //parameters.Add("data", data);
 
-            string result = sendWebRequest(parameters, urlBase + "Services/Order.asmx/_");
+            string result = sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/_");
             return result.Length > 0;
         }
     }
@@ -183,5 +180,26 @@ public static class Data_Provider
         result = result.Substring(result.IndexOf(">") + 1); //REMOVES < string xmlns = "..." >
 
         return result.Remove(result.LastIndexOf("<")); //REMOVES </string>
+    }
+}
+
+/// <summary>
+/// URL class for getting the url to the root of this web project.
+/// </summary>
+public static class URL
+{
+    /// <summary>
+    /// Returns
+    /// "http://localhost:#####" + "/" + "";
+    /// OR
+    /// "http://csmain.studentnet.int" + "/seproject/PalmsPP" + "/";
+    /// WHERE ##### is the local host port number that IIS Express makes for the debugger.
+    /// </summary>
+    /// <param name="request">The System.Web.HttpRequest of the web page that holds key URL information.</param>
+    /// <returns>The base URL to this project ending in the root's '/'</returns>
+    public static string root(HttpRequest request)
+    {
+        string URL = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath;
+        return URL + (URL[URL.Length - 1] == '/' ? "" : "/");
     }
 }

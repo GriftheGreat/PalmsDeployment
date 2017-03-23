@@ -131,9 +131,9 @@ public class Database_Queries
     public int createCCI(int p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
     {
         int result;
-        String query_string = @"BEGIN :out := createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status, ) END;";
+        String query_string = @"BEGIN :out := credit_card_inv_package.createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status) END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand    myCommand    = new OracleCommand   (query_string, myConnection);
 
         try
         {
@@ -227,7 +227,7 @@ public class Database_Queries
         DataTable menu = new DataTable();
         string query_string = @"SELECT * FROM food";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand    myCommand    = new OracleCommand   (query_string, myConnection);
 
         try
         {

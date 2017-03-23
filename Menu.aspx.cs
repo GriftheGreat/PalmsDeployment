@@ -40,9 +40,10 @@ public partial class Menu : System.Web.UI.Page
         }
     }
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected void Page_PreRender(object sender, EventArgs e)
     {
-        //Response.Write("Page_Load<br />\n");
+        // ASP.NET Page Life Cycle Overview 
+        // https://msdn.microsoft.com/en-us/library/ms178472.aspx
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
@@ -126,7 +127,6 @@ public partial class Menu : System.Web.UI.Page
 
         foreach (RepeaterItem item in this.rptDetailList.Items)
         {
-            //Response.Write(((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "-");
             if(correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
             {
                 DataRow newRow        = details.NewRow();
@@ -138,10 +138,6 @@ public partial class Menu : System.Web.UI.Page
                 details.Rows.Add(newRow);
             }
         }
-
-        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
-        //j.DataSource = null;
-        //j.DataBind();
 
         if (tempOrder == null)
         {

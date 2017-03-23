@@ -8,6 +8,18 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
+        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
+        //j.DataSource = null;
+        //j.DataBind();
+
+        int jj;
+        for (jj = 0; jj < 10; jj++)
+        {
+            Response.Write("<div>"+jj.ToString()+"</div>");
+
+        }
+        //this.litControl.Text = var;
+
         List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("", Request);
 
         this.gdvMenu1.DataSource = j[0];

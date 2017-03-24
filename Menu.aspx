@@ -184,7 +184,7 @@
                                 <div class="front">
                                     <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>'      CssClass="card-front-name" />
-                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost") %>'      CssClass="card-front-price" />
+                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
                                 </div>
                                 <div class="back">
                                     <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
@@ -194,8 +194,8 @@
 <%--combo?--%>                      <div class="productInfo">
 <%--combo?--%>                          <h4 class="text-left">
                                             <asp:Literal ID="litfood_description" runat="server" Text='<%# Eval("food_descr") %>' />
-                                            <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost") %>'      CssClass="" />
-                                            <asp:Label   ID="lbldeliverable"      runat="server" Text='<%# Eval("is_deliverable") %>' CssClass="" />
+                                            <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                            <asp:Label   ID="lbldeliverable"      runat="server" Text='<%# Eval("is_deliverable") %>' />
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">

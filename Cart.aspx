@@ -122,7 +122,7 @@
                             <div class="front card-front">
 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "                                    <img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
                                 <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>'  CssClass="card-front-name" />
-                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
+                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
                             </div>
 <%--                        <asp:Literal       ID="lit1"           runat="server" Text='<%# Eval("Deliverable").ToString() == "Y" ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" />" : "" %>' />--%>
 <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "                        <img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
@@ -142,7 +142,7 @@
                                         <%# Eval("Chosen").ToString() %>
                                         <asp:CheckBox      ID="chbAdded"    runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
                                         <%--<asp:Label         ID="lblmydetails" runat="server" Text='<%# Eval("Description") %>' />--%>
-                                        <asp:Label         ID="Label1" runat="server" Text='<%# "$" + Eval("Cost").ToString() %>' />
+                                        <asp:Label         ID="Label1" runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
                                         <asp:Label         ID="Label2" runat="server" Text='<%# Eval("GroupName") %>' />
                                         <asp:HiddenField   ID="hid1"   runat="server" Value='<%# Eval("ID") %>' /><br />
                                     </ItemTemplate>

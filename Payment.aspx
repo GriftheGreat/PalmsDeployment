@@ -151,6 +151,8 @@
             });
 
             $('div[tabSection="' + tabToOpen + '"]').first().show();
+
+            $('#<%= this.hidPaymentType.ClientID %>').val(tabToOpen);
         }
     </script>
 </asp:Content>
@@ -168,15 +170,16 @@
                             <div class="front payment-item">
 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "                                    <img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\">" : "" %>
                                 <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' CssClass="card-front-name" />
-                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price") %>' CssClass="card-front-price" />
+                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
                 </div>
                 <div class="order-summary-info">
-                    Price: $$$<asp:Literal ID="litPrice" runat="server" />
+                    Total Price: <asp:Literal ID="litPrice" runat="server" />
                 </div>
             </div>
+            <asp:HiddenField ID="hidPaymentType" runat="server" />
             <div class="payment-options">
                 <table class="payment-options-button-container">
                     <tr>

@@ -113,4 +113,14 @@ public class Order
         this.Time              = DateTime.Now;
         this.Type              = type;
     }
+
+    public float CalculateCost()
+    {
+        float cost = 0.0f;
+        foreach(Order_Element food in this.Order_Elements)
+        {
+            cost += food.CalculateCost();
+        }
+        return cost;
+    }
 }

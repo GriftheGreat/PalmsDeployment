@@ -35,7 +35,7 @@ public class CreditCard
         }
         else
         {
-            token = "Fail:one or more check(s) failed:";
+            token = "Fail:one or more validation(s) failed:";
         }
         return token + CCNumber + ";" + expirationMonthDate + ";" + ownerName + ";" + cardSecurityCode + ";" + amount;
     }

@@ -203,7 +203,7 @@ public class CreditCardInvoice
     public string createCCI(string p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
     {
         string result;
-        string query_string = "BEGIN :out := createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status); END;";
+        string query_string = "BEGIN :out := credit_card_inv_package.createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 

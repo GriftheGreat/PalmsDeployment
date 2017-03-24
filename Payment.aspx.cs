@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Payment : System.Web.UI.Page
 {
@@ -34,6 +29,9 @@ public partial class Payment : System.Web.UI.Page
 
             if (MyOrder.Order_Elements != null)
             {
+                string cost = MyOrder.CalculateCost().ToString();
+                this.litPrice.Text = cost.Insert(cost.IndexOf("-") + 1, "$");
+
                 this.rptItems.DataSource = MyOrder.Order_Elements;
                 this.rptItems.DataBind();
             }
@@ -44,15 +42,15 @@ public partial class Payment : System.Web.UI.Page
     {
         bool success = false;
 
-        if(true/*CC*/)
+        if(this.hidPaymentType.Value == "1") // Credit Card
         {
             //validate?
             string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text, Request);
             string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N", Request);
-Response.Write(paymentResultString = "\n<br />\n<br />" + saveResultString);
+
             success = paymentResultString.Contains("Pass:") && saveResultString.Contains("Pass:");
         }
-        else if(true/*idC*/)
+        else if(this.hidPaymentType.Value == "2") // PCC ID Card
         {
             //validate?
             string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, this.txtIDNumber.Text, this.txtPassword.Text, Request);

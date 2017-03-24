@@ -204,4 +204,14 @@ public class Order_Element
     //    }
     //    return data;
     //}
+
+    internal float CalculateCost()
+    {
+        float cost = this.Price;
+        foreach (Detail detail in this.Details)
+        {
+            cost += detail.Cost;
+        }
+        return cost;
+    }
 }

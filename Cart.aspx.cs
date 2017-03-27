@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Data;
 using System.Web.UI.WebControls;
-using System.Net;
-using System.Collections.Specialized;
-using Oracle.DataAccess.Client;
 
 public partial class Cart : System.Web.UI.Page
 {
     #region Properties
-    private Order _myOrder;
     public Order MyOrder
     {
         get
@@ -18,6 +13,7 @@ public partial class Cart : System.Web.UI.Page
         set
         {
             Session["order"] = value;
+            Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
     }
     #endregion
@@ -33,6 +29,43 @@ public partial class Cart : System.Web.UI.Page
         {
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
+        }
+    }
+
+    protected void Page_PreRender(object sender, EventArgs e)
+    {
+        int numItems = 0;
+
+        if (Session["orderItemNumber"] != null)
+        {
+            numItems = Convert.ToInt32(Session["orderItemNumber"].ToString());
+        }
+
+        this.plhItemsAreInOrder.Visible = numItems != 0;
+        this.plhNoItemsInOrder.Visible = numItems == 0;
+    }
+
+    protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
+        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+        rpt.DataBind();
+    }
+
+    protected void lnkGoPay_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(URL.root(Request) + "Payment.aspx", true);
+    }
+
+    protected void lnkRemoveItem_Click(object sender, EventArgs e)
+    {
+        Order temp = MyOrder;
+        if (temp != null && temp.Order_Elements != null)
+        {
+            temp.Order_Elements.RemoveAt(((RepeaterItem)((LinkButton)sender).NamingContainer).ItemIndex);
+            this.rptItems.DataSource = temp.Order_Elements;
+            this.rptItems.DataBind();
+            MyOrder = temp;
         }
     }
 }

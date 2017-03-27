@@ -21,6 +21,7 @@
 	<li>Commit your local changes.</li>
 	<li>Push your local changes.</li>
 	<li>Start git bash in the server folder.</li>
-	<li>Run command <pre>git pull origin master</pre> (it will fail).</li>
-	<li>Run command <pre>git checkout -f master</pre> the whole folder is mirrored.</li>
+	<li>Run command <pre>git pull</pre> and the whole folder is mirrored.</li>
+	<li>But you might have to run commands like: <pre>git pull origin master</pre> (it will fail).</li>
+	<li>and... <pre>git checkout -f master</pre> the whole folder is mirrored.</li>
 </ol>

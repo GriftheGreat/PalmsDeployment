@@ -39,11 +39,11 @@ public partial class ManagerUI : System.Web.UI.Page
     public DataTable Get_Food()
     {
         DataTable data = new DataTable();
-        string query_string           = @"SELECT   * 
+        string query_string = @"SELECT   * 
                                           FROM     food
                                           ORDER BY food_name";
-        OracleConnection  myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand     myCommand    = new OracleCommand(query_string, myConnection);
+        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
         try
         {
@@ -102,7 +102,7 @@ public partial class ManagerUI : System.Web.UI.Page
     }
 
     /// <summary>
-    /// Add new row into DataTable if no record found in Table
+    /// Controls button that adds a record
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -132,43 +132,56 @@ public partial class ManagerUI : System.Web.UI.Page
     }
 
     /// <summary>
-    /// Insert New Record
+    /// Controls the button that finalizes the record addition
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     protected void InsertNewRecord(object sender, EventArgs e)
     {
+        // Retrive new changes from text boxes
+        TextBox txtNewName = FoodGrid.FooterRow.FindControl("txtNewName") as TextBox;
+        DropDownList insertFoodTypeDDL = FoodGrid.FooterRow.FindControl("insertFoodTypeDDL") as DropDownList;
+        TextBox txtNewDescr = FoodGrid.FooterRow.FindControl("txtNewDescr") as TextBox;
+        TextBox txtNewCost = FoodGrid.FooterRow.FindControl("txtNewCost") as TextBox;
+        TextBox txtNewIsDeliverable = FoodGrid.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
+        TextBox NewPhoto = FoodGrid.FooterRow.FindControl("NewPhoto") as TextBox;
+
+        // Update database and rebind DataTable
+        string query_string = @"BEGIN :out := food_package.createFood(p_food_type_id_fk => :p_food_type_id_fk,
+                                                                      p_food_name       => :p_food_name,
+                                                                      p_food_descr      => :p_food_descr,
+                                                                      p_food_cost       => :p_food_cost,
+                                                                      p_is_deliverable  => :p_is_deliverable,
+                                                                      p_image_path      => :p_image_path); END;";
+
+        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
         try
         {
-            string strName = dt.Rows[0]["name"].ToString();
-            if (strName == "0")
-            {
-                dt.Rows[0].Delete();
-                // GlobalClass.adap.Update(dt);   An OracleDataApater created to "push" changes up to the database.
-            }
-
-            // Retrive new changes from text boxes
-            TextBox txtName          = FoodGrid.FooterRow.FindControl("txtNewName")          as TextBox;
-            TextBox txtDescr         = FoodGrid.FooterRow.FindControl("txtNewDescr")         as TextBox;
-            TextBox txtCost          = FoodGrid.FooterRow.FindControl("txtNewCost")          as TextBox;
-            TextBox txtIsDeliverable = FoodGrid.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
-
-            // Place changes in text boxes
-            DataRow dr               = dt.NewRow();
-            dr["name"]               = txtName.Text.Trim();
-            dr["descr"]              = txtDescr.Text.Trim();
-            dr["cost"]               = txtCost.Text.Trim();
-            dt.Rows.Add(dr);
-            dt.AcceptChanges();
-            FoodGrid.ShowFooter = false;
-            FillGridView();
+            myConnection.Open();
+            myCommand.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+            myCommand.Parameters.Add("p_food_type_id_fk", insertFoodTypeDDL.SelectedValue);
+            myCommand.Parameters.Add("p_food_name", txtNewName.Text.Trim());
+            myCommand.Parameters.Add("p_food_descr", txtNewDescr.Text.Trim());
+            myCommand.Parameters.Add("p_food_cost", Convert.ToDecimal(txtNewCost.Text.Trim()));
+            myCommand.Parameters.Add("p_is_deliverable", txtNewIsDeliverable.Text.Trim());
+            myCommand.Parameters.Add("p_image_path", NewPhoto.Text.Trim());
+            myCommand.ExecuteNonQuery();
         }
-        catch
+        finally
         {
-            Response.Write("<script> alert('Record not added...') </script>");
+            try
+            {
+                myCommand.Dispose();
+            }
+            catch { }
+            myConnection.Close();
+            myConnection.Dispose();
         }
-
+        FoodGrid.ShowFooter = false;
+        FillGridView();
     }
+
     /// <summary>
     /// Update the record
     /// </summary>
@@ -176,15 +189,17 @@ public partial class ManagerUI : System.Web.UI.Page
     /// <param name="e"></param>
     protected void updateRecord(object sender, GridViewUpdateEventArgs e)
     {
-        // Fill text boxes with current data
-        TextBox txtName          = FoodGrid.Rows[e.RowIndex].FindControl("txtName") as TextBox;
-        TextBox txtDescr         = FoodGrid.Rows[e.RowIndex].FindControl("txtDescr") as TextBox;
-        TextBox txtCost          = FoodGrid.Rows[e.RowIndex].FindControl("txtCost") as TextBox;
+        // Create fields with current data
+        TextBox txtName = FoodGrid.Rows[e.RowIndex].FindControl("txtName") as TextBox;
+        DropDownList FoodTypeDDL = FoodGrid.Rows[e.RowIndex].FindControl("newFoodTypeDDL") as DropDownList;
+        TextBox txtDescr = FoodGrid.Rows[e.RowIndex].FindControl("txtDescr") as TextBox;
+        TextBox txtCost = FoodGrid.Rows[e.RowIndex].FindControl("txtCost") as TextBox;
         TextBox txtIsDeliverable = FoodGrid.Rows[e.RowIndex].FindControl("txtIsDeliverable") as TextBox;
-        TextBox txtPhotoPath     = FoodGrid.Rows[e.RowIndex].FindControl("Photo") as TextBox;
+        TextBox txtPhotoPath = FoodGrid.Rows[e.RowIndex].FindControl("Photo") as TextBox;
 
         // Update database and rebind DataTable
         string query_string = @"BEGIN food_package.updateFood(p_food_id_pk      => :p_food_id_pk,
+                                                              p_food_type_id_fk => :food_type_id_fk,
                                                               p_food_name       => :p_food_name,
                                                               p_food_descr      => :p_food_descr,
                                                               p_food_cost       => :p_food_cost,
@@ -196,6 +211,7 @@ public partial class ManagerUI : System.Web.UI.Page
         {
             myConnection.Open();
             myCommand.Parameters.Add("p_food_id_pk", dt.Rows[FoodGrid.Rows[e.RowIndex].RowIndex]["food_id_pk"]);
+            myCommand.Parameters.Add("p_food_type_id_fk", FoodTypeDDL.SelectedValue);
             myCommand.Parameters.Add("p_food_name", txtName.Text.Trim());
             myCommand.Parameters.Add("p_food_descr", txtDescr.Text.Trim());
             myCommand.Parameters.Add("p_food_cost", Convert.ToDecimal(txtCost.Text.Trim()));
@@ -213,7 +229,7 @@ public partial class ManagerUI : System.Web.UI.Page
 
             myConnection.Close();
             myConnection.Dispose();
-            }
+        }
         FoodGrid.EditIndex = -1;
 
         // Refresh the UI display
@@ -227,18 +243,26 @@ public partial class ManagerUI : System.Web.UI.Page
     /// <param name="e"></param>
     protected void RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
+        string query_string = @"BEGIN food_package.deleteFood(p_food_id_pk => :p_food_id_pk); END;";
+        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
         try
         {
-            dt.Rows[FoodGrid.Rows[e.RowIndex].RowIndex].Delete();
-            dt.AcceptChanges();
-            // Get the image path for removing deleted's record image from server folder
-            Image imgPhoto = FoodGrid.Rows[e.RowIndex].FindControl("imgPhoto") as Image;
-            File.Delete(Server.MapPath(imgPhoto.ImageUrl));
-            FillGridView();
+            myConnection.Open();
+            myCommand.Parameters.Add("p_food_id_pk", dt.Rows[FoodGrid.Rows[e.RowIndex].RowIndex]["food_id_pk"]);
+            myCommand.ExecuteNonQuery();
         }
-        catch
+        finally
         {
-            Response.Write("<script> alert('Record not deleted...') </script>");
+            try
+            {
+                myCommand.Dispose();
+            }
+            catch { }
+
+            myConnection.Close();
+            myConnection.Dispose();
         }
+        FillGridView();
     }
 }

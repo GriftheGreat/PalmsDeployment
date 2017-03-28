@@ -95,7 +95,7 @@
                 </asp:TemplateField>
 
                 <asp:TemplateField>
-                    <HeaderTemplate>Is Deliverable</HeaderTemplate>
+                    <HeaderTemplate>Deliverable</HeaderTemplate>
                     <ItemTemplate>
                         <asp:Label ID="lblIsDeliverable" runat="server" Text='<%# Eval("IS_DELIVERABLE") %>' />
                     </ItemTemplate>

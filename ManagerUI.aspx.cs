@@ -6,42 +6,22 @@ using Oracle.DataAccess.Client;
 using System.Web.UI.WebControls;
 
 public partial class ManagerUI : System.Web.UI.Page
-{
-    #region Properties
-    private DataTable _dt;
-
-    public DataTable dt
-    {
-        get
-        {
-            return Session["Food_Table"] != null ? (DataTable)Session["Food_Table"] : null;
-        }
-        set
-        {
-            Session["Food_Table"] = value;
-        }
-    }
-    #endregion
-
+{ 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["Food_Table"] != null)
-        {
-            dt = (DataTable)Session["Food_Table"];
-        }
         if (!IsPostBack)
         {
-            // Call FillGridView Method
             FillGridView();
         }
+
     }
 
     public DataTable Get_Food()
     {
         DataTable data = new DataTable();
-        string query_string = @"SELECT   * 
-                                          FROM     food
-                                          ORDER BY food_name";
+        string query_string = @"SELECT * 
+                                  FROM food
+                              ORDER BY food_name";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
@@ -63,21 +43,16 @@ public partial class ManagerUI : System.Web.UI.Page
         }
         return data;
     }
+
     /// <summary>
     /// Fill record into GridView
     /// </summary>
     public void FillGridView()
     {
-        try
-        {
-            FoodGrid.DataSource = dt = Get_Food();
-            FoodGrid.DataBind();
-        }
-        catch
-        {
-            Response.Write("<script> alert('Connection String Error...') </script>");
-        }
+        FoodGrid.DataSource = Get_Food();
+        FoodGrid.DataBind();        
     }
+
     /// <summary>
     /// Edit record
     /// </summary>
@@ -139,12 +114,12 @@ public partial class ManagerUI : System.Web.UI.Page
     protected void InsertNewRecord(object sender, EventArgs e)
     {
         // Retrive new changes from text boxes
-        TextBox txtNewName = FoodGrid.FooterRow.FindControl("txtNewName") as TextBox;
-        DropDownList insertFoodTypeDDL = FoodGrid.FooterRow.FindControl("insertFoodTypeDDL") as DropDownList;
-        TextBox txtNewDescr = FoodGrid.FooterRow.FindControl("txtNewDescr") as TextBox;
-        TextBox txtNewCost = FoodGrid.FooterRow.FindControl("txtNewCost") as TextBox;
-        TextBox txtNewIsDeliverable = FoodGrid.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
-        TextBox NewPhoto = FoodGrid.FooterRow.FindControl("NewPhoto") as TextBox;
+        TextBox      txtNewName          = FoodGrid.FooterRow.FindControl("txtNewName")          as TextBox;
+        DropDownList insertFoodTypeDDL   = FoodGrid.FooterRow.FindControl("insertFoodTypeDDL")   as DropDownList;
+        TextBox      txtNewDescr         = FoodGrid.FooterRow.FindControl("txtNewDescr")         as TextBox;
+        TextBox      txtNewCost          = FoodGrid.FooterRow.FindControl("txtNewCost")          as TextBox;
+        TextBox      txtNewIsDeliverable = FoodGrid.FooterRow.FindControl("txtNewIsDeliverable") as TextBox;
+        TextBox      NewPhoto            = FoodGrid.FooterRow.FindControl("NewPhoto")            as TextBox;
 
         // Update database and rebind DataTable
         string query_string = @"BEGIN :out := food_package.createFood(p_food_type_id_fk => :p_food_type_id_fk,
@@ -155,7 +130,7 @@ public partial class ManagerUI : System.Web.UI.Page
                                                                       p_image_path      => :p_image_path); END;";
 
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand    myCommand    = new OracleCommand(query_string, myConnection);
         try
         {
             myConnection.Open();
@@ -190,12 +165,12 @@ public partial class ManagerUI : System.Web.UI.Page
     protected void updateRecord(object sender, GridViewUpdateEventArgs e)
     {
         // Create fields with current data
-        TextBox txtName = FoodGrid.Rows[e.RowIndex].FindControl("txtName") as TextBox;
-        DropDownList FoodTypeDDL = FoodGrid.Rows[e.RowIndex].FindControl("newFoodTypeDDL") as DropDownList;
-        TextBox txtDescr = FoodGrid.Rows[e.RowIndex].FindControl("txtDescr") as TextBox;
-        TextBox txtCost = FoodGrid.Rows[e.RowIndex].FindControl("txtCost") as TextBox;
-        TextBox txtIsDeliverable = FoodGrid.Rows[e.RowIndex].FindControl("txtIsDeliverable") as TextBox;
-        TextBox txtPhotoPath = FoodGrid.Rows[e.RowIndex].FindControl("Photo") as TextBox;
+        TextBox      txtName          = FoodGrid.Rows[e.RowIndex].FindControl("txtName")          as TextBox;
+        DropDownList FoodTypeDDL      = FoodGrid.Rows[e.RowIndex].FindControl("newFoodTypeDDL")   as DropDownList;
+        TextBox      txtDescr         = FoodGrid.Rows[e.RowIndex].FindControl("txtDescr")         as TextBox;
+        TextBox      txtCost          = FoodGrid.Rows[e.RowIndex].FindControl("txtCost")          as TextBox;
+        TextBox      txtIsDeliverable = FoodGrid.Rows[e.RowIndex].FindControl("txtIsDeliverable") as TextBox;
+        TextBox      txtPhotoPath     = FoodGrid.Rows[e.RowIndex].FindControl("Photo")            as TextBox;
 
         // Update database and rebind DataTable
         string query_string = @"BEGIN food_package.updateFood(p_food_id_pk      => :p_food_id_pk,
@@ -206,11 +181,11 @@ public partial class ManagerUI : System.Web.UI.Page
                                                               p_is_deliverable  => :p_is_deliverable,
                                                               p_image_path      => :p_image_path); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand    myCommand    = new OracleCommand(query_string, myConnection);
         try
         {
             myConnection.Open();
-            myCommand.Parameters.Add("p_food_id_pk", dt.Rows[FoodGrid.Rows[e.RowIndex].RowIndex]["food_id_pk"]);
+            myCommand.Parameters.Add("p_food_id_pk", ((HiddenField)FoodGrid.Rows[e.RowIndex].FindControl("hidId")).Value);
             myCommand.Parameters.Add("p_food_type_id_fk", FoodTypeDDL.SelectedValue);
             myCommand.Parameters.Add("p_food_name", txtName.Text.Trim());
             myCommand.Parameters.Add("p_food_descr", txtDescr.Text.Trim());
@@ -245,11 +220,11 @@ public partial class ManagerUI : System.Web.UI.Page
     {
         string query_string = @"BEGIN food_package.deleteFood(p_food_id_pk => :p_food_id_pk); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
+        OracleCommand    myCommand    = new OracleCommand(query_string, myConnection);
         try
         {
             myConnection.Open();
-            myCommand.Parameters.Add("p_food_id_pk", dt.Rows[FoodGrid.Rows[e.RowIndex].RowIndex]["food_id_pk"]);
+            myCommand.Parameters.Add("p_food_id_pk", ((HiddenField)FoodGrid.Rows[e.RowIndex].FindControl("hidID")).Value);
             myCommand.ExecuteNonQuery();
         }
         finally

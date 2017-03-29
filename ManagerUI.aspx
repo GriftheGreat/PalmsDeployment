@@ -4,6 +4,16 @@
          Inherits="ManagerUI"
          MasterPageFile="~/Master Pages/Manager.Master" %>
 
+<asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
+    <style type="text/css">
+        .card-image
+        {
+            width: 150px;
+        }
+    </style>
+    
+</asp:Content>
+
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div>
         <asp:GridView ID="FoodGrid" runat="server" ShowHeaderWhenEmpty="True"
@@ -22,10 +32,9 @@
             <SelectedRowStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
 
             <Columns>
-
                 <asp:TemplateField>
                     <ItemTemplate>
-                        <asp:Label ID="lblId" Visible="false" runat="server" Text='<%# Eval("FOOD_ID_PK")%>' />
+                        <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("FOOD_ID_PK") %>' />
                     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -68,11 +77,11 @@
                         <asp:Label ID="lblDescr" runat="server" Text='<%# Eval("FOOD_DESCR") %>' />
                     </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:TextBox ID="txtDescr" runat="server" Text='<%# Bind("FOOD_DESCR") %>' MaxLength="150" Width="20em" TextMode="MultiLine" />
+                        <asp:TextBox ID="txtDescr" runat="server" Text='<%# Bind("FOOD_DESCR") %>' MaxLength="150" Width="30em" TextMode="MultiLine" />
                         <asp:RequiredFieldValidator ID="rfvtxtDescr" runat="server" Text="Invalid entry" ToolTip="Enter Description" ControlToValidate="txtDescr" />
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtNewDescr" runat="server" MaxLength="150" ViewStateMode="Enabled" />
+                        <asp:TextBox ID="txtNewDescr" runat="server" MaxLength="150"  Width="30em"  TextMode="MultiLine" />
                         <asp:RequiredFieldValidator ID="rfvtxtNewDescr" runat="server" Text="Invalid entry" ToolTip="Enter food description" ControlToValidate="txtNewDescr" />
                     </FooterTemplate>
                 </asp:TemplateField>
@@ -101,11 +110,13 @@
                     </ItemTemplate>
                     <EditItemTemplate>
                         <asp:TextBox ID="txtIsDeliverable" runat="server" Text='<%# Bind("IS_DELIVERABLE") %>' MaxLength="1" Width="1em" />
-                        <asp:RequiredFieldValidator ID="rfvtxtIsDeliverable" runat="server" Text="Invalid entry" ToolTip="Indicate whether deliverable" ControlToValidate="txtIsDeliverable" />
+                        <asp:RequiredFieldValidator ID="rfvTxtIsDeliverable" runat="server" Text="Invalid entry" ToolTip="Indicate whether deliverable" ControlToValidate="txtIsDeliverable" />
+                        <asp:RegularExpressionValidator ID="revTxtDescr" runat="server" Text="Invalid entry" ToolTip="Indicate whether deliverable" ControlToValidate="txtIsDeliverable" ValidationExpression="[YN]" />
                     </EditItemTemplate>
                     <FooterTemplate>
                         <asp:TextBox ID="txtNewIsDeliverable" runat="server" MaxLength="1" Width="1em" />
                         <asp:RequiredFieldValidator ID="rfvtxtNewIsDeliverable" runat="server" Text="Invalid entry" ToolTip="Indicate whether deliverable" ControlToValidate="txtNewIsDeliverable" />
+                        <asp:RegularExpressionValidator ID="revTxtNewDescr" runat="server" Text="Invalid entry" ToolTip="Indicate whether deliverable" ControlToValidate="txtNewIsDeliverable" ValidationExpression="[YN]" />
                     </FooterTemplate>
                 </asp:TemplateField>
 
@@ -116,11 +127,11 @@
                     </ItemTemplate>
 
                     <EditItemTemplate>
-                        <asp:TextBox ID="Photo" runat="server" ToolTip="Select Photo" Text='<%# Eval("image_path") %>' Width="20em"/>
+                        <asp:TextBox ID="Photo" runat="server" ToolTip="Type in Photopath" Text='<%# Eval("image_path") %>' Width="20em"/>
                         <asp:RegularExpressionValidator ID="revfuPhoto" runat="server" Text="Invalid Entry" ToolTip="Image formate only" ControlToValidate="Photo" ValidationExpression="[a-zA-Z0_9/].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG)\b" />
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="NewPhoto" runat="server" ToolTip="select Photo" />
+                        <asp:TextBox ID="NewPhoto" runat="server" ToolTip="Type in Photopath" />
                         <asp:RegularExpressionValidator ID="revNewPhoto" runat="server" Text="Invalid Entry" ToolTip="Image formate only" ControlToValidate="NewPhoto" ValidationExpression="[a-zA-Z0_9/].*\b(.jpeg|.JPEG|.jpg|.JPG|.jpe|.JPE|.png|.PNG)\b" />
                     </FooterTemplate>
                 </asp:TemplateField>
@@ -128,17 +139,17 @@
                 <asp:TemplateField>
                     <HeaderTemplate>Operation</HeaderTemplate>
                     <ItemTemplate>
-                        <asp:Button ID="btnEdit" runat="server" CommandName="Edit" Text="Edit" />
-                        <asp:Button ID="btnDelete" runat="server" CommandName="Delete" Text="Delete" CausesValidation="true" OnClientClick="return confirm('Are you sure?')" />
+                        <asp:Button ID="btnEdit" runat="server" UseSubmitBehavior="false" CommandName="Edit" Text="Edit"  />
+                        <asp:Button ID="btnDelete" runat="server" UseSubmitBehavior="false" CommandName="Delete" Text="Delete" CausesValidation="true" OnClientClick="return confirm('Are you sure?')" />
                     </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:Button ID="btnUpdate" runat="server" CommandName="Update" Text="Update" />
-                        <asp:Button ID="btnCancel" runat="server" CommandName="Cancel" Text="Cancel" CausesValidation="false" />
+                        <asp:Button ID="btnUpdate" runat="server" UseSubmitBehavior="false" CommandName="Update" Text="Update" />
+                        <asp:Button ID="btnCancel" runat="server" UseSubmitBehavior="false" CommandName="Cancel" Text="Cancel" CausesValidation="false" />
                     </EditItemTemplate>
 
                     <FooterTemplate>
-                        <asp:Button ID="btnNewInsert" runat="server" Text="Insert" OnClick="InsertNewRecord" />
-                        <asp:Button ID="btnNewCancel" runat="server" Text="Cancel" OnClick="AddNewCancel" CausesValidation="false" />
+                        <asp:Button ID="btnNewInsert" runat="server" UseSubmitBehavior="false" Text="Insert" OnClick="InsertNewRecord" />
+                        <asp:Button ID="btnNewCancel" runat="server" UseSubmitBehavior="false" Text="Cancel" OnClick="AddNewCancel" CausesValidation="false" />
                     </FooterTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -147,6 +158,6 @@
             </EmptyDataTemplate>
         </asp:GridView>
         <br />
-        <asp:Button ID="btnAdd" runat="server" Text="Add New Record" OnClick="AddNewRecord" />
+        <asp:Button ID="btnAdd" runat="server" UseSubmitBehavior="false" Text="Add New Record" OnClick="AddNewRecord" />
     </div>
 </asp:Content>

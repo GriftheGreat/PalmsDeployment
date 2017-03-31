@@ -17,10 +17,10 @@ public class CreditCard
         string token;
 
         Regex CCNumberCheck            = new Regex("^[0-9]{16,16}$");
-        Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/(0[1-9]|[1-2][0-9]|30|31)$");
+        Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/[0-9]{2,2}$");
         Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
-        Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]*$");
-        Regex amountCheck              = new Regex("^[0-9]*.{0,1}[0-9]{0,2}$");
+        Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
+        Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
 
         if (CCNumberCheck.IsMatch           (CCNumber) &&
             expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
@@ -31,12 +31,16 @@ public class CreditCard
             // Logic for checking amount of money student has goes here.
             // To simulate, the "check" will randomly pass or fail.
             Random rnd = new Random();
-            token = rnd.Next(100) < 50 ? "Pass:" : "Fail:balance has insufficient funds:"; // 0 <= number < 100
+            token = rnd.Next(100) < 50 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
         }
         else
         {
-            token = "Fail:one or more validation(s) failed:";
+            token = "Fail:Invalid credit card data"+ CCNumberCheck.IsMatch(CCNumber).ToString()+
+                                                     expirationMonthDateCheck.IsMatch(expirationMonthDate).ToString() +
+                                                     cardSecurityCodeCheck.IsMatch(cardSecurityCode).ToString() +
+                                                     ownerNameCheck.IsMatch(ownerName).ToString() +
+                                                     amountCheck.IsMatch(amount) + ".";
         }
-        return token + CCNumber + ";" + expirationMonthDate + ";" + ownerName + ";" + cardSecurityCode + ";" + amount;
+        return token + "\nownerName=" + ownerName + ":amount=" + amount;
     }
 }

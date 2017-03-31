@@ -11,10 +11,12 @@ public partial class Menu : System.Web.UI.Page
     {
         get
         {
+            //Response.Write("*get::" + (Session["order"] != null ? "yep" : "null") + "*<br />\n");
             return Session["order"] != null ? (Order)Session["order"] : null;
         }
         set
         {
+            //Response.Write("*set::" + (value != null ? "yep->"+value.Type : "null") + "*<br />\n");
             Session["order"] = value;
             Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
@@ -29,6 +31,7 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_Init(object sender, EventArgs e)
     {
+        //Response.Write("|Page_Init::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "|<br />\n");
         if (MenuData == null)
         {
             MenuData = Data_Provider.Transact_Interface.Get_Menu("", Request);
@@ -42,6 +45,7 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_PreRender(object sender, EventArgs e)
     {
+       // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
         // ASP.NET Page Life Cycle Overview 
         // https://msdn.microsoft.com/en-us/library/ms178472.aspx
         string menu = "PG";

@@ -1,8 +1,4 @@
-﻿using Oracle.DataAccess.Client;
-using System.Configuration;
-using System.Data;
-
-/// <summary>
+﻿/// <summary>
 /// Summary description for Detail
 /// </summary>
 public class Detail

@@ -13,10 +13,10 @@ public static class Data_Provider
         public static bool Validate_Credit_Card(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
         {
             Regex CCNumberCheck            = new Regex("^[0-9]{16,16}$");
-            Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/(0[1-9]|[1-2][0-9]|30|31)$");
+            Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/[0-9]{2,2}$");
             Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
-            Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]*$");
-            Regex amountCheck              = new Regex("^[0-9]*.{0,1}[0-9]{0,2}$");
+            Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
+            Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
 
             return CCNumberCheck.IsMatch           (CCNumber) &&
                    expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
@@ -55,12 +55,13 @@ public static class Data_Provider
             return sendWebRequest(parameters, URL.root(request) + "Services/CreditCardInvoice.asmx/createCCI");
         }
 
-        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password, HttpRequest request)
+        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password, string amount, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
             parameters.Add("Order_ID", Order_ID);
             parameters.Add("ID_Number", ID_Number);
             parameters.Add("Password", Password);
+            parameters.Add("amount", amount);
 
             return sendWebRequest(parameters, URL.root(request) + "Services/IDCard.asmx/Process_ID_Card");
         }
@@ -69,9 +70,9 @@ public static class Data_Provider
         {
             List<DataTable> menuTables = new List<DataTable>();
             string result;
+            string[] rows;
             DataTable menu;
             bool isNotFirstRow;
-            string[] rows;
             List<DataColumn> columns;
 
             NameValueCollection parameters = new NameValueCollection();
@@ -118,14 +119,79 @@ public static class Data_Provider
             return menuTables;
         }
 
-        public static bool Send_Order_Info(Order data, HttpRequest request)
+        public static string Send_Order_Info(Order order, HttpRequest request)
         {
-            //data. pull apart
+            string data = "{'CustomerFirstName' : '" + order.CustomerFirstName                   + @"',
+                            'CustomerLastName' : '"  + order.CustomerLastName                    + @"',
+                            'Location' : '"          + order.Location                            + @"',
+                            'Time' : '"              + order.Time.ToString("M/dd/yyyy HH:mi:ss") + @"',
+                            'Type' : '"              + order.Type                                + @"',
+                            'Foods' : [";
+
+            foreach(Order_Element food in order.Order_Elements)
+            {
+                data += "{'ID' : '"      + food.ID.ToString() + @"',
+                          'Details' : [";
+
+                foreach (Detail detail in food.Details)
+                {
+                    if (detail.Chosen)
+                    {
+                        data += "{'ID' : '" + detail.ID.ToString() + @"'},";
+                    }
+                }
+                data = data.TrimEnd(",".ToCharArray()) + "]},"; // Details
+            }
+            data = data.TrimEnd(",".ToCharArray()) + "]}"; // Foods
+
+            //NameValueCollection parameters = new NameValueCollection();
+            //parameters.Add("data", data);
+
+            return data;// sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
+        }
+
+        public static DataTable Get_Locations(string data, HttpRequest request)
+        {
+            string result;
+            string[] rows;
+            DataTable menu = new DataTable();
+            bool isNotFirstRow = false;
+            List<DataColumn> columns = new List<DataColumn>();
+
             NameValueCollection parameters = new NameValueCollection();
             //parameters.Add("data", data);
 
-            string result = sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/_");
-            return result.Length > 0;
+            result = sendWebRequest(parameters, URL.root(request) + "Services/Locations.asmx/getLocations");
+
+            if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
+            {
+                menu.Columns.Add(new DataColumn("location_id_pk"));
+                menu.Columns.Add(new DataColumn("location_name"));
+                menu.Rows.Add(new string[] { "1", result });
+            }
+            else
+            {
+                rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
+                {
+                    columns.Add(new DataColumn(columnName));
+                }
+                menu.Columns.AddRange(columns.ToArray());
+
+                foreach (string row in rows)
+                {
+                    if (isNotFirstRow)
+                    {
+                        menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
+                    }
+                    else
+                    {
+                        isNotFirstRow = true;
+                    }
+                }
+            }
+            return menu;
         }
     }
 

@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Web.Services;
 
@@ -22,47 +23,65 @@ using System.Web.Services;
 public class IDCard
 {
     [WebMethod]
-    public string Process_ID_Card(string Order_ID, string ID_Number, string Password)
+    public string Process_ID_Card(string Order_ID, string ID_Number, string Password, string amount)
     {
         string status;
-        string result;
+        string result = "";
 
-        // Logic for checking amount of money student has goes here.
-        // To simulate, the "check" will randomly pass or fail.
-        Random rnd = new Random();
-        status = rnd.Next(100) < 50 ? "Pass:" : "Fail:balance has insufficient funds:"; // 0 <= number < 100
+        Regex IDNumberCheck = new Regex("^[0-9]{4,6}$");
+        Regex PasswordCheck = new Regex("^[0-9]{8,8}$");
+        Regex amountCheck   = new Regex("^-{0,1}[0-9]*.{0,1}[0-9]{0,2}$");
 
-        // Retain invoice
-        string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
-        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
-
-        try
+        if (IDNumberCheck.IsMatch(ID_Number) &&
+            PasswordCheck.IsMatch(Password) &&
+            amountCheck.IsMatch  (amount))
         {
-            myConnection.Open();
-            myCommand.Parameters.Add("p_order_id_fk", Order_ID);
-            myCommand.Parameters.Add("p_confirmation_status", 'Y');
-            myCommand.ExecuteNonQuery();
+            // Logic for checking amount of money student has goes here.
+            // To simulate, the "check" will randomly pass or fail.
+            Random rnd = new Random();
+            status = rnd.Next(100) < 50 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
 
-            result = myCommand.Parameters["out"].Value.ToString();
-        }
-        catch (Exception ex)
-        {
-            result = "ERROR\n" + ex.Message;
-        }
-        finally
-        {
-            try
+            if (status == "Pass")
             {
-                myCommand.Dispose();
-            }
-            catch { }
+                // Retain invoice
+                string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
+                OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+                OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
-            myConnection.Close();
-            myConnection.Dispose();
+                try
+                {
+                    myConnection.Open();
+                    myCommand.Parameters.Add("p_order_id_fk", Order_ID);
+                    myCommand.Parameters.Add("p_confirmation_status", 'Y');
+                    myCommand.ExecuteNonQuery();
+
+                    //do not need in return
+                    //result = myCommand.Parameters["out"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    status = "";
+                    result = "Fail:Could not finalize payment.\n" + ex.Message;
+                }
+                finally
+                {
+                    try
+                    {
+                        myCommand.Dispose();
+                    }
+                    catch { }
+
+                    myConnection.Close();
+                    myConnection.Dispose();
+                }
+            }
+        }
+        else
+        {
+            status = "Fail:Invalid ID card data.";
         }
 
-        return status + ID_Number + "," + Password + ":" + result;
+        return status + result;
     }
 }
 
@@ -216,11 +235,12 @@ public class CreditCardInvoice
             myCommand.Parameters.Add("p_cci_confirmation_status", p_cci_confirmation_status);
             myCommand.ExecuteNonQuery();
 
-            result = "Pass:" + myCommand.Parameters["out"].Value.ToString();
+                            //do not need in return
+            result = "Pass";// + myCommand.Parameters["out"].Value.ToString();
         }
         catch (Exception ex)
         {
-            result = "ERROR\n" + ex.Message;
+            result = "Fail:Could not finalize payment.\n" + ex.Message;
         }
         finally
         {
@@ -413,7 +433,6 @@ public class Order_Data
         return result;
     }
 }
-
 
 //updateOrder(p_order_id_pk       "order".order_id_pk%TYPE,
 //deleteOrder(p_order_id_pk "order".order_id_pk%TYPE);

@@ -11,7 +11,6 @@
             width: 150px;
         }
     </style>
-    
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
@@ -89,15 +88,15 @@
                 <asp:TemplateField>
                     <HeaderTemplate>Cost</HeaderTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="lblCost" runat="server" Text='<%# Eval("FOOD_COST") %>' />
+                        <asp:Label ID="lblCost" runat="server" Text='<%# Eval("FOOD_COST", "{0:0.00}") %>'  />
                     </ItemTemplate>
                     <EditItemTemplate>
-                        <asp:TextBox ID="txtCost" runat="server" Text='<%# Bind("FOOD_COST") %>' MaxLength="5" />
+                        <asp:TextBox ID="txtCost" runat="server" Text='<%# Bind("FOOD_COST", "{0:0.00}") %>' />
                         <asp:RequiredFieldValidator ID="rfvtxtCost" runat="server" Text="Invalid entry" ToolTip="Enter Cost" ControlToValidate="txtCost" />
                         <asp:RegularExpressionValidator ID="revtxtCost" runat="server" Text="Invalid entry" ToolTip="Enter numeric value" ControlToValidate="txtCost" ValidationExpression="^[0-9.]*$" />
                     </EditItemTemplate>
                     <FooterTemplate>
-                        <asp:TextBox ID="txtNewCost" runat="server" MaxLength="5" />
+                        <asp:TextBox ID="txtNewCost" runat="server" />
                         <asp:RequiredFieldValidator ID="rfvtxtNewCost" runat="server" Text="Invalid entry" ToolTip="Enter Cost" ControlToValidate="txtNewCost" />
                         <asp:RegularExpressionValidator ID="revtxtNewCost" runat="server" Text="Invalid entry" ToolTip="Enter numeric value" ControlToValidate="txtNewCost" ValidationExpression="^[0-9.]*$" />
                     </FooterTemplate>

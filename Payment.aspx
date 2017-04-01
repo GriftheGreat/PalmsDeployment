@@ -12,14 +12,19 @@
     <style type="text/css">
         .card-front-name
         {
+            /*http://localhost:56863/Includes/images/Menu%20Items//Breakfast/Breakfast_SECCroissant.jpg */
             position: absolute;
             top: 0px;
             width: 100%;
             text-align: center;
             background-color: none;
             background-color: rgba(255, 255, 255, .5);
-            display: block;
+            display: inline;
         }
+
+
+
+
 
         .card-front-price
         {
@@ -35,8 +40,10 @@
         .payment-item
         {
             margin-left: -100px;
-            position: inherit;
+            position: relative;
+            margin-right: 50px;
             display: inline-block;
+            float: left;
         }
     </style>
     <%-- order summary --%>

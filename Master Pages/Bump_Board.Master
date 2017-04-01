@@ -12,7 +12,8 @@
    </title>
    <link rel="stylesheet" type="text/css" href="~/Includes/stylesheets/Bump_Board.css" />
    <script>
-       setInterval(function(){document.getElementById("time").innerHTML = (new Date()).toLocaleTimeString();}, 1000);
+       setInterval(function () { document.getElementById("time").innerHTML = (new Date()).toLocaleTimeString(); }, 1000);
+       //setInterval(function () { get_orders(); }, 3000);
    </script>
    
    <asp:ContentPlaceHolder ID="Styles" runat="server">

@@ -2,14 +2,95 @@ html, body
  {
 	margin: 0px;
 	padding: 0px;
+    padding-top: 2px;
 	background-color: rgb(0, 0, 0);
 	color: rgb(255, 255, 255);
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
  }
- 
-.tab
+
+body form,
+/*body form header>div
+{
+    height: 100%;
+}*/
+
+ .order_display
+ {
+     min-height: 100%;
+ }
+
+ .orderBox
+ {
+    vertical-align: top;
+    background-color: black;
+	display: inline-block;
+	width: 25%;
+	height: 100%;
+ }
+
+ .orderBoxElement
+ {
+    border: 1px solid blue;
+    width: 100%;
+	height: 100%;
+ }
+
+ .window_button
+ {
+     display:inline;
+     background-color: rgb(0, 0, 0);
+	 color: rgb(255, 255, 255);
+	 border: 2px solid rgb(0, 0, 255);
+	 border-bottom-color: rgb(0, 0, 0);
+	 padding: 0px 10px;
+	 border-radius: 8px 8px 0px 0px;
+     cursor: pointer;
+     width: 75px;
+ }
+
+ .focused_window_button
+ {
+     display:inline;
+     background-color: rgb(0, 0, 255);
+	 color: rgb(255, 255, 255);
+	 border: 2px solid rgb(0, 0, 255);
+	 border-bottom-color: rgb(0, 0, 0);
+	 padding: 0px 10px;
+	 border-radius: 8px 8px 0px 0px;
+     cursor: pointer;
+     width: 75px;
+ }
+
+ .window_button:hover
+ {
+     background-color: rgb(0, 0, 255);
+ }
+
+.top
+ {
+
+ }
+
+.middle
+{
+    height: 359px;
+    margin-bottom: 22px;
+}
+.bottom
+ {
+	border-top: 1px solid rgb(200, 200, 200);
+	background-color: rgb(0, 100, 0);
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	height: 22px;
+	text-align: center;
+ }
+
+/*.tab
 {
      background-color: rgb(0, 0, 0);
 	 color: rgb(255, 255, 255);
@@ -17,9 +98,9 @@ html, body
 	 border-bottom-color: rgb(0, 0, 0);
 	 padding: 0px 10px;
 	 border-radius: 8px 8px 0px 0px
-}
+}*/
 
-.focused_tab
+/*.focused_tab
 {
      background-color: rgb(255, 0, 0);
 	 color: rgb(200, 200, 200);
@@ -27,28 +108,33 @@ html, body
 	 border-bottom-color: rgb(0, 0, 0);
 	 padding: 0px 10px;
 	 border-radius: 8px 8px 0px 0px
-}
-
-.order_Box
-{
-    display: inline;
-    color: red;
-}
-
-/*div.food_item
-{
-    color: green;
-}
-
-div.detail
-{
-    color: red;
 }*/
 
-.order_text
+.box_number
 {
-    font-size: 20px;
+
 }
+
+.order_line
+{
+    padding-left: 5px;
+    font-size: 20px;
+    color: cyan;
+}
+
+
+
+.food_item
+ {
+     color: gold;
+     padding-left: 20px;
+ }
+
+.detail
+ {
+     color: orangered;
+     padding-left: 40px;
+ }
 
 .base_bar
  {
@@ -85,10 +171,10 @@ div.detail
     background-color: red;
 }
 
-.tab:hover
+/*.tab:hover
  {
 	 background-color: rgb(0, 0, 255);
- }
+ }*/
 
 .bar
  {
@@ -97,49 +183,16 @@ div.detail
 	height: 20px;
  }
  
- .row1
- {
-      height: 350px;
-	/* height: 45%;*/
- }
+
+
+.row
+{
+    height: 50%
+}
  
- .row2
- {
-     height: 350px;
-	 /*height: 45%;*/
- }
-.orderBox
- {
-	background-image: url('/Images/Blue line.bmp');
-	background-repeat: repeat-y;
-	display: inline-block;
-	width: 25%;
-	height: 100%;
- }
 
-.food_item
- {
-     color: gold;
-     padding-left: 10px;
- }
 
-.detail
- {
-     color: blueviolet;
-     padding-left: 20px;
- }
 
- #bottom
- {
-	border-top: 1px solid rgb(200, 200, 200);
-	background-color: rgb(0, 100, 0);
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	width: 100%;
-	height: 22px;
-	text-align: center;
- }
 
  #func
  {

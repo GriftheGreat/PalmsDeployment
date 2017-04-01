@@ -1,39 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Net;
-using System.Collections.Specialized;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Web;
 
 public static class Data_Provider
 {
-    public const string mytext = " got connected!";
-    //public const string urlBase = "http://localhost:50168/";
-    public const string urlBase = "http://csmain.studentnet.int/seproject/PalmsPP/";
-
     public static class Credit_Card_Interface
     {
-        public static bool Validate_Credit_Card(string data)
+        public static bool Validate_Credit_Card(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount)
         {
-            return true;
+            Regex CCNumberCheck            = new Regex("^[0-9]{16,16}$");
+            Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/[0-9]{2,2}$");
+            Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
+            Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
+            Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
+
+            return CCNumberCheck.IsMatch           (CCNumber) &&
+                   expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
+                   cardSecurityCodeCheck.IsMatch   (cardSecurityCode) &&
+                   ownerNameCheck.IsMatch          (ownerName) &&
+                   amountCheck.IsMatch             (amount);
         }
 
-        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string amount)
+        public static string Send_Credit_Card_Info(string CCNumber, string expirationMonthDate, string cardSecurityCode, string ownerName, string amount, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("CCNumber", CCNumber);
+            parameters.Add("CCNumber",            CCNumber);
             parameters.Add("expirationMonthDate", expirationMonthDate);
-            parameters.Add("cardSecurityCode", cardSecurityCode);
-            parameters.Add("amount", amount);
+            parameters.Add("cardSecurityCode",    cardSecurityCode);
+            parameters.Add("ownerName",           ownerName);
+            parameters.Add("amount",              amount);
 
-            return sendWebRequest(parameters, urlBase + "Services/CreditCard.asmx/Process_Credit_Card");
-        }
-
-        public static bool Save_Credit_Card_Info(string token)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            //parameters.Add("token", token);
-
-            return sendWebRequest(parameters, urlBase + "Services/CreditCardInvoice.asmx/HelloWorld").Contains("ERROR");
+            return sendWebRequest(parameters, URL.root(request) + "Services/CreditCard.asmx/Process_Credit_Card");
         }
     }
 
@@ -44,58 +45,153 @@ public static class Data_Provider
             return true;
         }
 
-        public static bool Send_ID_Card_Info(string data)
+        public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
+            parameters.Add("p_cci_order_id_fk",         order_id);
+            parameters.Add("p_cci_token",               token);
+            parameters.Add("p_cci_confirmation_status", confirmation_status);
 
-            string result = sendWebRequest(parameters, urlBase + "");
-            return result.Length > 0;
+            return sendWebRequest(parameters, URL.root(request) + "Services/CreditCardInvoice.asmx/createCCI");
         }
 
-        public static DataTable Get_Menu(string data)
+        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password, string amount, HttpRequest request)
         {
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("Order_ID", Order_ID);
+            parameters.Add("ID_Number", ID_Number);
+            parameters.Add("Password", Password);
+            parameters.Add("amount", amount);
+
+            return sendWebRequest(parameters, URL.root(request) + "Services/IDCard.asmx/Process_ID_Card");
+        }
+
+        public static List<DataTable> Get_Menu(string data, HttpRequest request)
+        {
+            List<DataTable> menuTables = new List<DataTable>();
             string result;
-            DataTable menu = new DataTable();
-            bool isNotFirstRow = true;
             string[] rows;
-            List<DataColumn> columns = new List<DataColumn>();
+            DataTable menu;
+            bool isNotFirstRow;
+            List<DataColumn> columns;
 
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
+            //parameters.Add("data", data);
 
-            result = sendWebRequest(parameters, urlBase + "");
+            result = sendWebRequest(parameters, URL.root(request) + "Services/Menu.asmx/Menu");
 
-
-            rows = result.Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (string columnName in rows[0].Split(",".ToCharArray()))
+            foreach (string resultTable in result.Split(new string[] { "-;-" }, StringSplitOptions.None))
             {
-                columns.Add(new DataColumn(columnName));
-            }
-            menu.Columns.AddRange(columns.ToArray());
+                isNotFirstRow = false;
+                menu = new DataTable();
+                columns = new List<DataColumn>();
 
-            foreach (string row in rows)
-            {
-                if(isNotFirstRow)
+                if (resultTable.Contains("ERROR") || string.IsNullOrEmpty(resultTable))
                 {
-                    menu.Rows.Add(row.Split(",".ToCharArray()));
+                    menu.Columns.Add(new DataColumn("ERROR"));
+                    menu.Rows.Add(new string[] { resultTable });
+                    menuTables.Add(menu);
                 }
                 else
                 {
-                    isNotFirstRow = true;
+                    rows = resultTable.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
+                    {
+                        columns.Add(new DataColumn(columnName));
+                    }
+                    menu.Columns.AddRange(columns.ToArray());
+
+                    foreach (string row in rows)
+                    {
+                        if (isNotFirstRow)
+                        {
+                            menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
+                        }
+                        else
+                        {
+                            isNotFirstRow = true;
+                        }
+                    }
+                    menuTables.Add(menu);
+                }
+            }
+            return menuTables;
+        }
+
+        public static string Send_Order_Info(Order order, HttpRequest request)
+        {
+            string data = "{'CustomerFirstName' : '" + order.CustomerFirstName                   + @"',
+                            'CustomerLastName' : '"  + order.CustomerLastName                    + @"',
+                            'Location' : '"          + order.Location                            + @"',
+                            'Time' : '"              + order.Time.ToString("M/dd/yyyy HH:mi:ss") + @"',
+                            'Type' : '"              + order.Type                                + @"',
+                            'Foods' : [";
+
+            foreach(Order_Element food in order.Order_Elements)
+            {
+                data += "{'ID' : '"      + food.ID.ToString() + @"',
+                          'Details' : [";
+
+                foreach (Detail detail in food.Details)
+                {
+                    if (detail.Chosen)
+                    {
+                        data += "{'ID' : '" + detail.ID.ToString() + @"'},";
+                    }
+                }
+                data = data.TrimEnd(",".ToCharArray()) + "]},"; // Details
+            }
+            data = data.TrimEnd(",".ToCharArray()) + "]}"; // Foods
+
+            //NameValueCollection parameters = new NameValueCollection();
+            //parameters.Add("data", data);
+
+            return data;// sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
+        }
+
+        public static DataTable Get_Locations(string data, HttpRequest request)
+        {
+            string result;
+            string[] rows;
+            DataTable menu = new DataTable();
+            bool isNotFirstRow = false;
+            List<DataColumn> columns = new List<DataColumn>();
+
+            NameValueCollection parameters = new NameValueCollection();
+            //parameters.Add("data", data);
+
+            result = sendWebRequest(parameters, URL.root(request) + "Services/Locations.asmx/getLocations");
+
+            if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
+            {
+                menu.Columns.Add(new DataColumn("location_id_pk"));
+                menu.Columns.Add(new DataColumn("location_name"));
+                menu.Rows.Add(new string[] { "1", result });
+            }
+            else
+            {
+                rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
+                {
+                    columns.Add(new DataColumn(columnName));
+                }
+                menu.Columns.AddRange(columns.ToArray());
+
+                foreach (string row in rows)
+                {
+                    if (isNotFirstRow)
+                    {
+                        menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
+                    }
+                    else
+                    {
+                        isNotFirstRow = true;
+                    }
                 }
             }
             return menu;
-        }
-
-        public static bool Send_Order_Info(string data)
-        {
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
-
-            string result = sendWebRequest(parameters, urlBase + "");
-            return result.Length > 0;
         }
     }
 
@@ -141,6 +237,35 @@ public static class Data_Provider
             }
             catch (Exception) { }
         }
-        return result;
+        //return result =
+        //< !--? xml version = "1.0" encoding = "utf-8" ? -->
+        //< string xmlns = "..." > ... </string>
+        //WHERE FIRST ... IS LIKE http://csmain.studentnet.int/seproject/PalmsPP/Services/CreditCard.asmx AND SECOND ... = DATA
+
+        result = result.Substring(result.IndexOf(">") + 1); //REMOVES < !--? xml version = "1.0" encoding = "utf-8" ? -->
+        result = result.Substring(result.IndexOf(">") + 1); //REMOVES < string xmlns = "..." >
+
+        return result.Remove(result.LastIndexOf("<")); //REMOVES </string>
+    }
+}
+
+/// <summary>
+/// URL class for getting the url to the root of this web project.
+/// </summary>
+public static class URL
+{
+    /// <summary>
+    /// Returns
+    /// "http://localhost:#####" + "/" + "";
+    /// OR
+    /// "http://csmain.studentnet.int" + "/seproject/PalmsPP" + "/";
+    /// WHERE ##### is the local host port number that IIS Express makes for the debugger.
+    /// </summary>
+    /// <param name="request">The System.Web.HttpRequest of the web page that holds key URL information.</param>
+    /// <returns>The base URL to this project ending in the root's '/'</returns>
+    public static string root(HttpRequest request)
+    {
+        string URL = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath;
+        return URL + (URL[URL.Length - 1] == '/' ? "" : "/");
     }
 }

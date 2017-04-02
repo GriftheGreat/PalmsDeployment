@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -21,6 +22,10 @@ public partial class Menu : System.Web.UI.Page
             Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
     }
+    #endregion
+
+    #region Variables
+    public string currentBigCategory = "";
     #endregion
 
     public List<DataTable> MenuData;
@@ -63,8 +68,28 @@ public partial class Menu : System.Web.UI.Page
             this.plhCreateYourOwnPizza.Visible = true;
         }
 
-        // must select where either "PG" or "PJ"
-        EnumerableRowCollection<DataRow> selectedRows = MenuData[1].AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu);
+        // must select where either "PG" or "PJ" and manage food type meals (PG only)
+        DataTable categories = MenuData[1];
+        categories.Columns.Add("sort");
+
+        foreach(DataRow row in categories.Rows)
+        {
+            if (row["food_type_meal"].ToString() == "B")
+            {
+                row["sort"] = "1";
+            }
+            else if (row["food_type_meal"].ToString() == "L")
+            {
+                row["sort"] = "2";
+            }
+            else if (row["food_type_meal"].ToString() == "A")
+            {
+                row["sort"] = "3";
+            }
+        }
+
+        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu)
+                                                                                  .OrderBy(row => row["food_type_meal"].ToString());
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();
@@ -98,6 +123,26 @@ public partial class Menu : System.Web.UI.Page
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
+        if (!(Request.QueryString["menu"] == "PapaJohns"))
+        {
+            if (e.Item.ItemIndex == 0)
+            {
+                e.Item.FindControl("plhBigCategoryStart").Visible = true;
+                currentBigCategory = ((DataRow)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+            else if (currentBigCategory != ((DataRow)e.Item.DataItem)["food_type_meal"].ToString() && ((DataRow)e.Item.DataItem)["food_type_meal"].ToString() == "A")
+            {
+                // sort column makes sure this is done at last item being bound
+                e.Item.FindControl("plhBigCategoryEnd").Visible = true;
+                currentBigCategory = ((DataRow)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+            else if (currentBigCategory != ((DataRow)e.Item.DataItem)["food_type_meal"].ToString())
+            {
+                e.Item.FindControl("plhBigCategoryMiddle").Visible = true;
+                currentBigCategory = ((DataRow)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+        }
+
         Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
         EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString())
                                                                                   .OrderBy(row => row["food_name"].ToString());
@@ -162,4 +207,77 @@ public partial class Menu : System.Web.UI.Page
                                                        Convert.ToSingle(food["food_cost"].ToString()) ));
          MyOrder = tempOrder;
     }
+//=======
+﻿//using System;
+//using System.Collections;
+//using System.Collections.Generic;
+//using System.Web.UI.WebControls;
+//
+//public partial class Choices : System.Web.UI.Page
+//{
+//
+//    #region Properties
+//
+//    public int meal_index = 0;
+//    public string[] meals = new string[] { "Breakfast", "Lunch & Dinner" };
+//
+//    private Order _myOrder;
+//    public Order MyOrder
+//    {
+//        get
+//        {
+//            return Session["order"] != null ? (Order)Session["order"] : null;
+//        }
+//        set
+//        {
+//            Session["order"] = value;
+//        }
+//    }
+//    #endregion
+//
+//    protected void Page_Load(object sender, EventArgs e)
+//    {
+//        rptMeals.DataSource = meals;
+//        rptMeals.DataBind();
+//
+//        if (Session["order"] != null)
+//        {
+//            MyOrder = (Order)Session["order"];
+//        }
+//    }
+//
+//    protected void btnAdd_Click(object sender, EventArgs e)
+//    {
+//        string FoodIDtext = ((sender as Button).NamingContainer.FindControl("hidFoodID") as HiddenField).Value;
+//        int FoodID;
+//
+//        if (!string.IsNullOrEmpty(FoodIDtext))
+//        {
+//            if (Int32.TryParse(FoodIDtext, out FoodID) && FoodID > 0)
+//            {
+//                if (MyOrder == null)
+//                {
+//                    MyOrder = new Order(getType());
+//                    MyOrder.Order_Elements = new List<Order_Element>();
+//                }
+//                System.Diagnostics.Debug.WriteLine(FoodID);
+//                //MyOrder.Order_Elements.Add(new Order_Element(FoodID));
+//                Session["order"] = MyOrder;
+//            }
+//            else
+//            {
+//                // Error
+//            }
+//        }
+//        else
+//        {
+//            // Error
+//        }
+//    }
+//
+//    private string getType()
+//    {
+//        return "Deliverable";
+//    }
+//>>>>>>> Judah
 }

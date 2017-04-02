@@ -285,17 +285,15 @@ ul.nav a:hover {
 
 .slideImages {
     width: 100%;
-   
-    
 }
 
 .carousel-indicators {
     bottom: 0;
+
 }
 
 .carousel .item {
     height: 706px; 
-
     width:100%; 
 }
 

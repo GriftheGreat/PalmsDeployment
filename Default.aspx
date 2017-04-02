@@ -24,8 +24,8 @@
             <li data-target="#myCarousel" data-slide-to="2"></li>
         </ol>   
         <!-- Wrapper for carousel items -->
-        <div class="carousel-inner">
-            <div class="item active">
+        <div class="carousel-inner carouselWrapper">
+            <div class="item">
                 <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="slideImages" />
          		<div class="carousel-caption slideShowCaption">
                   <h3>First slide label</h3>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="item">
-                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/PapaJohnImage.png\"" %> alt="second Slide" class="slideImages" />
+                <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/slideShow/slide2.jpeg\"" %> alt="second Slide" class="slideImages" />
                 <div class="carousel-caption slideShowCaption">
                   <h3>Second slide label</h3>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>

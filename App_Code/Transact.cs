@@ -269,39 +269,35 @@ public class Order_Data
     {
         public string CustomerFirstName;
         public string CustomerLastName;
+        public string Cost;
         public string Location;
-        public List<Order_Element> Order_Elements;
-        public DateTime Time;
+        public string Time;
         public string Type;
+        public List<Webapp_Order_Element> Foods;
     }
 
     private class Webapp_Order_Element
     {
-        public string Deliverable;
-        public string Description;
-        public List<Detail> Details;
-        public int ID;
-        public string ImagePath;
-        public string Name;
-        public float Price;
+        public string ID;
+        public List<Webapp_Detail> Details;
     }
 
     private class Webapp_Detail
     {
-        public float Cost;
-        public string Description;
-        public int ID;
+        public string ID;
     }
     #endregion classes
+
 
     [WebMethod]
     public string createOrder(string data)
     {
-        JavaScriptSerializer serializer = new JavaScriptSerializer();
-        //string serializedResult = serializer.Serialize(RegisteredUsers)
-        Order webappOrder = serializer.Deserialize<Order>(data);
-
+        string webappOrderID = "0";
+        string currentWebappOrderElementID = "0";
         string result = "";
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        Webapp_Order webappOrder = serializer.Deserialize<Webapp_Order>(data);
+
         #region queries
         string query_string1 = @"BEGIN :out := createOrder(p_location_id_fk    => :p_location_id_fk   
                                                            p_ticket_id_fk      => :p_ticket_id_fk     
@@ -342,22 +338,84 @@ public class Order_Data
         try
         {
             myConnection.Open();
-            #region create order
+//?
+            #region create order, create order elements, and order elements details
             try
             {
-//                myCommand1.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand1.Parameters.Add("p_location_id_fk",    webappOrder.Location);
-//                //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
-//                //myCommand1.Parameters.Add("p_order_num",         p_order_num);
-//                myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
-//                myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
-//                myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
-//                myCommand1.Parameters.Add("p_order_cost",        p_order_cost);
-//                myCommand1.Parameters.Add("p_order_ready",       "N"/*status*/);
-//                myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
+                myCommand1.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
+                myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
+                myCommand1.Parameters.Add("p_order_cost",        webappOrder.Cost);
+                myCommand1.Parameters.Add("p_order_status",      "N");
+                myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
+                myCommand1.Parameters.Add("p_location_id_fk",    webappOrder.Location);
+                //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
+                //myCommand1.Parameters.Add("p_order_num",         p_order_num);
+                //myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
                 myCommand1.ExecuteNonQuery();
 
-                result += "Pass:" + myCommand1.Parameters["out"].Value.ToString();
+                webappOrderID = myCommand1.Parameters["out"].Value.ToString();
+//???????????????????????
+                result += "Pass:";// + myCommand1.Parameters["out"].Value.ToString();
+
+//?
+                #region create order elements and order elements details
+                foreach (Webapp_Order_Element food in webappOrder.Foods)
+                {
+                    try
+                    {
+                        myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                        myCommand2.Parameters.Add("", food.ID);
+                        myCommand2.Parameters.Add("", webappOrderID);
+                        myCommand2.ExecuteNonQuery();
+
+                        currentWebappOrderElementID = myCommand2.Parameters["out"].Value.ToString();
+//???????????????????????
+                        result += "\n\nPass:";// + myCommand2.Parameters["out"].Value.ToString();
+
+//?
+                        #region create order[ elements] details
+                        foreach (Webapp_Detail detail in food.Details)
+                        {
+                            try
+                            {
+                                myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                                myCommand3.Parameters.Add("", detail.ID);
+                                myCommand3.Parameters.Add("", currentWebappOrderElementID);
+                                myCommand3.ExecuteNonQuery();
+
+//???????????????????????
+                                result += "\n\nPass:";// + myCommand3.Parameters["out"].Value.ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                result += "\n\nERROR\n" + ex.Message;
+                            }
+                            finally
+                            {
+                                try
+                                {
+                                    myCommand3.Dispose();
+                                }
+                                catch { }
+                            }
+                        }
+                        #endregion create order elements details
+                    }
+                    catch (Exception ex)
+                    {
+                        result += "\n\nERROR\n" + ex.Message;
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            myCommand2.Dispose();
+                        }
+                        catch { }
+                    }
+                }
+                #endregion create order elements and order elements details
             }
             catch (Exception ex)
             {
@@ -371,55 +429,7 @@ public class Order_Data
                 }
                 catch { }
             }
-            #endregion create order
-
-            #region create order elements
-            try
-            {
-//                myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand2.Parameters.Add("p_location_id_fk", p_location_id_fk);
-//                myCommand2.Parameters.Add("p_ticket_id_fk",   p_ticket_id_fk);
-                myCommand2.ExecuteNonQuery();
-
-                result += "\n\nPass:" + myCommand2.Parameters["out"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                result += "\n\nERROR\n" + ex.Message;
-            }
-            finally
-            {
-                try
-                {
-                    myCommand2.Dispose();
-                }
-                catch { }
-            }
-            #endregion create order elements
-
-            #region create order[ elements] details
-            try
-            {
-//                myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand3.Parameters.Add("p_location_id_fk", p_location_id_fk);
-//                myCommand3.Parameters.Add("p_ticket_id_fk",   p_ticket_id_fk);
-                myCommand3.ExecuteNonQuery();
-
-                result += "\n\nPass:" + myCommand3.Parameters["out"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                result += "\n\nERROR\n" + ex.Message;
-            }
-            finally
-            {
-                try
-                {
-                    myCommand3.Dispose();
-                }
-                catch { }
-            }
-            #endregion create order[ elements] details
+            #endregion create order, create order elements, and order elements details
         }
         catch (Exception ex)
         {

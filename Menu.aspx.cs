@@ -148,6 +148,11 @@ public partial class Menu : System.Web.UI.Page
             tempOrder = new Order(this.hidOrderType.Value);
         }
 
+        if (this.hidOrderType.Value == "PickUp")
+        {
+            tempOrder.Location = "Palm's Grille";
+        }
+
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
                                                        Convert.ToInt32(this.hidChosenFoodId.Value),
                                                        food["image_path"].ToString(),

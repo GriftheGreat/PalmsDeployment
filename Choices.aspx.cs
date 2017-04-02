@@ -8,7 +8,7 @@ public partial class Choices : System.Web.UI.Page
 
     #region Properties
      
-    public int meal_count = 0;
+    public int meal_index = 0;
     public string[] meals = new string[] {"Breakfast", "Lunch & Dinner" };
 
     private Order _myOrder;
@@ -27,8 +27,8 @@ public partial class Choices : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        Repeater0.DataSource = meals;
-        Repeater0.DataBind();
+        rptMeals.DataSource = meals;
+        rptMeals.DataBind();
 
         if (Session["order"] != null)
         {
@@ -50,8 +50,8 @@ public partial class Choices : System.Web.UI.Page
                     MyOrder = new Order(getType());
                     MyOrder.Order_Elements = new List<Order_Element>();
                 }
-
-                MyOrder.Order_Elements.Add(new Order_Element(FoodID));
+                System.Diagnostics.Debug.WriteLine(FoodID);
+                //MyOrder.Order_Elements.Add(new Order_Element(FoodID));
                 Session["order"] = MyOrder;
             }
             else

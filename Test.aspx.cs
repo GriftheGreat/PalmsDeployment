@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.WebControls;
@@ -7,10 +8,19 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-		this.me.Text = "Jacob" + Data_Provider.mytext;
-        this.lbl1.Text = null;
-        this.lbl1.Text = this.lbl1.Text.Length.ToString();
+        List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("", Request);
 
+        this.gdvMenu1.DataSource = j[0];
+        this.gdvMenu1.DataBind();
+
+        this.gdvMenu2.DataSource = j[1];
+        this.gdvMenu2.DataBind();
+
+        this.gdvMenu3.DataSource = j[2];
+        this.gdvMenu3.DataBind();
+
+        this.gdvMenu4.DataSource = j[3];
+        this.gdvMenu4.DataBind();
     }
 
     protected void Label4_DataBinding(object sender, EventArgs e)
@@ -27,7 +37,7 @@ public partial class Test : System.Web.UI.Page
 
     protected void btn2_Click(object sender, EventArgs e)
     {
-        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444","05/17","123","0.00") == "Y" ? "Transaction Approved" : "Transaction Denied";
+        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444", "05/17", "123", "Jacob Harder", "0.00", Request);//.Contains("Pass") ? "Transaction Approved" : "Transaction Denied";
     }
 }
 

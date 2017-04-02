@@ -14,13 +14,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	<%--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> Latest compiled and minified CSS --%>
-    <link rel="stylesheet" type="text/css" href="~/bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="~/Includes/stylesheets/customStyle.css" /><%--                                  Custom css --%>
-	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans" /><%--                  Google fonts --%>
+    <link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "bootstrap/css/bootstrap.min.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/customStyle.css\"" %> /><%-- Custom css --%>
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans" /><%-- Google fonts --%>
     <asp:ContentPlaceHolder ID="Styles" runat="server">
     </asp:ContentPlaceHolder>
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script><%--    jQuery library --%>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script><%-- jQuery library --%>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,6 +34,7 @@
     <form id="form1" runat="server">
         <header>
             <%-- Navigation beginning --%>
+            <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src="/Includes/images/Asset1.png" /></a>
             <nav class="navbar navbar-default navbar-fixed-top col-lg-12">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -42,14 +43,13 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src="/Includes/images/Asset1.png" /></a>
                     </div>
                     <div class="collapse navbar-collapse" id="myNavbar">
                         <ul class="nav navbar-nav">
-                            <li><a href="Default.aspx" title="Home"   >Home</a></li> <!-- add class="active" to make the page active -->
-                            <li><a href="Choices.aspx" title="Choices">Choices</a></li>
-                            <li><a href="Pizza.aspx"   title="Pizza"  >Pizza</a></li>
-                            <li><a href="Cart.aspx"    title="Cart"   >Cart<span class="badge">3</span></a></li>
+                            <li><a href="Default.aspx"               title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
+                            <li><a href="Menu.aspx?menu=PalmsGrille" title="Palms Grille">Palms Grille</a></li>
+                            <li><a href="Menu.aspx?menu=PapaJohns"   title="Papa John's" >Papa John's</a></li>
+                            <li><a href="Cart.aspx"                  title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
             <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 			<%-- Include all compiled plugins (below), or include individual files as needed --%>
-			<script type="text/javascript" src="//bootstrap/js/bootstrap.min.js"></script>
+			<script type="text/javascript" src=<%= "\"" + URL.root(Request) + "bootstrap/js/bootstrap.min.js\"" %>></script>
         </footer>
     </form>
 </body>

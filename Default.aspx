@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#"
+         Title="Palms Grill Online Home"
          AutoEventWireup="true"
          CodeFile="Default.aspx.cs"
          Inherits="_Default"

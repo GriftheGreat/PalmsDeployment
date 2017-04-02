@@ -8,31 +8,6 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
-        /* Choices page css code starts here */
-        /*.burgerHeader, .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            color: rgba(13,86,55, .9);
-            background-color: sandybrown;
-            font-weight: bold;   
-        }
-
-                       .wrapsHeader, .paniniHeader, .quesadillaHeader, .saladHeader, .pizzaHeader
-        {
-            margin-top: 20px;
-        }
-
-        .burgerButton, .wrapsButton, .paniniButton, .quesadillaButton, .saladButton, .pizzaButton
-        {
-            border: none;
-            outline:none;
-            text-decoration: none;
-            width: 100%;
-            height: 100%;
-            background-color: sandybrown;
-            display: inline-block;
-            text-align: center;
-        }*/
-
         .HeaderButton
         {
             margin-top: 20px;
@@ -188,23 +163,23 @@
                                         ORDER BY sort">   
     </asp:SqlDataSource>
     <div class="container">
-        <asp:Repeater ID="Repeater0" runat="server">
+        <asp:Repeater ID="rptMeals" runat="server">
             <ItemTemplate>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="MealHeaderButton" onclick="AccordionTrigger('<%#meals[meal_count]%>');">
-                            <asp:Literal ID="litCategory1" runat="server" Text='<%#meals[meal_count] %>'/>
+                        <div class="MealHeaderButton" onclick="AccordionTrigger('<%#meals[meal_index]%>');">
+                            <asp:Literal ID="litCategory1" runat="server" Text='<%#meals[meal_index] %>'/>
 <%-- asp:Label's generate inside a span tag. asp:Literals do not. --%>
-                            <asp:HiddenField ID="hidMealID" runat="server" Value='<%#meals[meal_count] %>'/>
+                            <asp:HiddenField ID="hidMealID" runat="server" Value='<%#meals[meal_index] %>'/>
                         </div>
                     </div>
                 </div>
 
-                <div class="row" style="display:none;" AccordionControl='<%#meals[meal_count] %>'>
+                <div class="row" style="display:none;" AccordionControl='<%#meals[meal_index] %>'>
 <%-- Food data sources organized by the meal or if it is associated with Papa Johns --%>
 
                     <%-- Food data sources organized by the meal or if it is associated with Papa Johns --%>
-                    <asp:Repeater ID="rptCategories" runat="server" DataSourceID='<%#"SqlCategories" + (meal_count++ == 0 ? "BreakFast" : "Lunch")%>'>
+                    <asp:Repeater ID="rptCategories" runat="server" DataSourceID='<%#"SqlCategories" + (meal_index++ == 0 ? "BreakFast" : "Lunch")%>'>
                         <ItemTemplate>
                             <div class="row">
                                 <div class="col-lg-12">

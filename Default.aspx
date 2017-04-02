@@ -15,7 +15,6 @@
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
 
 
-    <div class="slideShowWrapper">
     <div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel">
     	<!-- Carousel indicators -->
         <ol class="carousel-indicators">
@@ -24,7 +23,7 @@
             <li data-target="#myCarousel" data-slide-to="2"></li>
         </ol>   
         <!-- Wrapper for carousel items -->
-        <div class="carousel-inner carouselWrapper">
+        <div class="carousel-inner">
             <div class="item">
                 <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="slideImages" />
          		<div class="carousel-caption slideShowCaption">
@@ -58,7 +57,6 @@
 
 
 
-</div>
 
 
 

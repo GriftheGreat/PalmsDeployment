@@ -276,7 +276,7 @@ ul.nav a:hover {
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
-<<<<<<< HEAD
+
 }
 
 
@@ -285,16 +285,19 @@ ul.nav a:hover {
 
 .slideImages {
     width: 100%;
+    height: 500px;
+    
 }
 
 .carousel-indicators {
     bottom: 0;
-
+    
 }
 
 .carousel .item {
     height: 706px; 
     width:100%; 
+    
 }
 
 

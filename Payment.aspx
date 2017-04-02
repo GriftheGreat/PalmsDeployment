@@ -52,7 +52,6 @@
         {
             display: inline-block;
             width: 600px;
-            height: 300px;
             overflow: hidden;
         }
 
@@ -62,6 +61,10 @@
             border-radius: 20px;
             display: block;
             height: 40px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: sandybrown;
+            clear: both;
         }
 
         .order-summary-items
@@ -83,6 +86,7 @@
         .payment-options-button-container
         {
             width: 100%;
+            
         }
 
         .payment-options-button
@@ -96,12 +100,13 @@
 
         .payment-options-button:hover
         {
-            background-color: rgb(200, 200, 200);
+            background-color: darkgray;
         }
 
         .current-tab
         {
             border-width: 2px 2px 0px 2px;
+            background-color: lightgray;
         }
 
         .payment-options-tab-section
@@ -112,6 +117,7 @@
             padding: 20px;
             width: 100%;
             text-align: left;
+            background-color: lightgray;
         }
 
         .payment-options-tab-section table
@@ -163,7 +169,7 @@
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
-    <div class="container">
+    <div class="container col-md-">
         <div class="row" style="text-align: center;">
             <div class="order-summary">
                 <div class="order-summary-info">

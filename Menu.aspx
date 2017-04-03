@@ -169,6 +169,30 @@
             foodID = null;// clear global variable
         }
 
+        function AccordionTrigger2(open)
+        {
+            var clickedElement = $('div[AccordionControl2="' + open + '"]').first();
+
+            $('div[AccordionControl2]:visible').each(function (index) {
+                $( this ).slideUp();
+            });
+
+            if (clickedElement.is(":visible"))
+            {
+                clickedElement.slideUp();
+            }
+            else
+            {
+                clickedElement.slideDown();
+
+                setTimeout(function () {
+                    $('body,html').animate({
+                        scrollTop: clickedElement.offset().top - 100
+                    });
+                }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
+            }
+        }
+
         function AccordionTrigger(open)
         {
             var clickedElement = $('div[AccordionControl="' + open + '"]').first();
@@ -238,26 +262,26 @@
                 <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
                                 <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row" style="display:none;" AccordionControl='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
                     </div>
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%#meals[meal_index]%>');">
-                                <asp:Literal     ID="lblMealName2"     runat="server" Text='<%#meals[meal_index] %>'/>
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                                <asp:Literal     ID="lblMealName2"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row" style="display:none;" AccordionControl='<%#meals[meal_index] %>'>
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
                 <div class="row">
                     <div class="col-lg-12">

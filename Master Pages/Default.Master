@@ -35,7 +35,9 @@
         <header>
             <%-- Navigation beginning --%>
             <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src="/Includes/images/Asset1.png" /></a>
-            <nav class="navbar navbar-default navbar-fixed-top col-lg-12">
+
+            <nav class="navbar navbar-default navbar-fixed-top">
+
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -43,23 +45,29 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                    </div>
+                    </div> 
+
                     <div class="collapse navbar-collapse" id="myNavbar">
+       
+                         <div class="col-md-8 col-md-offset-4 col-sm-9 col-sm-offset-3">
                         <ul class="nav navbar-nav">
                             <li><a href="Default.aspx"               title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
                             <li><a href="Menu.aspx?menu=PalmsGrille" title="Palms Grille">Palms Grille</a></li>
                             <li><a href="Menu.aspx?menu=PapaJohns"   title="Papa John's" >Papa John's</a></li>
                             <li><a href="Cart.aspx"                  title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
                         </ul>
+                    
                     </div>
+                </div>
                 </div>
             </nav>
             <%-- Navigation ending --%>
         </header>
         <div>
             <asp:ContentPlaceHolder ID="Content" runat="server">
-            
             </asp:ContentPlaceHolder>
+
+            
         </div>
         <footer>
             <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>

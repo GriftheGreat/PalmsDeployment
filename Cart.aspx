@@ -11,19 +11,23 @@
     <style type="text/css">
         .cart-item
         {
-            padding: 15px;
-            border: 1px solid rgb(192,192,192);
-            border-radius: 12px;
+            padding: 15px 0px 15px 0px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgb(192,192,192);
+            /*border-radius: 12px;*/
+           
         }
 
-        .card-front
-        {
+
+        .card-front {
+            margin-right: 40px;
+            width: 180px;
             position: inherit;
             display: inline-block;
             float: left;
         }
 
-        .card-front-name
+        /*.card-front-name
         {
             position: absolute;
             top: 0px;
@@ -43,11 +47,11 @@
             background-color: none;
             background-color: rgba(255, 255, 255, .5);
             display: block;
-        }
+        }*/
 
         .item-detail-list
         {
-            border: 1px solid rgb(128, 128, 128);
+            /*border: 1px solid rgb(128, 128, 128);*/
             width: 300px;
             height: 150px;
             overflow: auto;
@@ -57,9 +61,10 @@
 
         .remove-button
         {
-            margin: 15px;
-            padding: 10px 30px 10px 30px;
-            border: 2px solid rgb(202, 41, 36);
+            font-size: 11pt;
+            margin: 10px 0px 10px 10px;
+            padding: 5px 10px 5px 10px;
+            border: 1px solid rgb(202, 41, 36);
             border-radius: 10px;
             color: rgb(202, 41, 36);
             display: inline-block;
@@ -213,9 +218,10 @@
                         <div class="col-lg-12 cart-item">
                             <div class="front card-front <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
-                                <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>'  CssClass="card-front-name" />
-                                <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
                             </div>
+                            <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' />
+                            <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />
+
                             <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />

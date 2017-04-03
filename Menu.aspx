@@ -68,7 +68,6 @@
             display: block;
         }
 
-
         .item-detail-list
         {
             border: 1px solid rgb(128, 128, 128);
@@ -283,7 +282,7 @@
                                         <asp:Literal     ID="litfood_name"        runat="server" Text='<%# Eval("food_name") %>' />
                                     </h3>
 <%--combo?--%>                      <div class="productInfo">
-<%--combo?--%>                          <h4 class="text-left">
+<%--combo?--%>                          <h4 class="text-center">
                                             <asp:Literal ID="litfood_description" runat="server" Text='<%# Eval("food_descr") %>' />
                                             <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' />
                                             <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;\" title=\"Deliverable\" />" : "" %>
@@ -418,7 +417,7 @@
     </asp:PlaceHolder>
 
     <%-- Modal --%>
-    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
+    <div id="modalFoodDetails" class="modal fade text-center modal-responsive" role="dialog">
         <div class="modal-dialog">
             <%-- Modal content--%>
             <div class="modal-content">
@@ -450,6 +449,8 @@
             </div>
         </div>
     </div>
+
+<%-- Make a modal out of Pizza.aspx and put it here as modalFoodDetails2 --%>
 
     <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
 

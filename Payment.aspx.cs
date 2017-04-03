@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Payment : System.Web.UI.Page
 {
@@ -28,12 +23,69 @@ public partial class Payment : System.Web.UI.Page
         {
             Response.Redirect(URL.root(Request) + "Cart.aspx", true);
         }
-        else
+        this.lblError.Text = "";
+        checkFoodDeliverability(); // put here to be checked before a button click function clears lblError (and re-checks)
+    }
+
+    protected void Page_PreRender(object sender, EventArgs e)
+    {
+        if (MyOrder != null)
         {
-            this.litSummaryNumber.Text = Session["orderItemNumber"].ToString();
+            string type = MyOrder.Type;
+            string location = MyOrder.Location;
+
+            this.litSummaryNumber.Text            = Session["orderItemNumber"].ToString();
+            this.txtFirstName.Text                = MyOrder.CustomerFirstName;
+            this.txtLastName.Text                 = MyOrder.CustomerLastName;
+
+            this.ddlDeliveryType.SelectedValue     = type;
+            this.ddlDeliveryType.Items[0].Enabled  = string.IsNullOrEmpty(type);
+            this.deliveryLocationContainer.Visible = !string.IsNullOrEmpty(type);
+
+            this.ddlLocations.Items[0].Enabled = string.IsNullOrEmpty(location);
+            this.ddlLocations.Items[1].Enabled = false;
+            this.locationPlaceContainer.Style.Add("display", "none");
+            this.ddlLocations.Enabled = true;
+            this.txtLocationPlace.Text = "";
+
+            if (location != null)
+            {
+                if (location == "Palm's Grille")
+                {
+                    this.ddlLocations.SelectedValue = location;
+                    this.ddlLocations.SelectedItem.Enabled = true;
+                    this.ddlLocations.Enabled = false;
+                }
+                else if (location == "Sports Center" || location == "Campus House Lobby")
+                {
+                    this.ddlLocations.SelectedValue = location;
+                }
+                else if (location.Length > 2 && (location.Substring(0, 2) == "WA" || location.Substring(0, 2) == "DR"))
+                {
+                    this.ddlLocations.SelectedValue = location.Substring(0, 2);
+                    this.txtLocationPlace.Text = location.Substring(3);
+                    this.locationPlaceContainer.Style.Add("display", "");
+
+                    if (location.Substring(0, 2) == "DR")
+                    {
+                        this.lbllocationPlace.InnerHtml = "Room Number";
+                    }
+                    else
+                    {
+                        this.lbllocationPlace.InnerHtml = "Apartment Number";
+                    }
+                }
+            }
+            else
+            {
+                this.ddlLocations.SelectedValue = "";
+            }
 
             if (MyOrder.Order_Elements != null)
             {
+                string cost = Math.Round(MyOrder.CalculateCost(), 2).ToString();
+                this.litPrice.Text = cost.Insert(cost.IndexOf("-") + 1, "$");
+
                 this.rptItems.DataSource = MyOrder.Order_Elements;
                 this.rptItems.DataBind();
             }
@@ -43,39 +95,179 @@ public partial class Payment : System.Web.UI.Page
     protected void lnkSubmit_Click(object sender, EventArgs e)
     {
         bool success = false;
+        this.lblError.Text = "";
+        string location = this.ddlLocations.SelectedValue;
+        Order tempOrder = MyOrder;
 
-        if(true/*CC*/)
+        #region gather order payment info
+        tempOrder.CustomerFirstName = this.txtFirstName.Text;
+        tempOrder.CustomerLastName  = this.txtLastName.Text;
+        tempOrder.Type              = this.ddlDeliveryType.SelectedValue;
+        tempOrder.Location          = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
+                                       this.ddlLocations.SelectedValue == "Sports Center" ||
+                                       this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :
+                                                                                                 this.ddlLocations.SelectedValue + " " + this.txtLocationPlace.Text);
+        MyOrder = tempOrder; // saving the delivery type is important on this page
+        #endregion
+
+        #region payment
+        if (this.hidPaymentType.Value == "1") // Credit Card
         {
             //validate?
-            string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text, this.txtCreditCardExpDate.Text, this.txtCreditCardSecurityCode.Text, this.txtCreditCardOwnerName.Text, this.litPrice.Text, Request);
-            string saveResultString    = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, paymentResultString, paymentResultString.Contains("Pass:") ? "Y" : "N", Request);
-Response.Write(paymentResultString = "\n<br />\n<br />" + saveResultString);
-            success = paymentResultString.Contains("Pass:") && saveResultString.Contains("Pass:");
+            #region Send_Credit_Card_Info
+            string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text,
+                                                                                                   this.txtCreditCardExpDate.Text,
+                                                                                                   this.txtCreditCardSecurityCode.Text,
+                                                                                                   this.txtCreditCardOwnerName.Text,
+                                                                                                   this.litPrice.Text.Replace("$", ""),
+                                                                                                   Request);
+            #endregion
+            #region Save_Credit_Card_Info
+            string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/,
+                                                                                                paymentResultString,
+                                                                                                paymentResultString.Contains("Pass:") ? "Y" : "N",
+                                                                                                Request);
+            #endregion
+
+            success = paymentResultString.Contains("Pass") && saveResultString.Contains("Pass");
+
+            #region error messages
+            if (paymentResultString.Contains("Fail"))
+            {
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + getFailure(paymentResultString);
+            }
+
+            if (saveResultString.Contains("Fail"))
+            {
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + getFailure(saveResultString);
+            }
+            #endregion
         }
-        else if(true/*idC*/)
+        else if (this.hidPaymentType.Value == "2") // PCC ID Card
         {
             //validate?
-            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/, this.txtIDNumber.Text, this.txtPassword.Text, Request);
+            #region SendSave_ID_Card_Info
+            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/,
+                                                                                                this.txtIDNumber.Text,
+                                                                                                this.txtPassword.Text,
+                                                                                                this.litPrice.Text.Replace("$", ""),
+                                                                                                Request);
+            #endregion
 
-            success = paymentResultString.Contains("Pass:");
+            success = paymentResultString.Contains("Pass");
+
+            #region error message
+            if (paymentResultString.Contains("Fail"))
+            {
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + getFailure(paymentResultString);
+            }
+            #endregion error message
         }
         else
         {
-            //neither of the tabs are chosen...?
+            this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "Please choose a payment method.";
         }
+        #endregion
 
+        #region check food deliverability, order type, and order delivery location
+        if (!checkFoodDeliverability() || string.IsNullOrEmpty(tempOrder.Type) || string.IsNullOrEmpty(tempOrder.Location))
+        {
+            success = false;
+        }
+        #endregion
+
+        #region send order or refund
         if (success)
         {
-            if (Data_Provider.Transact_Interface.Send_Order_Info(MyOrder, Request))
+            string orderResultString = Data_Provider.Transact_Interface.Send_Order_Info(tempOrder, Request);
+            if (orderResultString.Contains("Pass"))
             {
                 Session.Remove("order");
                 Session.Remove("orderItemNumber");
                 Response.Redirect(URL.root(Request) + "ThankYou.aspx", true);
+                Session["orderNumber"] = "1";
+                Session["waitTime"]    = "1 hour";
             }
             else
             {
-                //order was not sent correctly...?
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + orderResultString;// "An error occurred while submitting the Order. You have been refunded.";
+
+                #region refund
+                if (this.hidPaymentType.Value == "1") // Credit Card
+                {
+                    string paymentResultString = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info(this.txtCreditCardNumber.Text,
+                                                                                                           this.txtCreditCardExpDate.Text,
+                                                                                                           this.txtCreditCardSecurityCode.Text,
+                                                                                                           this.txtCreditCardOwnerName.Text,
+                                                                                                           (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate
+                                                                                                           Request);
+                    string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234",
+                                                                                                     paymentResultString,
+                                                                                                     paymentResultString.Contains("Pass:") ? "Y" : "N",
+                                                                                                     Request);
+                }
+                else if (this.hidPaymentType.Value == "2") // PCC ID Card
+                {
+                    string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234",
+                                                                                                        this.txtIDNumber.Text,
+                                                                                                        this.txtPassword.Text,
+                                                                                                        (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate
+                                                                                                        Request);
+                }
+                #endregion
             }
         }
+        #endregion
     }
+
+    protected void ddlDeliveryType_Click(object sender, EventArgs e)
+    {
+        if (MyOrder != null)
+        {
+            Order tempOrder = MyOrder;
+            tempOrder.Type = this.ddlDeliveryType.SelectedValue;
+            tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
+            MyOrder = tempOrder;
+
+            this.lblError.Text = "";
+            checkFoodDeliverability(); // button click function happens after Page_Load check
+        }
+    }
+
+    #region Private Methods
+    /// <summary>
+    /// Parses a failure message for its error message.
+    /// </summary>
+    /// <param name="text">A string with an error message between a ':' and a '.'</param>
+    /// <returns>Error message as a string.</returns>
+    private string getFailure(string text)
+    {
+        return text.Substring(text.IndexOf(":") + 1, text.IndexOf(".") - text.IndexOf(":"));
+    }
+
+    /// <summary>
+    /// Checks if all foods match order type and adds message to error display
+    /// </summary>
+    /// <returns>True if all foods match order type.</returns>
+    private bool checkFoodDeliverability()
+    {
+        bool allFoodsMatchType = false;
+        if (MyOrder != null && MyOrder.Order_Elements != null)
+        {
+            allFoodsMatchType = true;
+            foreach (Order_Element food in MyOrder.Order_Elements)
+            {
+                if (MyOrder.Type == "Delivery" && food.Deliverable != "Y")
+                {
+                    allFoodsMatchType = false;
+                }
+            }
+            if (!allFoodsMatchType)
+            {
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more foods cannot be delivered. Please remove them or choose Pick-Up.";
+            }
+        }
+        return allFoodsMatchType;
+    }
+    #endregion
 }

@@ -8,6 +8,23 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
+        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
+        //j.DataSource = null;
+        //j.DataBind();
+
+        //int jj;
+        //for (jj = 0; jj < 10; jj++)
+        //{
+        //    Response.Write("<div>"+jj.ToString()+"</div>");
+        //
+        //}
+        //this.litControl.Text = var;
+
+
+        gdvSession.DataSource = Session;
+        gdvSession.DataBind();
+
+
         List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("", Request);
 
         this.gdvMenu1.DataSource = j[0];
@@ -23,12 +40,12 @@ public partial class Test : System.Web.UI.Page
         this.gdvMenu4.DataBind();
     }
 
-    protected void Label4_DataBinding(object sender, EventArgs e)
-	{
-		Label lbl4 = (Label) sender;
-		RepeaterItem container = (RepeaterItem)lbl4.NamingContainer;
-		lbl4.Text = ((DataRowView)container.DataItem)[0].ToString(); // column 0
-	}
+    protected void btnClearSession_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        gdvSession.DataSource = Session;
+        gdvSession.DataBind();
+    }
 
     protected void btn1_Click(object sender, EventArgs e)
     {

@@ -18,11 +18,6 @@ public partial class Cart : System.Web.UI.Page
     }
     #endregion
 
-    protected void Page_Init(object sender, EventArgs e)
-    {
-        // dynamically load static checkbox lists here
-    }
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (MyOrder != null && MyOrder.Order_Elements != null)
@@ -43,6 +38,63 @@ public partial class Cart : System.Web.UI.Page
 
         this.plhItemsAreInOrder.Visible = numItems != 0;
         this.plhNoItemsInOrder.Visible = numItems == 0;
+
+        if (MyOrder != null)
+        {
+            string type     = MyOrder.Type;
+            string location = MyOrder.Location;
+
+            this.ddlDeliveryType.SelectedValue     = type;
+            this.ddlDeliveryType.Items[0].Enabled  = string.IsNullOrEmpty(type);
+            this.deliveryLocationContainer.Visible = !string.IsNullOrEmpty(type);
+
+            this.ddlLocations.Items[0].Enabled = string.IsNullOrEmpty(location);
+            this.ddlLocations.Items[1].Enabled = false;
+            this.locationPlaceContainer.Style.Add("display", "none");
+            this.ddlLocations.Enabled          = true;
+            this.txtLocationPlace.Text         = "";
+
+            if (location != null)
+            {
+                if (location == "Palm's Grille")
+                {
+                    this.ddlLocations.SelectedValue = location;
+                    this.ddlLocations.SelectedItem.Enabled = true;
+                    this.ddlLocations.Enabled = false;
+                }
+                else if (location == "Sports Center" || location == "Campus House Lobby")
+                {
+                    this.ddlLocations.SelectedValue = location;
+                }
+                else if (location.Length > 2 && (location.Substring(0, 2) == "WA" || location.Substring(0, 2) == "DR"))
+                {
+                    this.ddlLocations.SelectedValue = location.Substring(0, 2);
+                    this.txtLocationPlace.Text = location.Substring(3);
+                    this.locationPlaceContainer.Style.Add("display", "");
+
+                    if (location.Substring(0, 2) == "DR")
+                    {
+                        this.lbllocationPlace.InnerHtml = "Room Number";
+                    }
+                    else
+                    {
+                        this.lbllocationPlace.InnerHtml = "Apartment Number";
+                    }
+                }
+            }
+            else
+            {
+                this.ddlLocations.SelectedValue = "";
+            }
+
+            if (MyOrder.Order_Elements != null)
+            {
+                string cost = Math.Round(MyOrder.CalculateCost(), 2).ToString();
+                this.litPrice.Text = cost.Insert(cost.IndexOf("-") + 1, "$");
+            }
+        }
+        this.lblError.Text = "";
+        this.lnkGoPay.Enabled = checkFoodDeliverability();
     }
 
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -54,6 +106,16 @@ public partial class Cart : System.Web.UI.Page
 
     protected void lnkGoPay_Click(object sender, EventArgs e)
     {
+        if (MyOrder != null)
+        {
+            Order tempOrder    = MyOrder;
+            tempOrder.Type     = this.ddlDeliveryType.SelectedValue;
+            tempOrder.Location = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
+                                  this.ddlLocations.SelectedValue == "Sports Center" ||
+                                  this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :
+                                                                                            this.ddlLocations.SelectedValue + " " + this.txtLocationPlace.Text);
+            MyOrder = tempOrder;
+        }
         Response.Redirect(URL.root(Request) + "Payment.aspx", true);
     }
 
@@ -68,4 +130,43 @@ public partial class Cart : System.Web.UI.Page
             MyOrder = temp;
         }
     }
+
+    protected void ddlDeliveryType_Click(object sender, EventArgs e)
+    {
+        if (MyOrder != null)
+        {
+            Order tempOrder    = MyOrder;
+            tempOrder.Type     = this.ddlDeliveryType.SelectedValue;
+            tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
+            MyOrder = tempOrder;
+            this.rptItems.DataBind();
+        }
+    }
+
+    #region Private Methods
+    /// <summary>
+    /// Checks if all foods match order type and adds message to error display
+    /// </summary>
+    /// <returns>True if all foods match order type.</returns>
+    private bool checkFoodDeliverability()
+    {
+        bool allFoodsMatchType = false;
+        if (MyOrder != null && MyOrder.Order_Elements != null)
+        {
+            allFoodsMatchType = true;
+            foreach (Order_Element food in MyOrder.Order_Elements)
+            {
+                if (MyOrder.Type == "Delivery" && food.Deliverable != "Y")
+                {
+                    allFoodsMatchType = false;
+                }
+            }
+            if (!allFoodsMatchType)
+            {
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more foods cannot be delivered. Please remove them or choose Pick-Up.";
+            }
+        }
+        return allFoodsMatchType;
+    }
+    #endregion
 }

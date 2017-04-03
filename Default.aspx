@@ -24,7 +24,7 @@
         </ol>   
         <!-- Wrapper for carousel items -->
         <div class="carousel-inner">
-            <div class="item">
+            <div class="item active">
                 <img src=<%= "\"" + Request.Url.GetLeftPart(UriPartial.Authority) + "/Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="slideImages" />
          		<div class="carousel-caption slideShowCaption">
                   <h3>First slide label</h3>

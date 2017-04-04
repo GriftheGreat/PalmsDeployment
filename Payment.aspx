@@ -32,11 +32,19 @@
             display: block;
         }
 
-        .payment-item
+        /*OLD .payment-item
         {
             margin-left: -100px;
             position: inherit;
             display: inline-block;
+        }*/
+        .payment-item
+        {
+            margin-left: -100px;
+            position: relative;
+            margin-right: 50px;
+            display: inline-block;
+            float: left;
         }
 
         .cannot-deliver
@@ -50,16 +58,27 @@
         {
             display: inline-block;
             width: 600px;
-            height: 300px;
+/*            height: 300px;*/
             overflow: hidden;
         }
 
+        /*OLD .order-summary-info
+        {
+            border: 2px solid rgb(128, 128, 128);
+            border-radius: 20px;
+            display: block;
+            height: 40px;
+        }*/
         .order-summary-info
         {
             border: 2px solid rgb(128, 128, 128);
             border-radius: 20px;
             display: block;
             height: 40px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            background-color: sandybrown;
+            clear: both;
         }
 
         .order-summary-items
@@ -94,12 +113,14 @@
 
         .payment-options-button:hover
         {
-            background-color: rgb(200, 200, 200);
+            /*background-color: rgb(200, 200, 200);*/
+            background-color: darkgray;
         }
 
         .current-tab
         {
             border-width: 2px 2px 0px 2px;
+            background-color: lightgray;
         }
 
         .payment-options-section
@@ -110,6 +131,7 @@
             padding: 20px;
             width: 100%;
             text-align: left;
+            background-color: lightgray;
         }
 
         .payment-options-section table
@@ -331,6 +353,7 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
+<%--    <div class="container col-md-">  --%>
         <div class="row" style="text-align: center;">
             <div class="order-summary">
                 <div class="order-summary-info">

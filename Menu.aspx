@@ -9,6 +9,22 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
+        .MealHeaderButton
+        {
+            margin-top: 30px;
+            border: outset;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            color: sandybrown;
+            background-color: darkred;
+            font-weight: bold;   
+
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
         .HeaderButton
         {
             margin-top: 20px;
@@ -52,8 +68,6 @@
             display: block;
         }
 
-
-
         .item-detail-list
         {
             border: 1px solid rgb(128, 128, 128);
@@ -83,6 +97,29 @@
                     var purchaseButton = $(this);
                     var hidFoodID = purchaseButton.attr("chooseDetail");
                     foodID = $('#' + hidFoodID).val();// assign global variable
+<%--=======
+        function AccordionTrigger(open)
+        {            
+            var mealTabClicked = false;
+            var clickedElements = []
+
+            $('div[AccordionControl="' + open + '"]').each(function (index) {
+                clickedElements.push($(this)); // Some food types are appear twice, once
+                                               // under Breakfast and once in Lunch & Dinner
+                                               // i.e. the Beverages food type
+            });
+
+            if (open == "Breakfast" || open == "Lunch & Dinner")
+            {
+                mealTabClicked = true;
+            }
+
+            // Collapse the correct category of tabs
+            if (mealTabClicked == true)
+            {
+                $('div[AccordionControl][AccordionControl!="' + open + '"]:visible[AccordionControl="Breakfast"],[AccordionControl="Lunch & Dinner"]').each(function (index) {
+                    $(this).slideUp();
+>>>>>>> Judah--%>
                 });
             }
             else
@@ -132,6 +169,30 @@
             foodID = null;// clear global variable
         }
 
+        function AccordionTrigger2(open)
+        {
+            var clickedElement = $('div[AccordionControl2="' + open + '"]').first();
+
+            $('div[AccordionControl2]:visible').each(function (index) {
+                $( this ).slideUp();
+            });
+
+            if (clickedElement.is(":visible"))
+            {
+                clickedElement.slideUp();
+            }
+            else
+            {
+                clickedElement.slideDown();
+
+                setTimeout(function () {
+                    $('body,html').animate({
+                        scrollTop: clickedElement.offset().top - 100
+                    });
+                }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
+            }
+        }
+
         function AccordionTrigger(open)
         {
             var clickedElement = $('div[AccordionControl="' + open + '"]').first();
@@ -161,14 +222,67 @@
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
             //$('#modalFoodDetails').modal('show');  REMOVED because this is handled by   $('#modalOrderType').on("hidden.bs.modal", function ()
+<%--=======
+                $('div[AccordionControl][AccordionControl!="' + open + '"]:visible[AccordionControl!="Breakfast"][AccordionControl!="Lunch & Dinner"]').each(function (index) {
+                    $(this).slideUp();
+                });
+            }
+            
+            // Toggle whether the clicke tab is open or closed
+            for (var instance = 1; instance <= clickedElements.length; instance++)
+            {
+                if (instance == 1)
+                {
+                    if (clickedElements[instance-1].is(":visible")) {
+                        $('div[AccordionControl="' + open + '"]').first().slideUp();
+                    }
+                    else {
+                        $('div[AccordionControl="' + open + '"]').first().slideDown();
+                    }
+                }
+                else
+                {
+                    if (clickedElements[instance - 1].is(":visible")) {
+                        $('div[AccordionControl="' + open + '"]').last().slideUp();
+                    }
+                    else {
+                        $('div[AccordionControl="' + open + '"]').last().slideDown();
+                    }
+                }
+            }
+>>>>>>> Judah--%>
         }
     </script>
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound"><%-- set DataSource in Page_Load --%>
+        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
+                <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                                <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                                <asp:Literal     ID="lblMealName2"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
+                </asp:PlaceHolder>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
@@ -192,7 +306,7 @@
                                         <asp:Literal     ID="litfood_name"        runat="server" Text='<%# Eval("food_name") %>' />
                                     </h3>
 <%--combo?--%>                      <div class="productInfo">
-<%--combo?--%>                          <h4 class="text-left">
+<%--combo?--%>                          <h4 class="text-center">
                                             <asp:Literal ID="litfood_description" runat="server" Text='<%# Eval("food_descr") %>' />
                                             <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' />
                                             <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;\" title=\"Deliverable\" />" : "" %>
@@ -203,8 +317,117 @@
                                     </div>
                                 </div>
                             </div>
+<%--=======
+    <asp:SqlDataSource ID='SqlCategoriesBreakFast' runat="server"
+                        ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
+                        ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
+                        SelectCommand="SELECT ft.food_type_meal,
+                                              CASE
+                                                  WHEN ft.food_type_meal = 'B' THEN 'Breakfast'
+                                                  WHEN ft.food_type_meal = 'A' THEN 'Beverages'
+                                                  WHEN ft.food_type_meal = 'L' THEN 'Lunch ' || chr(38) || ' Dinner'
+                                                  ELSE 18
+                                              END AS bigCategoryName
+                                          FROM food_type ft
+                                          WHERE ft.food_type_vendor = 'PG'
+                                        ORDER BY sort">   
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID='SqlCategoriesLunch' runat="server"
+                        ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
+                        ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
+                        SelectCommand="SELECT ft.food_type_name, ft.food_type_id_pk, ft.food_type_meal,
+                                                CASE LOWER(ft.food_type_name)
+                                                    WHEN 'breakfast sandwiches'           THEN 1
+                                                    WHEN 'breakfast sides'                THEN 2
+                                                    WHEN 'bakery'                         THEN 3
+                                                    WHEN 'beverages'                      THEN 4
+                                                    WHEN 'burgers'                        THEN 5
+                                                    WHEN 'sides'                          THEN 6
+                                                    WHEN 'soups ' || chr(38) || ' salads' THEN 7
+                                                    WHEN 'sandwiches'                     THEN 8
+                                                    WHEN 'paninis'                        THEN 9
+                                                    WHEN 'quesadillas'                    THEN 10
+                                                    WHEN 'wraps'                          THEN 12
+                                                    WHEN 'appetizers'                     THEN 13
+                                                    WHEN 'ice cream'                      THEN 14
+                                                    WHEN 'pizza'                          THEN 15
+                                                    WHEN 'sides'                          THEN 16
+                                                    WHEN 'desserts'                       THEN 17
+                                                    ELSE 18
+                                                END AS sort
+                                            FROM food_type ft
+                                            WHERE food_type_meal = 'L'
+                                            OR food_type_meal = 'A'
+                                        ORDER BY sort">   
+    </asp:SqlDataSource>
+    <div class="container">
+        <asp:Repeater ID="rptMeals" runat="server">
+            <ItemTemplate>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="MealHeaderButton" onclick="AccordionTrigger('<%#meals[meal_index]%>');">
+                            <asp:Literal ID="litCategory1" runat="server" Text='<%#meals[meal_index] %>'/>
+                            <asp:HiddenField ID="hidMealID" runat="server" Value='<%#meals[meal_index] %>'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display:none;" AccordionControl='<%#meals[meal_index] %>'>
+
+                    <asp:Repeater ID="rptCategories" runat="server" DataSourceID='<%#"SqlCategories" + (meal_index++ == 0 ? "BreakFast" : "Lunch")%>'>
+                        <ItemTemplate>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                                        <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
+                                        <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
+                                <asp:SqlDataSource ID="sqlFood" runat="server"
+                                    ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>"
+                                    ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>"
+                                    SelectCommand="SELECT f.food_id_pk, f.food_name, f.food_descr, f.food_cost, f.is_deliverable, f.image_path
+                                                        FROM food f
+                                                    WHERE f.food_type_id_fk = :food_type_id_pk
+                                                    ORDER BY f.food_name">
+                                    <SelectParameters>
+                                        <asp:ControlParameter ControlID="hidFoodTypeID" Name="food_type_id_pk" DefaultValue="-1" PropertyName="Value" />
+                                    </SelectParameters>
+                                </asp:SqlDataSource>
+                                <asp:Repeater ID="rptFood" runat="server" DataSourceID="sqlFood">
+                                    <ItemTemplate>
+                                        <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                                            <div class="front">
+                                                <img class="card-image" src="<%# "Includes/images/Menu Items/" + Eval("image_path").ToString() %>">
+                                            </div>
+                                            <div class="back">
+                                                <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
+                                                <h3 class="text-center productName">
+                                                    <asp:Literal     ID="litfood_name"        runat="server" Text='<%# Eval("food_name") %>' />
+                                                </h3>
+                                  <div class="productInfo">
+                                      <h4 class="text-left">
+                                                        <asp:Literal ID="litfood_description" runat="server" Text='<%# Eval("food_descr") %>' />
+                                                        <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost") %>'      CssClass="" />
+                                                        <asp:Label   ID="lbldeliverable"      runat="server" Text='<%# Eval("is_deliverable") %>' CssClass="" />
+                                                    </h4>
+                                                </div>
+                                                <div class="addToCartButton">
+                                                    <asp:Button      ID="btnAdd"              runat="server" Text="Add to cart" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+>>>>>>> Judah--%>
                         </ItemTemplate>
                     </asp:Repeater>
+                    <asp:PlaceHolder ID="plhBigCategoryEnd" runat="server" Visible="false">
+                        </div>
+                    </asp:PlaceHolder>
                 </div>
             </ItemTemplate>
         </asp:Repeater>
@@ -218,7 +441,7 @@
     </asp:PlaceHolder>
 
     <%-- Modal --%>
-    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
+    <div id="modalFoodDetails" class="modal fade text-center modal-responsive" role="dialog">
         <div class="modal-dialog">
             <%-- Modal content--%>
             <div class="modal-content">
@@ -250,6 +473,8 @@
             </div>
         </div>
     </div>
+
+<%-- Make a modal out of Pizza.aspx and put it here as modalFoodDetails2 --%>
 
     <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
 

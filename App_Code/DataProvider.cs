@@ -121,11 +121,12 @@ public static class Data_Provider
 
         public static string Send_Order_Info(Order order, HttpRequest request)
         {
-            string data = "{'CustomerFirstName' : '" + order.CustomerFirstName                   + @"',
-                            'CustomerLastName' : '"  + order.CustomerLastName                    + @"',
-                            'Location' : '"          + order.Location                            + @"',
-                            'Time' : '"              + order.Time.ToString("M/dd/yyyy HH:mi:ss") + @"',
-                            'Type' : '"              + order.Type                                + @"',
+            string data = "{'CustomerFirstName' : '" + order.CustomerFirstName                         + @"',
+                            'CustomerLastName' : '"  + order.CustomerLastName                          + @"',
+                            'Cost' : '"              + Math.Round(order.CalculateCost(), 2).ToString() + @"',
+                            'Location' : '"          + order.Location                                  + @"',
+                            'Time' : '"              + order.Time.ToString("M/dd/yyyy HH:mi:ss")       + @"',
+                            'Type' : '"              + order.Type                                      + @"',
                             'Foods' : [";
 
             foreach(Order_Element food in order.Order_Elements)
@@ -144,10 +145,10 @@ public static class Data_Provider
             }
             data = data.TrimEnd(",".ToCharArray()) + "]}"; // Foods
 
-            //NameValueCollection parameters = new NameValueCollection();
-            //parameters.Add("data", data);
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("data", data);
 
-            return data;// sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
+            return sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
         }
 
         public static DataTable Get_Locations(string data, HttpRequest request)

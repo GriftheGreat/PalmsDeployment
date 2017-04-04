@@ -38,8 +38,8 @@ public partial class Payment : System.Web.UI.Page
             this.txtFirstName.Text                = MyOrder.CustomerFirstName;
             this.txtLastName.Text                 = MyOrder.CustomerLastName;
 
-            this.ddlDeliveryType.SelectedValue = type;
-            this.ddlDeliveryType.Items[0].Enabled = string.IsNullOrEmpty(type);
+            this.ddlDeliveryType.SelectedValue     = type;
+            this.ddlDeliveryType.Items[0].Enabled  = string.IsNullOrEmpty(type);
             this.deliveryLocationContainer.Visible = !string.IsNullOrEmpty(type);
 
             this.ddlLocations.Items[0].Enabled = string.IsNullOrEmpty(location);

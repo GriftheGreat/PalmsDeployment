@@ -11,20 +11,50 @@
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="scripts" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
        <script type="text/javascript">
+           var window_number = 1;
+
+           var order_box_array;
+           $(document).ready(function(){
+               document.focus();
+           })
+
            document.addEventListener("keypress", process_input);
            function process_input(e)
            {
-               if(e.keyCode >= 49 && e.keyCode <= 56)
+               if (window_number == 1)
                {
-                   alert("boo " + e.keyCode.toString());
-                   document.focus();
+                   if (e.keyCode >= 49 && e.keyCode <= 56) {
+                       //alert(e.keyCode.toString());
+                       $('input[order_id]').each(function (index, box) {
+                           //alert(index.toString());
+                           if ((index + 1) == (e.keyCode - 48)) {
+                               var id = $(box).attr("order_id");
+                               if (id != "") {
+                                   $.ajax({
+                                       type: "POST",
+                                       url: "bump_board.aspx/bump_order",
+                                       contentType: "application/json; charset=utf-8",
+                                       data: '{"order_id":' + id + '}',
+                                       dataType: "json",
+                                       success: function (result) {
+                                           document.focus();
+                                           get_orders(1);
+                                       },
+                                       error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                           alert("Request: " + XMLHttpRequest.toString() + "\n\nStatus: " + textStatus + "\n\nError: " + errorThrown);
+                                       }
+                                   });
+                               }
+                           }
+                       })
+
+                   }
                }
-               
            }
 
            function get_orders(window_display) {
-               var boundary = 3;
-               var window_number = window_display;
+               var boundary = 8;
+               window_number = window_display;
                $("#1").removeClass("focused_window_button");
                $("#2").removeClass("focused_window_button");
                $("#3").removeClass("focused_window_button");
@@ -55,7 +85,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="Content" runat="server">
     <div class="order_display">    
         <div class="top">
-            <div id="1" class="window_button" onclick="get_orders(1);">Front Window</div>
+            <div id="1" class="window_button focused_window_button" onclick="get_orders(1);">Front Window</div>
             <div id="2" class="window_button" onclick="get_orders(2);">Back Window</div>
             <div id="3" class="window_button" onclick="get_orders(3);">Ice Cream</div>
             <div id="4" class="window_button" onclick="get_orders(4);">Frier</div>
@@ -63,7 +93,7 @@
             <div id="6" class="window_button" onclick="get_orders(6);">Pizza</div>
             <div class="bar">PG - Front Video 8</div> 
         </div>
-
+         
         <div id="middle" class="middle">
             <asp:Literal ID="litOrder_boxes" runat="server" />
         </div>
@@ -71,14 +101,14 @@
         <div class="bottom">
             <div style="float: left;">BT 10.19.33.21</div>
             <div style="display: inline-block;">
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"         ID="clear"  Text="Clear"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar grey"    ID="park"   Text="Park"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"         ID="sum"    Text="Sum"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"         ID="recall" Text="Recall"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar grey"    ID="esc"    Text="Esc"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"         ID="refresh" Text="Refresh"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"         ID="funct"  Text="Funct"  runat="server"></asp:Button>
-                <asp:Button UseSubmitBehavior="false" CssClass="base_bar red"     ID="help"   Text="Help"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"       enabled="false"   ID="clear"  Text="Clear"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar grey"  enabled="false"   ID="park"   Text="Park"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"       enabled="false"   ID="sum"    Text="Sum"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"       enabled="false"   ID="recall" Text="Recall"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar grey"  enabled="false"   ID="esc"    Text="Esc"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"       enabled="false"   ID="refresh" Text="Refresh"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar"       enabled="false"   ID="funct"  Text="Funct"  runat="server"></asp:Button>
+                <asp:Button UseSubmitBehavior="false" CssClass="base_bar red"   enabled="false"   ID="help"   Text="Help"  runat="server"></asp:Button>
             </div>
             <div id="func"><span id="time"></span></div>
         </div>

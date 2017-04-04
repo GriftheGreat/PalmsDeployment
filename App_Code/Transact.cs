@@ -258,6 +258,59 @@ public class CreditCardInvoice
 }
 
 /// <summary>
+/// The TimeSlots class is for simulation purposes and should only be call by transact entities or via web services. (client AJAX too)
+/// </summary>
+[WebService(Namespace = "http://csmain.studentnet.int/seproject/PalmsPP/App_Code/Transact.cs")]
+[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+[System.Web.Script.Services.ScriptService]
+public class TimeSlots : System.Web.Services.WebService
+{
+    [WebMethod]
+    public string getTimeSlots()
+    {
+        DataTable menu = new DataTable();
+        StringBuilder sb = new StringBuilder();
+
+        string query = @"SELECT *
+                           FROM time_slot
+                           JOIN ""order""
+                             ON 1=1 --?--
+                          WHERE 1=1--?--";
+
+        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+        OracleCommand myCommand = new OracleCommand(query, myConnection);
+
+        try
+        {
+            myConnection.Open();
+            menu.Load(myCommand.ExecuteReader());
+
+            IEnumerable<string> columnNames = menu.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+            sb.AppendLine(string.Join("-,-", columnNames));
+            //AppendLine puts "\r\n" between rows
+
+            foreach (DataRow row in menu.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                sb.AppendLine(string.Join("-,-", fields));
+            }
+        }
+        catch (Exception ex)
+        {
+            sb.AppendLine("ERROR");
+            sb.AppendLine(ex.Message);
+        }
+        finally
+        {
+            myConnection.Close();
+            myConnection.Dispose();
+        }
+        return sb.ToString();
+    }
+}
+
+
+/// <summary>
 /// The Order_Data class is for simulation purposes and should only be call by transact entities or via web services.
 /// </summary>
 [WebService(Namespace = "http://csmain.studentnet.int/seproject/PalmsPP/App_Code/Transact.cs")]
@@ -272,6 +325,7 @@ public class Order_Data
         public string Cost;
         public string Location;
         public string Time;
+        public string TimeSlot;
         public string Type;
         public List<Webapp_Order_Element> Foods;
     }
@@ -299,27 +353,19 @@ public class Order_Data
         Webapp_Order webappOrder = serializer.Deserialize<Webapp_Order>(data);
 
         #region queries
-        string query_string1 = @"BEGIN :out := createOrder(p_location_id_fk    => :p_location_id_fk   
-                                                           p_ticket_id_fk      => :p_ticket_id_fk     
-                                                           p_order_num         => :p_order_num        ;--error order number should be gotten in package by coalesce(max(number of today), 0) + 1
-                                                           p_customer_fname    => :p_customer_fname   
-                                                           p_customer_lname    => :p_customer_lname   
-                                                           p_order_cal_time    => :p_order_cal_time   
-                                                           p_order_cost        => :p_order_cost       
-                                                           p_order_ready       => :p_order_ready      
-                                                           p_order_placed_time => :p_order_placed_time); END;";
-        string query_string2 = @"BEGIN :out := createOrder(
-                                                           ); END;";
-        //createOrderElement(p_food_id_fk          order_element.food_id_fk%TYPE,
-        //                   p_order_id_fk         order_element.order_id_fk%TYPE,
-        //                   p_order_element_ready order_element.order_element_ready%TYPE)
-        //RETURN order_element.order_element_id_pk%TYPE
+        string query_string1 = @"BEGIN :out := placeOrder(p_customer_fname    => :p_customer_fname
+                                                          p_customer_lname    => :p_customer_lname
+                                                          p_order_cost        => :p_order_cost
+                                                          p_order_placed_time => :p_order_placed_time
+                                                          p_time_slot         => :p_time_slot,           --format:  '##:##-##:##'
+                                                          p_location_text     => p_location_text); END;";
 
-        //createOrderDetail(p_order_element_id_fk order_detail.order_element_id_fk%TYPE,
-        //                  p_detail_id_fk        order_detail.detail_id_fk%TYPE)
-        //RETURN order_detail.order_detail_id_pk%TYPE
-        string query_string3 = @"BEGIN :out := createOrder(
-                                                           ); END;";
+        string query_string2 = @"BEGIN :out := createOrderElement(p_food_id_fk          => p_food_id_fk,
+                                                                  p_order_id_fk         => p_order_id_fk,
+                                                                  p_order_element_ready => p_order_element_ready); END;";
+
+        string query_string3 = @"BEGIN :out := createOrderDetail(p_order_element_id_fk => p_order_element_id_fk,
+                                                                 p_detail_id_fk        => p_detail_id_fk); END;";
         #endregion queries
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         //OracleTransaction j = myConnection.BeginTransaction();
@@ -338,9 +384,10 @@ public class Order_Data
                 myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
                 myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
                 myCommand1.Parameters.Add("p_order_cost",        webappOrder.Cost);
-                myCommand1.Parameters.Add("p_order_status",      "N");
                 myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
-                myCommand1.Parameters.Add("p_location_id_fk",    webappOrder.Location);
+                myCommand1.Parameters.Add("p_time_slot",         webappOrder.TimeSlot);
+                myCommand1.Parameters.Add("p_location_text",     webappOrder.Location);
+                //myCommand1.Parameters.Add("p_order_status",      "N");
                 //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
                 //myCommand1.Parameters.Add("p_order_num",         p_order_num);
                 //myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
@@ -348,7 +395,7 @@ public class Order_Data
 
                 webappOrderID = myCommand1.Parameters["out"].Value.ToString();
 //???????????????????????
-                result += "Pass:";// + myCommand1.Parameters["out"].Value.ToString();
+                result += "Pass:" + myCommand1.Parameters["out"].Value.ToString();
 
 //?
                 #region create order elements and order elements details
@@ -357,8 +404,9 @@ public class Order_Data
                     try
                     {
                         myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-                        myCommand2.Parameters.Add("", food.ID);
-                        myCommand2.Parameters.Add("", webappOrderID);
+                        myCommand2.Parameters.Add("p_food_id_fk",          food.ID);
+                        myCommand2.Parameters.Add("p_order_id_fk",         webappOrderID);
+                        myCommand2.Parameters.Add("p_order_element_ready", "N");
                         myCommand2.ExecuteNonQuery();
 
                         currentWebappOrderElementID = myCommand2.Parameters["out"].Value.ToString();
@@ -372,8 +420,8 @@ public class Order_Data
                             try
                             {
                                 myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-                                myCommand3.Parameters.Add("", detail.ID);
-                                myCommand3.Parameters.Add("", currentWebappOrderElementID);
+                                myCommand3.Parameters.Add("p_detail_id_fk",        detail.ID);
+                                myCommand3.Parameters.Add("p_order_element_id_fk", currentWebappOrderElementID);
                                 myCommand3.ExecuteNonQuery();
 
 //???????????????????????

@@ -103,6 +103,7 @@ public partial class Payment : System.Web.UI.Page
         tempOrder.CustomerFirstName = this.txtFirstName.Text;
         tempOrder.CustomerLastName  = this.txtLastName.Text;
         tempOrder.Type              = this.ddlDeliveryType.SelectedValue;
+        tempOrder.TimeSlot          = "ASAP";
         tempOrder.Location          = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
                                        this.ddlLocations.SelectedValue == "Sports Center" ||
                                        this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :

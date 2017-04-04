@@ -125,7 +125,8 @@ public static class Data_Provider
                             'CustomerLastName' : '"  + order.CustomerLastName                          + @"',
                             'Cost' : '"              + Math.Round(order.CalculateCost(), 2).ToString() + @"',
                             'Location' : '"          + order.Location                                  + @"',
-                            'Time' : '"              + order.Time.ToString("M/dd/yyyy HH:mi:ss")       + @"',
+                            'Time' : '"              + order.Time.ToString("yyyyddMM HH:mi:ss")        + @"',
+                            'TimeSlot' : '"          + order.TimeSlot                                  + @"',
                             'Type' : '"              + order.Type                                      + @"',
                             'Foods' : [";
 
@@ -145,55 +146,55 @@ public static class Data_Provider
             }
             data = data.TrimEnd(",".ToCharArray()) + "]}"; // Foods
 
-            NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("data", data);
-
-            return sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
-        }
-
-        public static DataTable Get_Locations(string data, HttpRequest request)
-        {
-            string result;
-            string[] rows;
-            DataTable menu = new DataTable();
-            bool isNotFirstRow = false;
-            List<DataColumn> columns = new List<DataColumn>();
-
-            NameValueCollection parameters = new NameValueCollection();
+            //NameValueCollection parameters = new NameValueCollection();
             //parameters.Add("data", data);
 
-            result = sendWebRequest(parameters, URL.root(request) + "Services/Locations.asmx/getLocations");
-
-            if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
-            {
-                menu.Columns.Add(new DataColumn("location_id_pk"));
-                menu.Columns.Add(new DataColumn("location_name"));
-                menu.Rows.Add(new string[] { "1", result });
-            }
-            else
-            {
-                rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
-                {
-                    columns.Add(new DataColumn(columnName));
-                }
-                menu.Columns.AddRange(columns.ToArray());
-
-                foreach (string row in rows)
-                {
-                    if (isNotFirstRow)
-                    {
-                        menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
-                    }
-                    else
-                    {
-                        isNotFirstRow = true;
-                    }
-                }
-            }
-            return menu;
+            return data;// sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
         }
+
+        //public static DataTable Get_Locations(string data, HttpRequest request)
+        //{
+        //    string result;
+        //    string[] rows;
+        //    DataTable menu = new DataTable();
+        //    bool isNotFirstRow = false;
+        //    List<DataColumn> columns = new List<DataColumn>();
+
+        //    NameValueCollection parameters = new NameValueCollection();
+        //    //parameters.Add("data", data);
+
+        //    result = sendWebRequest(parameters, URL.root(request) + "Services/Locations.asmx/getLocations");
+
+        //    if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
+        //    {
+        //        menu.Columns.Add(new DataColumn("location_id_pk"));
+        //        menu.Columns.Add(new DataColumn("location_name"));
+        //        menu.Rows.Add(new string[] { "1", result });
+        //    }
+        //    else
+        //    {
+        //        rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        //        foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
+        //        {
+        //            columns.Add(new DataColumn(columnName));
+        //        }
+        //        menu.Columns.AddRange(columns.ToArray());
+
+        //        foreach (string row in rows)
+        //        {
+        //            if (isNotFirstRow)
+        //            {
+        //                menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
+        //            }
+        //            else
+        //            {
+        //                isNotFirstRow = true;
+        //            }
+        //        }
+        //    }
+        //    return menu;
+        //}
     }
 
     private static string sendWebRequest(NameValueCollection data, string url)

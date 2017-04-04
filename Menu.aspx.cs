@@ -89,7 +89,7 @@ public partial class Menu : System.Web.UI.Page
         }
 
         EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu)
-                                                                                  .OrderBy(row => row["food_type_meal"].ToString());
+                                                                                  .OrderBy(row => row["sort"].ToString());
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();
@@ -123,6 +123,8 @@ public partial class Menu : System.Web.UI.Page
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
+        #region Big Categories
+        //this section requires the categories to be ordered by the "sort" column
         if (!(Request.QueryString["menu"] == "PapaJohns"))
         {
             if (e.Item.ItemIndex == 0)
@@ -142,6 +144,7 @@ public partial class Menu : System.Web.UI.Page
                 currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
             }
         }
+        #endregion
 
         Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
         EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString())

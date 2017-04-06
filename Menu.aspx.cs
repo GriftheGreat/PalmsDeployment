@@ -88,8 +88,9 @@ public partial class Menu : System.Web.UI.Page
             }
         }
 
-        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu)
-                                                                                  .OrderBy(row => row["sort"].ToString());
+        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu &&
+                                                                                               row["food_type_name"].ToString()   != "Create Your Own Pizza")
+                                                                               .OrderBy(row => row["sort"].ToString());
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();

@@ -96,9 +96,9 @@ ul.nav a:hover {
     border-width: 1px;
     border-color: rgba(189,195,199, .5);
 
-    transition: transform 1s;
 	transition: -webkit-transform 1s;
-    /*transition: -moz-transform 1s;*/
+    transition: -moz-transform 1s;
+    transition: transform 1s;
 
     transform-style: preserve-3d;
 	-webkit-transform-style: preserve-3d;

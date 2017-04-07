@@ -8,7 +8,24 @@ public partial class Test : System.Web.UI.Page
 {
 	protected void Page_Load(object sender, EventArgs e)
 	{
-        List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("");
+        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
+        //j.DataSource = null;
+        //j.DataBind();
+
+        //int jj;
+        //for (jj = 0; jj < 10; jj++)
+        //{
+        //    Response.Write("<div>"+jj.ToString()+"</div>");
+        //
+        //}
+        //this.litControl.Text = var;
+
+
+        gdvSession.DataSource = Session;
+        gdvSession.DataBind();
+
+
+        List<DataTable> j = Data_Provider.Transact_Interface.Get_Menu("", Request);
 
         this.gdvMenu1.DataSource = j[0];
         this.gdvMenu1.DataBind();
@@ -23,12 +40,12 @@ public partial class Test : System.Web.UI.Page
         this.gdvMenu4.DataBind();
     }
 
-    protected void Label4_DataBinding(object sender, EventArgs e)
-	{
-		Label lbl4 = (Label) sender;
-		RepeaterItem container = (RepeaterItem)lbl4.NamingContainer;
-		lbl4.Text = ((DataRowView)container.DataItem)[0].ToString(); // column 0
-	}
+    protected void btnClearSession_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        gdvSession.DataSource = Session;
+        gdvSession.DataBind();
+    }
 
     protected void btn1_Click(object sender, EventArgs e)
     {
@@ -37,7 +54,7 @@ public partial class Test : System.Web.UI.Page
 
     protected void btn2_Click(object sender, EventArgs e)
     {
-        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444", "05/17", "123", "Jacob Harder", "0.00");//.Contains("Pass") ? "Transaction Approved" : "Transaction Denied";
+        this.lbl2.Text = Data_Provider.Credit_Card_Interface.Send_Credit_Card_Info("1111222233334444", "05/17", "123", "Jacob Harder", "0.00", Request);//.Contains("Pass") ? "Transaction Approved" : "Transaction Denied";
     }
 }
 

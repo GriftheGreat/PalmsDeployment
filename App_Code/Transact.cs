@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Web.Services;
 
@@ -22,47 +23,65 @@ using System.Web.Services;
 public class IDCard
 {
     [WebMethod]
-    public string Process_ID_Card(string Order_ID, string ID_Number, string Password)
+    public string Process_ID_Card(string Order_ID, string ID_Number, string Password, string amount)
     {
         string status;
-        string result;
+        string result = "";
 
-        // Logic for checking amount of money student has goes here.
-        // To simulate, the "check" will randomly pass or fail.
-        Random rnd = new Random();
-        status = rnd.Next(100) < 50 ? "Pass:" : "Fail:balance has insufficient funds:"; // 0 <= number < 100
+        Regex IDNumberCheck = new Regex("^[0-9]{4,6}$");
+        Regex PasswordCheck = new Regex("^[0-9]{8,8}$");
+        Regex amountCheck   = new Regex("^-{0,1}[0-9]*.{0,1}[0-9]{0,2}$");
 
-        // Retain invoice
-        string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
-        OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-        OracleCommand myCommand = new OracleCommand(query_string, myConnection);
-
-        try
+        if (IDNumberCheck.IsMatch(ID_Number) &&
+            PasswordCheck.IsMatch(Password) &&
+            amountCheck.IsMatch  (amount))
         {
-            myConnection.Open();
-            myCommand.Parameters.Add("p_order_id_fk", Order_ID);
-            myCommand.Parameters.Add("p_confirmation_status", 'Y');
-            myCommand.ExecuteNonQuery();
+            // Logic for checking amount of money student has goes here.
+            // To simulate, the "check" will randomly pass or fail.
+            Random rnd = new Random();
+            status = rnd.Next(100) < 50 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
 
-            result = myCommand.Parameters["out"].Value.ToString();
-        }
-        catch (Exception ex)
-        {
-            result = "ERROR\n" + ex.Message;
-        }
-        finally
-        {
-            try
+            if (status == "Pass")
             {
-                myCommand.Dispose();
-            }
-            catch { }
+                // Retain invoice
+                string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
+                OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
+                OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
-            myConnection.Close();
-            myConnection.Dispose();
+                try
+                {
+                    myConnection.Open();
+                    myCommand.Parameters.Add("p_order_id_fk", Order_ID);
+                    myCommand.Parameters.Add("p_confirmation_status", 'Y');
+                    myCommand.ExecuteNonQuery();
+
+                    //do not need in return
+                    //result = myCommand.Parameters["out"].Value.ToString();
+                }
+                catch (Exception ex)
+                {
+                    status = "";
+                    result = "Fail:Could not finalize payment.\n" + ex.Message;
+                }
+                finally
+                {
+                    try
+                    {
+                        myCommand.Dispose();
+                    }
+                    catch { }
+
+                    myConnection.Close();
+                    myConnection.Dispose();
+                }
+            }
+        }
+        else
+        {
+            status = "Fail:Invalid ID card data.";
         }
 
-        return status + ID_Number + "," + Password + ":" + result;
+        return status + result;
     }
 }
 
@@ -170,9 +189,9 @@ public class Menu_Data
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            while (sb.ToString().Split(new string[] {"-;-"}, StringSplitOptions.None).Length < queries.Length)
+            while (sb.ToString().Split(new string[] { "-;-" }, StringSplitOptions.None).Length < queries.Length)
             {
                 if (sb.Length > 0)
                 {
@@ -203,7 +222,7 @@ public class CreditCardInvoice
     public string createCCI(string p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
     {
         string result;
-        string query_string = "BEGIN :out := createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status); END;";
+        string query_string = "BEGIN :out := credit_card_inv_package.createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
@@ -216,11 +235,12 @@ public class CreditCardInvoice
             myCommand.Parameters.Add("p_cci_confirmation_status", p_cci_confirmation_status);
             myCommand.ExecuteNonQuery();
 
-            result = "Pass:" + myCommand.Parameters["out"].Value.ToString();
+                            //do not need in return
+            result = "Pass";// + myCommand.Parameters["out"].Value.ToString();
         }
         catch (Exception ex)
         {
-            result = "ERROR\n" + ex.Message;
+            result = "Fail:Could not finalize payment.\n" + ex.Message;
         }
         finally
         {
@@ -249,39 +269,35 @@ public class Order_Data
     {
         public string CustomerFirstName;
         public string CustomerLastName;
+        public string Cost;
         public string Location;
-        public List<Order_Element> Order_Elements;
-        public DateTime Time;
+        public string Time;
         public string Type;
+        public List<Webapp_Order_Element> Foods;
     }
 
     private class Webapp_Order_Element
     {
-        public string Deliverable;
-        public string Description;
-        public List<Detail> Details;
-        public int ID;
-        public string ImagePath;
-        public string Name;
-        public float Price;
+        public string ID;
+        public List<Webapp_Detail> Details;
     }
 
     private class Webapp_Detail
     {
-        public float Cost;
-        public string Description;
-        public int ID;
+        public string ID;
     }
     #endregion classes
+
 
     [WebMethod]
     public string createOrder(string data)
     {
-        JavaScriptSerializer serializer = new JavaScriptSerializer();
-        //string serializedResult = serializer.Serialize(RegisteredUsers)
-        Order webappOrder = serializer.Deserialize<Order>(data);
-
+        string webappOrderID = "0";
+        string currentWebappOrderElementID = "0";
         string result = "";
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        Webapp_Order webappOrder = serializer.Deserialize<Webapp_Order>(data);
+
         #region queries
         string query_string1 = @"BEGIN :out := createOrder(p_location_id_fk    => :p_location_id_fk   
                                                            p_ticket_id_fk      => :p_ticket_id_fk     
@@ -293,10 +309,6 @@ public class Order_Data
                                                            p_order_ready       => :p_order_ready      
                                                            p_order_placed_time => :p_order_placed_time); END;";
         string query_string2 = @"BEGIN :out := createOrder(
-
-
-
-
                                                            ); END;";
         //createOrderElement(p_food_id_fk          order_element.food_id_fk%TYPE,
         //                   p_order_id_fk         order_element.order_id_fk%TYPE,
@@ -307,10 +319,6 @@ public class Order_Data
         //                  p_detail_id_fk        order_detail.detail_id_fk%TYPE)
         //RETURN order_detail.order_detail_id_pk%TYPE
         string query_string3 = @"BEGIN :out := createOrder(
-
-
-
-
                                                            ); END;";
         #endregion queries
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
@@ -322,22 +330,84 @@ public class Order_Data
         try
         {
             myConnection.Open();
-            #region create order
+//?
+            #region create order, create order elements, and order elements details
             try
             {
-//                myCommand1.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand1.Parameters.Add("p_location_id_fk",    webappOrder.Location);
-//                //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
-//                //myCommand1.Parameters.Add("p_order_num",         p_order_num);
-//                myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
-//                myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
-//                myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
-//                myCommand1.Parameters.Add("p_order_cost",        p_order_cost);
-//                myCommand1.Parameters.Add("p_order_ready",       "N"/*status*/);
-//                myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
+                myCommand1.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
+                myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
+                myCommand1.Parameters.Add("p_order_cost",        webappOrder.Cost);
+                myCommand1.Parameters.Add("p_order_status",      "N");
+                myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
+                myCommand1.Parameters.Add("p_location_id_fk",    webappOrder.Location);
+                //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
+                //myCommand1.Parameters.Add("p_order_num",         p_order_num);
+                //myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
                 myCommand1.ExecuteNonQuery();
 
-                result += "Pass:" + myCommand1.Parameters["out"].Value.ToString();
+                webappOrderID = myCommand1.Parameters["out"].Value.ToString();
+//???????????????????????
+                result += "Pass:";// + myCommand1.Parameters["out"].Value.ToString();
+
+//?
+                #region create order elements and order elements details
+                foreach (Webapp_Order_Element food in webappOrder.Foods)
+                {
+                    try
+                    {
+                        myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                        myCommand2.Parameters.Add("", food.ID);
+                        myCommand2.Parameters.Add("", webappOrderID);
+                        myCommand2.ExecuteNonQuery();
+
+                        currentWebappOrderElementID = myCommand2.Parameters["out"].Value.ToString();
+//???????????????????????
+                        result += "\n\nPass:";// + myCommand2.Parameters["out"].Value.ToString();
+
+//?
+                        #region create order[ elements] details
+                        foreach (Webapp_Detail detail in food.Details)
+                        {
+                            try
+                            {
+                                myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                                myCommand3.Parameters.Add("", detail.ID);
+                                myCommand3.Parameters.Add("", currentWebappOrderElementID);
+                                myCommand3.ExecuteNonQuery();
+
+//???????????????????????
+                                result += "\n\nPass:";// + myCommand3.Parameters["out"].Value.ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                result += "\n\nERROR\n" + ex.Message;
+                            }
+                            finally
+                            {
+                                try
+                                {
+                                    myCommand3.Dispose();
+                                }
+                                catch { }
+                            }
+                        }
+                        #endregion create order elements details
+                    }
+                    catch (Exception ex)
+                    {
+                        result += "\n\nERROR\n" + ex.Message;
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            myCommand2.Dispose();
+                        }
+                        catch { }
+                    }
+                }
+                #endregion create order elements and order elements details
             }
             catch (Exception ex)
             {
@@ -351,55 +421,7 @@ public class Order_Data
                 }
                 catch { }
             }
-            #endregion create order
-
-            #region create order elements
-            try
-            {
-//                myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand2.Parameters.Add("p_location_id_fk", p_location_id_fk);
-//                myCommand2.Parameters.Add("p_ticket_id_fk",   p_ticket_id_fk);
-                myCommand2.ExecuteNonQuery();
-
-                result += "\n\nPass:" + myCommand2.Parameters["out"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                result += "\n\nERROR\n" + ex.Message;
-            }
-            finally
-            {
-                try
-                {
-                    myCommand2.Dispose();
-                }
-                catch { }
-            }
-            #endregion create order elements
-
-            #region create order[ elements] details
-            try
-            {
-//                myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-//                myCommand3.Parameters.Add("p_location_id_fk", p_location_id_fk);
-//                myCommand3.Parameters.Add("p_ticket_id_fk",   p_ticket_id_fk);
-                myCommand3.ExecuteNonQuery();
-
-                result += "\n\nPass:" + myCommand3.Parameters["out"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                result += "\n\nERROR\n" + ex.Message;
-            }
-            finally
-            {
-                try
-                {
-                    myCommand3.Dispose();
-                }
-                catch { }
-            }
-            #endregion create order[ elements] details
+            #endregion create order, create order elements, and order elements details
         }
         catch (Exception ex)
         {
@@ -413,7 +435,6 @@ public class Order_Data
         return result;
     }
 }
-
 
 //updateOrder(p_order_id_pk       "order".order_id_pk%TYPE,
 //deleteOrder(p_order_id_pk "order".order_id_pk%TYPE);

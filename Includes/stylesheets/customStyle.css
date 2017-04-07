@@ -55,11 +55,6 @@ ul.nav a:hover {
 }
 
 
-.slideShowCaption {
-    color: red;
-}
-
-
 
 /* Navigation bar css code ends here */
 
@@ -110,8 +105,8 @@ ul.nav a:hover {
 
 .front {
 	overflow: hidden;
-    width: 160px;
-    height: 200px;
+    width: 202px;
+    height: 280px;
 	position: absolute;
     /*background-color: rgba(220,198,224, .99);*/
     background-color: white;
@@ -119,8 +114,8 @@ ul.nav a:hover {
 }
 
 .back {
-    width: 160px;
-	height: 200px;
+    width: 202px;
+	height: 280px;
     transform: rotateY(-180deg);
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
@@ -210,7 +205,7 @@ ul.nav a:hover {
 }
 
 .modal-dialog {
-   width: 720px; 
+   max-width: 920px; 
 }
 
 
@@ -281,21 +276,19 @@ ul.nav a:hover {
 
 
 
-
+.carouselWrapper {
+    height: 400px;
+}
 
 .slideImages {
-    width: 100%;
-    height: 500px;
-    
+     
 }
 
 .carousel-indicators {
     bottom: 0;
-    
 }
 
 .carousel .item {
-    height: 706px; 
     width:100%; 
     
 }
@@ -312,4 +305,34 @@ ul.nav a:hover {
 
 .carousel-caption button {
   animation-delay: 3s;
+}
+
+
+
+.bottomInfo {
+    /*background-color: red;*/
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.firstThumbnail, .secondThumbnail, .thirdThumbnail {
+    height: 266px !important;  
+}
+
+.thumbnail {
+    background-color: lightgray;
+}
+
+
+
+
+@media (min-width: 768px) {
+  .modalSizing {
+    width: 100%;
+  }
+}
+@media (min-width: 992px) {
+  .modalSizing {
+    width: 900px;
+  }
 }

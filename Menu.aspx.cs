@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,14 +12,20 @@ public partial class Menu : System.Web.UI.Page
     {
         get
         {
+            //Response.Write("*get::" + (Session["order"] != null ? "yep" : "null") + "*<br />\n");
             return Session["order"] != null ? (Order)Session["order"] : null;
         }
         set
         {
+            //Response.Write("*set::" + (value != null ? "yep->"+value.Type : "null") + "*<br />\n");
             Session["order"] = value;
             Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
     }
+    #endregion
+
+    #region Variables
+    public string currentBigCategory = "";
     #endregion
 
     public List<DataTable> MenuData;
@@ -29,9 +36,10 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_Init(object sender, EventArgs e)
     {
+        //Response.Write("|Page_Init::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "|<br />\n");
         if (MenuData == null)
         {
-            MenuData = Data_Provider.Transact_Interface.Get_Menu("");
+            MenuData = Data_Provider.Transact_Interface.Get_Menu("", Request);
         }
 
         if(MenuData.Count == 1 && MenuData[0].Columns.Count == 1 && MenuData[0].Rows.Count == 0)
@@ -40,9 +48,11 @@ public partial class Menu : System.Web.UI.Page
         }
     }
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected void Page_PreRender(object sender, EventArgs e)
     {
-        //Response.Write("Page_Load<br />\n");
+       // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
+        // ASP.NET Page Life Cycle Overview 
+        // https://msdn.microsoft.com/en-us/library/ms178472.aspx
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
@@ -58,8 +68,28 @@ public partial class Menu : System.Web.UI.Page
             this.plhCreateYourOwnPizza.Visible = true;
         }
 
-        // must select where either "PG" or "PJ"
-        EnumerableRowCollection<DataRow> selectedRows = MenuData[1].AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu);
+        // must select where either "PG" or "PJ" and manage food type meals (PG only)
+        DataTable categories = MenuData[1];
+        categories.Columns.Add("sort");
+
+        foreach(DataRow row in categories.Rows)
+        {
+            if (row["food_type_meal"].ToString() == "B")
+            {
+                row["sort"] = "1";
+            }
+            else if (row["food_type_meal"].ToString() == "L")
+            {
+                row["sort"] = "2";
+            }
+            else if (row["food_type_meal"].ToString() == "A")
+            {
+                row["sort"] = "3";
+            }
+        }
+
+        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu)
+                                                                                  .OrderBy(row => row["food_type_meal"].ToString());
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();
@@ -93,6 +123,26 @@ public partial class Menu : System.Web.UI.Page
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
+        if (!(Request.QueryString["menu"] == "PapaJohns"))
+        {
+            if (e.Item.ItemIndex == 0)
+            {
+                e.Item.FindControl("plhBigCategoryStart").Visible = true;
+                currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+            else if (currentBigCategory != ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString() && ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString() == "A")
+            {
+                // sort column makes sure this is done at last item being bound
+                e.Item.FindControl("plhBigCategoryEnd").Visible = true;
+                currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+            else if (currentBigCategory != ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString())
+            {
+                e.Item.FindControl("plhBigCategoryMiddle").Visible = true;
+                currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
+            }
+        }
+
         Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
         EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString())
                                                                                   .OrderBy(row => row["food_name"].ToString());
@@ -126,7 +176,6 @@ public partial class Menu : System.Web.UI.Page
 
         foreach (RepeaterItem item in this.rptDetailList.Items)
         {
-            //Response.Write(((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "-");
             if(correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
             {
                 DataRow newRow        = details.NewRow();
@@ -139,13 +188,14 @@ public partial class Menu : System.Web.UI.Page
             }
         }
 
-        //Repeater j = ((Repeater)this.rptCategories.Items[this.rptCategories.Items.Count - 1].FindControl("rpt"));
-        //j.DataSource = null;
-        //j.DataBind();
-
         if (tempOrder == null)
         {
             tempOrder = new Order(this.hidOrderType.Value);
+        }
+
+        if (this.hidOrderType.Value == "PickUp")
+        {
+            tempOrder.Location = "Palm's Grille";
         }
 
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),

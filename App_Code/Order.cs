@@ -59,19 +59,6 @@ public class Order
         }
     }
 
-    private string _status;
-    public  string Status
-    {
-        get
-        {
-            return _status;
-        }
-        set
-        {
-            _status = value;
-        }
-    }
-
     private DateTime _time;
     public  DateTime Time
     {
@@ -94,7 +81,7 @@ public class Order
         }
         set
         {
-            if (value == null) { throw new Exception("Order Type cannot be null."); } else { _type = value; };
+            _type = value;
         }
     }
     #endregion End Properties
@@ -109,8 +96,17 @@ public class Order
         this.CustomerLastName  = null;
         this.Location          = null;
         this.Order_Elements    = new List<Order_Element>();
-        this.Status            = null;
         this.Time              = DateTime.Now;
         this.Type              = type;
+    }
+
+    public float CalculateCost()
+    {
+        float cost = 0.0f;
+        foreach(Order_Element food in this.Order_Elements)
+        {
+            cost += food.CalculateCost();
+        }
+        return cost;
     }
 }

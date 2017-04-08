@@ -12,6 +12,7 @@
     position: relative; 
     z-index: 5;
 }
+
 ul.navbar .navbar-nav li {
     display: inline-block;
     float: none !important;
@@ -19,16 +20,9 @@ ul.navbar .navbar-nav li {
     
 } 
 
-/*.navbar-nav > ul {
-  float: none;
-  display: inline-block;
-}*/
-
-
 nav.navbar .navbar-collapse {
   text-align: center;
 }
-
 
 .nav {
     /*background-color: red;*/
@@ -54,13 +48,9 @@ ul.nav a:hover {
     z-index: 10;
 }
 
-
 .slideShowCaption {
     color: red;
 }
-
-
-
 /* Navigation bar css code ends here */
 
 /* Home page */
@@ -85,9 +75,9 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-    perspective: 1000px;
 	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
+    perspective: 1000px;
 }
 
 .front, .back {
@@ -100,12 +90,9 @@ ul.nav a:hover {
     transition: -moz-transform 1s;
     transition: transform 1s;
 
-    transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-
-    backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .front {
@@ -121,23 +108,23 @@ ul.nav a:hover {
 .back {
     width: 160px;
 	height: 200px;
-    transform: rotateY(-180deg);
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
     /*background-color: rgba(52,73,94, .9);  Pickle bluewood*/
     background-color: rgba(13,86,55, .8);
 }
 
 .info-card:hover .back {
-    transform: rotateY(0);
 	-webkit-transform: rotateY(0);
     -moz-transform: rotateY(0);
+    transform: rotateY(0);
 }
 
 .info-card:hover .front {
-    transform: rotateY(180deg);
 	-webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 .card-image {
@@ -169,34 +156,27 @@ ul.nav a:hover {
 
 }
 
-
 .papaJohnFront, .papaJohnBack {
     border-radius: 12px;
     border-style: solid;
     border-width: 1px;
     border-color: rgba(189,195,199, .8);
 
-    transition: transform 1s;
+
 	transition: -webkit-transform 1s;
-    /*transition: -moz-transform 1s;*/
+    transition: -moz-transform 1s;
+    transition: transform 1s;
 
-    transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-
-    backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
-
 
 .customPizzaHeader {
     text-align: center;
     font-weight: bold;
     font-size: 38pt;
 }
-
-
-
 
 .modal-content {
     background-color: sandybrown;
@@ -225,8 +205,6 @@ ul.nav a:hover {
     font-size: 40pt;
     border-bottom: none;
 }
-
-
 
 /* Add some padding between the buttons */
 .sizeEightWrapper {
@@ -260,28 +238,11 @@ ul.nav a:hover {
     background-color: red;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
 
 }
-
-
-
-
 
 .slideImages {
     width: 100%;
@@ -299,8 +260,6 @@ ul.nav a:hover {
     width:100%; 
     
 }
-
-
 
 .carousel-caption h3:first-child {
   animation-delay: 1s;

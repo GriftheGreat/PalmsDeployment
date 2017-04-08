@@ -353,7 +353,6 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-<%--    <div class="container col-md-">  --%>
         <div class="row" style="text-align: center;">
             <div class="order-summary">
                 <div class="order-summary-info">
@@ -374,7 +373,6 @@
                     Total Price: <asp:Literal ID="litPrice" runat="server" />
                 </div>
             </div>
-
             <div>
                 <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
             </div>

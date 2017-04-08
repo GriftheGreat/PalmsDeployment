@@ -418,6 +418,12 @@
                             <td><span id="lbllocationPlace" runat="server"></span></td>
                             <td><asp:TextBox ID="txtLocationPlace"     runat="server" Width="3em" /></td>
                         </tr>
+                        <tr>
+                            <td>Time Wanted Today:</td>
+                            <td>
+                                <asp:DropDownList ID="ddlTimes"        runat="server" DataTextField="time_slot" DataValueField="time_slot_id_pk" />
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>

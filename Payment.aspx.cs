@@ -35,8 +35,14 @@ public partial class Payment : System.Web.UI.Page
             string location = MyOrder.Location;
 
             this.litSummaryNumber.Text            = Session["orderItemNumber"].ToString();
-            this.txtFirstName.Text                = MyOrder.CustomerFirstName;
-            this.txtLastName.Text                 = MyOrder.CustomerLastName;
+            if (string.IsNullOrEmpty(this.txtFirstName.Text)) // do not want the txtboxes clearing on post back
+            {
+                this.txtFirstName.Text = MyOrder.CustomerFirstName;
+            }
+            if (string.IsNullOrEmpty(this.txtLastName.Text)) // do not want the txtboxes clearing on post back
+            {
+                this.txtLastName.Text = MyOrder.CustomerLastName;
+            }
 
             this.ddlDeliveryType.SelectedValue     = type;
             this.ddlDeliveryType.Items[0].Enabled  = string.IsNullOrEmpty(type);
@@ -48,6 +54,10 @@ public partial class Payment : System.Web.UI.Page
             this.ddlLocations.Enabled = true;
             this.txtLocationPlace.Text = "";
 
+            this.ddlTimes.Enabled = true;
+            this.ddlTimes.DataSource = Data_Provider.Transact_Interface.Get_Times("", Request);
+            this.ddlTimes.DataBind();
+
             if (location != null)
             {
                 if (location == "Palm's Grille")
@@ -55,6 +65,7 @@ public partial class Payment : System.Web.UI.Page
                     this.ddlLocations.SelectedValue = location;
                     this.ddlLocations.SelectedItem.Enabled = true;
                     this.ddlLocations.Enabled = false;
+                    this.ddlTimes.Enabled = false;
                 }
                 else if (location == "Sports Center" || location == "Campus House Lobby")
                 {
@@ -103,6 +114,7 @@ public partial class Payment : System.Web.UI.Page
         tempOrder.CustomerFirstName = this.txtFirstName.Text;
         tempOrder.CustomerLastName  = this.txtLastName.Text;
         tempOrder.Type              = this.ddlDeliveryType.SelectedValue;
+        tempOrder.TimeSlot          = "ASAP";
         tempOrder.Location          = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
                                        this.ddlLocations.SelectedValue == "Sports Center" ||
                                        this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :
@@ -184,13 +196,18 @@ public partial class Payment : System.Web.UI.Page
             {
                 Session.Remove("order");
                 Session.Remove("orderItemNumber");
+
+                //Pass:{"order_id" : "26", "order_number" : "1", "ASAP time" : "20:30-20:45"} Pass Pass
+                orderResultString = orderResultString.Remove(orderResultString.LastIndexOf("}")).Replace("Pass:{", "").Replace(": ", "#").Replace(" ", "").Replace("\"", "");
+                //order_id:26,order_number:1,ASAPtime:20:30-20:45
+
+                Session["orderNumber"] = orderResultString.Split("#,".ToCharArray())[3];
+                Session["ASAPTime"]    = orderResultString.Split("#,".ToCharArray())[5];
                 Response.Redirect(URL.root(Request) + "ThankYou.aspx", true);
-                Session["orderNumber"] = "1";
-                Session["waitTime"]    = "1 hour";
             }
             else
             {
-                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + orderResultString;// "An error occurred while submitting the Order. You have been refunded.";
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + orderResultString;// getFailure(orderResultString);// "An error occurred while submitting the Order. You have been refunded.";
 
                 #region refund
                 if (this.hidPaymentType.Value == "1") // Credit Card
@@ -226,7 +243,10 @@ public partial class Payment : System.Web.UI.Page
         {
             Order tempOrder = MyOrder;
             tempOrder.Type = this.ddlDeliveryType.SelectedValue;
+            tempOrder.Location = this.txtFirstName.Text;
+            tempOrder.Location = this.txtLastName.Text;
             tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
+            tempOrder.TimeSlot = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "ASAP" : "");
             MyOrder = tempOrder;
 
             this.lblError.Text = "";

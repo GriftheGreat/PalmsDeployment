@@ -17,6 +17,8 @@
     <div class="container">
         <div class="row">
 	        <h1>Thank You!</h1>
+            <h2>Your order number is:<asp:Label ID="lblOrderNumber" runat="server" /></h2>
+            <asp:Label ID="lblASAPTime" runat="server" Text="The soonest your order will be ready is the time slot of " Visible="false" />
         </div>
     </div>
 </asp:Content>

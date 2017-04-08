@@ -22,6 +22,18 @@ public partial class Cart : System.Web.UI.Page
     {
         if (MyOrder != null && MyOrder.Order_Elements != null)
         {
+            if(Page.IsPostBack)
+            {
+                Order tempOrder = MyOrder;
+                foreach (RepeaterItem item in this.rptItems.Items)
+                {
+                    foreach (RepeaterItem detailitem in ((Repeater)item.FindControl("rptDetails")).Items)
+                    {
+                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("chbAdded")).Checked;
+                    }
+                }
+                MyOrder = tempOrder;
+            }
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
         }
@@ -138,6 +150,8 @@ public partial class Cart : System.Web.UI.Page
             Order tempOrder    = MyOrder;
             tempOrder.Type     = this.ddlDeliveryType.SelectedValue;
             tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
+            tempOrder.TimeSlot = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "ASAP" : "");
+
             MyOrder = tempOrder;
             this.rptItems.DataBind();
         }

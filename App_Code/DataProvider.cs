@@ -40,10 +40,10 @@ public static class Data_Provider
 
     public static class Transact_Interface
     {
-        public static bool Validate_ID_Card(string data)
-        {
-            return true;
-        }
+        //public static bool Validate_ID_Card(string data)
+        //{
+        //    return true;
+        //}
 
         public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status, HttpRequest request)
         {
@@ -66,7 +66,7 @@ public static class Data_Provider
             return sendWebRequest(parameters, URL.root(request) + "Services/IDCard.asmx/Process_ID_Card");
         }
 
-        public static List<DataTable> Get_Menu(string data, HttpRequest request)
+        public static List<DataTable> Get_Menu(string unused, HttpRequest request)
         {
             List<DataTable> menuTables = new List<DataTable>();
             string result;
@@ -124,8 +124,8 @@ public static class Data_Provider
             string data = "{'CustomerFirstName' : '" + order.CustomerFirstName                         + @"',
                             'CustomerLastName' : '"  + order.CustomerLastName                          + @"',
                             'Cost' : '"              + Math.Round(order.CalculateCost(), 2).ToString() + @"',
-                            'Location' : '"          + order.Location                                  + @"',
-                            'Time' : '"              + order.Time.ToString("yyyyddMM HH:mi:ss")        + @"',
+                            'Location' : '"          + order.Location.Replace("'", "-apo-")            + @"',
+                            'Time' : '"              + order.Time.ToString("yyyyMMdd HH:mm:ss")        + @"',
                             'TimeSlot' : '"          + order.TimeSlot                                  + @"',
                             'Type' : '"              + order.Type                                      + @"',
                             'Foods' : [";
@@ -146,55 +146,55 @@ public static class Data_Provider
             }
             data = data.TrimEnd(",".ToCharArray()) + "]}"; // Foods
 
-            //NameValueCollection parameters = new NameValueCollection();
-            //parameters.Add("data", data);
+            NameValueCollection parameters = new NameValueCollection();
+            parameters.Add("data", data);
 
-            return data;// sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
+            return sendWebRequest(parameters, URL.root(request) + "Services/Order.asmx/createOrder");
         }
 
-        //public static DataTable Get_Locations(string data, HttpRequest request)
-        //{
-        //    string result;
-        //    string[] rows;
-        //    DataTable menu = new DataTable();
-        //    bool isNotFirstRow = false;
-        //    List<DataColumn> columns = new List<DataColumn>();
+        public static DataTable Get_Times(string unused, HttpRequest request)
+        {
+            string result;
+            string[] rows;
+            DataTable menu = new DataTable();
+            bool isNotFirstRow = false;
+            List<DataColumn> columns = new List<DataColumn>();
 
-        //    NameValueCollection parameters = new NameValueCollection();
-        //    //parameters.Add("data", data);
+            NameValueCollection parameters = new NameValueCollection();
+            //parameters.Add("data", data);
 
-        //    result = sendWebRequest(parameters, URL.root(request) + "Services/Locations.asmx/getLocations");
+            result = sendWebRequest(parameters, URL.root(request) + "Services/TimeSlots.asmx/getTimeSlots");
 
-        //    if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
-        //    {
-        //        menu.Columns.Add(new DataColumn("location_id_pk"));
-        //        menu.Columns.Add(new DataColumn("location_name"));
-        //        menu.Rows.Add(new string[] { "1", result });
-        //    }
-        //    else
-        //    {
-        //        rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (result.Contains("ERROR") || string.IsNullOrEmpty(result))
+            {
+                menu.Columns.Add(new DataColumn("time_slot_id_pk"));
+                menu.Columns.Add(new DataColumn("time_slot"));
+                menu.Rows.Add(new string[] { "1", result });
+            }
+            else
+            {
+                rows = result.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-        //        foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
-        //        {
-        //            columns.Add(new DataColumn(columnName));
-        //        }
-        //        menu.Columns.AddRange(columns.ToArray());
+                foreach (string columnName in rows[0].Split(new string[] { "-,-" }, StringSplitOptions.None))
+                {
+                    columns.Add(new DataColumn(columnName));
+                }
+                menu.Columns.AddRange(columns.ToArray());
 
-        //        foreach (string row in rows)
-        //        {
-        //            if (isNotFirstRow)
-        //            {
-        //                menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
-        //            }
-        //            else
-        //            {
-        //                isNotFirstRow = true;
-        //            }
-        //        }
-        //    }
-        //    return menu;
-        //}
+                foreach (string row in rows)
+                {
+                    if (isNotFirstRow)
+                    {
+                        menu.Rows.Add(row.Split(new string[] { "-,-" }, StringSplitOptions.None));
+                    }
+                    else
+                    {
+                        isNotFirstRow = true;
+                    }
+                }
+            }
+            return menu;
+        }
     }
 
     private static string sendWebRequest(NameValueCollection data, string url)

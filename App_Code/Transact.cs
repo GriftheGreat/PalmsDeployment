@@ -44,13 +44,15 @@ public class IDCard
             if (status == "Pass")
             {
                 // Retain invoice
-                string query_string = "BEGIN :out := TIA_invoice_package.createInvoice(p_order_id_fk => :p_order_id_fk, p_confirmation_status => :p_confirmation_status); END;";
+                string query_string = @"BEGIN :out := PCC_account_inv_package.createPAI(p_order_id_fk => :p_order_id_fk,
+                                                                                        p_confirmation_status => :p_confirmation_status); END;";
                 OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
                 OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
                 try
                 {
                     myConnection.Open();
+                    myCommand.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
                     myCommand.Parameters.Add("p_order_id_fk", Order_ID);
                     myCommand.Parameters.Add("p_confirmation_status", 'Y');
                     myCommand.ExecuteNonQuery();
@@ -271,12 +273,18 @@ public class TimeSlots : System.Web.Services.WebService
         DataTable menu = new DataTable();
         StringBuilder sb = new StringBuilder();
 
-        string query = @"SELECT *
-                           FROM time_slot
-                           JOIN ""order""
-                             ON 1=1 --?--
-                          WHERE 1=1--?--";
-
+        string query = @"SELECT 'ASAP' AS time_slot, 'ASAP' AS time_slot_id_pk, 1 AS sort
+                           FROM dual
+                          UNION
+                         SELECT DISTINCT ts.time_slot_start_time || '-' || ts.time_slot_end_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort
+                           FROM ticket tk
+                           JOIN time_slot ts
+                             ON ts.time_slot_id_pk = tk.time_slot_id_fk
+                          WHERE TO_CHAR(ts.time_slot_date, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')--today
+                            AND NOT EXISTS(SELECT 'yes'
+                                              FROM ""order""
+                                             WHERE ""order"".ticket_id_fk = tk.ticket_id_pk) --no orders have used that ticket yet
+                       ORDER BY sort";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query, myConnection);
 
@@ -308,7 +316,6 @@ public class TimeSlots : System.Web.Services.WebService
         return sb.ToString();
     }
 }
-
 
 /// <summary>
 /// The Order_Data class is for simulation purposes and should only be call by transact entities or via web services.
@@ -346,26 +353,26 @@ public class Order_Data
     [WebMethod]
     public string createOrder(string data)
     {
-        string webappOrderID = "0";
-        string currentWebappOrderElementID = "0";
+        string webappOrderID = "";
+        string currentWebappOrderElementID = "";
         string result = "";
         JavaScriptSerializer serializer = new JavaScriptSerializer();
         Webapp_Order webappOrder = serializer.Deserialize<Webapp_Order>(data);
 
         #region queries
-        string query_string1 = @"BEGIN :out := placeOrder(p_customer_fname    => :p_customer_fname
-                                                          p_customer_lname    => :p_customer_lname
-                                                          p_order_cost        => :p_order_cost
-                                                          p_order_placed_time => :p_order_placed_time
-                                                          p_time_slot         => :p_time_slot,           --format:  '##:##-##:##'
-                                                          p_location_text     => p_location_text); END;";
+        string query_string1 = @"BEGIN :out1 := order_package.placeOrder(p_customer_fname    => :p_customer_fname,
+                                                                         p_customer_lname    => :p_customer_lname,
+                                                                         p_order_cost        => :p_order_cost,
+                                                                         p_order_placed_time => TO_DATE(:p_order_placed_time, 'YYYYMMDD HH24:MI:SS'), --yyyyMMdd HH:mm:ss
+                                                                         p_time_slot         => :p_time_slot,           --format:  '##:##-##:##'
+                                                                         p_location_text     => :p_location_text); END;";
 
-        string query_string2 = @"BEGIN :out := createOrderElement(p_food_id_fk          => p_food_id_fk,
-                                                                  p_order_id_fk         => p_order_id_fk,
-                                                                  p_order_element_ready => p_order_element_ready); END;";
+        string query_string2 = @"BEGIN :out2 := order_element_package.createOrderElement(p_food_id_fk          => :p_food_id_fk,
+                                                                                         p_order_id_fk         => :p_order_id_fk,
+                                                                                         p_order_element_ready => :p_order_element_ready); END;";
 
-        string query_string3 = @"BEGIN :out := createOrderDetail(p_order_element_id_fk => p_order_element_id_fk,
-                                                                 p_detail_id_fk        => p_detail_id_fk); END;";
+        string query_string3 = @"BEGIN :out3 := order_detail_package.createOrderDetail(p_order_element_id_fk => :p_order_element_id_fk,
+                                                                                       p_detail_id_fk        => :p_detail_id_fk); END;";
         #endregion queries
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         //OracleTransaction j = myConnection.BeginTransaction();
@@ -376,60 +383,52 @@ public class Order_Data
         try
         {
             myConnection.Open();
-//?
             #region create order, create order elements, and order elements details
             try
             {
-                myCommand1.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                myCommand1.Parameters.Add("out1", OracleDbType.Varchar2, ParameterDirection.Output).Size = 100;
                 myCommand1.Parameters.Add("p_customer_fname",    webappOrder.CustomerFirstName);
                 myCommand1.Parameters.Add("p_customer_lname",    webappOrder.CustomerLastName);
                 myCommand1.Parameters.Add("p_order_cost",        webappOrder.Cost);
                 myCommand1.Parameters.Add("p_order_placed_time", webappOrder.Time);
                 myCommand1.Parameters.Add("p_time_slot",         webappOrder.TimeSlot);
-                myCommand1.Parameters.Add("p_location_text",     webappOrder.Location);
-                //myCommand1.Parameters.Add("p_order_status",      "N");
-                //myCommand1.Parameters.Add("p_ticket_id_fk",      p_ticket_id_fk);
-                //myCommand1.Parameters.Add("p_order_num",         p_order_num);
-                //myCommand1.Parameters.Add("p_order_cal_time",    p_order_cal_time);
+                myCommand1.Parameters.Add("p_location_text",     webappOrder.Location.Replace("-apo-", "'"));
                 myCommand1.ExecuteNonQuery();
 
-                webappOrderID = myCommand1.Parameters["out"].Value.ToString();
-//???????????????????????
-                result += "Pass:" + myCommand1.Parameters["out"].Value.ToString();
+                webappOrderID = myCommand1.Parameters["out1"].Value.ToString();
+                result += "Pass:" + webappOrderID;
 
-//?
                 #region create order elements and order elements details
                 foreach (Webapp_Order_Element food in webappOrder.Foods)
                 {
                     try
                     {
-                        myCommand2.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                        myCommand2.Parameters.Clear();
+                        myCommand2.Parameters.Add("out2", OracleDbType.Int32, ParameterDirection.Output);
                         myCommand2.Parameters.Add("p_food_id_fk",          food.ID);
-                        myCommand2.Parameters.Add("p_order_id_fk",         webappOrderID);
+                        myCommand2.Parameters.Add("p_order_id_fk",         webappOrderID.Split(":,".ToCharArray())[1].Trim(" \"".ToCharArray()));
                         myCommand2.Parameters.Add("p_order_element_ready", "N");
                         myCommand2.ExecuteNonQuery();
 
-                        currentWebappOrderElementID = myCommand2.Parameters["out"].Value.ToString();
-//???????????????????????
-                        result += "\n\nPass:";// + myCommand2.Parameters["out"].Value.ToString();
+                        currentWebappOrderElementID = myCommand2.Parameters["out2"].Value.ToString();
+                        result += "\n\nPass";
 
-//?
                         #region create order[ elements] details
                         foreach (Webapp_Detail detail in food.Details)
                         {
                             try
                             {
-                                myCommand3.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
+                                myCommand3.Parameters.Clear();
+                                myCommand3.Parameters.Add("out3", OracleDbType.Int32, ParameterDirection.Output);
                                 myCommand3.Parameters.Add("p_detail_id_fk",        detail.ID);
                                 myCommand3.Parameters.Add("p_order_element_id_fk", currentWebappOrderElementID);
                                 myCommand3.ExecuteNonQuery();
 
-//???????????????????????
-                                result += "\n\nPass:";// + myCommand3.Parameters["out"].Value.ToString();
+                                result += "\n\nPass";
                             }
                             catch (Exception ex)
                             {
-                                result += "\n\nERROR\n" + ex.Message;
+                                result += "\n\nERROR with Detail\n" + ex.Message;
                             }
                             finally
                             {
@@ -444,7 +443,7 @@ public class Order_Data
                     }
                     catch (Exception ex)
                     {
-                        result += "\n\nERROR\n" + ex.Message;
+                        result += "\n\nERROR with Element\n" + ex.Message;
                     }
                     finally
                     {
@@ -459,7 +458,7 @@ public class Order_Data
             }
             catch (Exception ex)
             {
-                result += "ERROR\n" + ex.Message;
+                result += "ERROR with Order\n" + ex.Message;
             }
             finally
             {
@@ -480,52 +479,12 @@ public class Order_Data
             myConnection.Close();
             myConnection.Dispose();
         }
+
+        if(result.Contains("ERROR"))
+        {
+            result = "Fail:" + result.Replace("Pass:", "") + ".";
+        }
+
         return result;
     }
-}
-
-//updateOrder(p_order_id_pk       "order".order_id_pk%TYPE,
-//deleteOrder(p_order_id_pk "order".order_id_pk%TYPE);
-//updateOrderElement(p_order_element_id_pk order_element.order_element_id_pk%TYPE,
-//deleteOrderElement(p_order_element_id_pk order_element.order_element_id_pk%TYPE);
-//updateOrderDetail(p_order_detail_id_pk order_detail.order_detail_id_pk%TYPE,
-//deleteOrderDetail(p_order_detail_id_pk order_detail.order_detail_id_pk%TYPE);
-//updateCCI(p_cci_id_pk credit_card_inv.cci_id_pk%TYPE,
-//deleteCCI(p_cci_id_pk credit_card_inv.cci_id_pk%TYPE);
-
-
-//createTimeSlot(p_time_slot_date time_slot.time_slot_date%TYPE,
-//updateTimeSlot(p_time_slot_id_pk time_slot.time_slot_id_pk%TYPE,
-//deleteTimeSlot(p_time_slot_id_pk time_slot.time_slot_id_pk%TYPE);
-//createTicket(p_time_slot_id_fk ticket.time_slot_id_fk%TYPE)
-//updateTicket(p_ticket_id_pk ticket.ticket_id_pk%TYPE,
-//deleteTicket(p_ticket_id_pk ticket.ticket_id_pk%TYPE);
-//
-//createLocation(p_location_name  "location".location_name%TYPE,
-//updateLocation(p_location_id_pk "location".location_id_pk%TYPE,
-//deleteLocation(p_location_id_pk "location".location_id_pk%TYPE);
-//createFoodType(p_food_type_name food_type.food_type_name%TYPE,
-//updateFoodType(p_food_type_id_pk food_type.food_type_id_pk%TYPE,
-//deleteFoodType(p_food_type_id_pk food_type.food_type_id_pk%TYPE);
-//createFood(p_food_type_id_fk food.food_type_id_fk%TYPE,
-//updateFood(p_food_id_pk food.food_id_pk%TYPE,
-//deleteFood(p_food_id_pk food.food_id_pk%TYPE);
-//createFoodDetailLine(p_detail_id_fk food_detail_line.detail_id_fk%TYPE,
-//updateFoodDetailLine(p_fdl_id_pk food_detail_line.fdl_id_pk%TYPE,
-//deleteFoodDetailLine(p_fdl_id_pk food_detail_line.fdl_id_pk%TYPE);
-//createDetail(p_detail_descr detail.detail_descr%TYPE,
-//updateDetail(p_detail_id_pk detail.detail_id_pk%TYPE,
-//deleteDetail(p_detail_id_pk detail.detail_id_pk%TYPE);
-
-
-public class Database_Queries
-{
-}
-
-//public void time_slot()
-//{
-//}
-
-public static class Manager
-{
 }

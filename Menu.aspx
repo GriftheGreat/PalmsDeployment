@@ -110,6 +110,11 @@
                 putOptionsOnModal();// needs global variable
                 $('#modalFoodDetails').modal('show');
             });
+
+            $('span.CYOP-Button').on("click", function () {
+                $(this).attr('value', 'true');
+                alert($(this).html());
+            });
         });
 
         function normalPurchaseClick()
@@ -278,9 +283,8 @@
     </div>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
-        <%-- Trigger the modal with a button --%>
         <div class="create-your-own-container">
-            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalFoodDetails">Create Your Own</button>
+            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
         </div>
     </asp:PlaceHolder>
 
@@ -318,7 +322,50 @@
         </div>
     </div>
 
-<%-- Make a modal out of Pizza.aspx and put it here as modalFoodDetails2 --%>
+    <!-- Modal -->
+    <div id="modalCreateYourOwnPizza" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Create Your Own</h3>
+                </div>
+                <div class="modal-body">
+                    <h1>Select size:</h1>
+                    <span ID="CYOP-1"  runat="server" class="btn CYOP-Button" detail-id="" value="true" />8''</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP-2"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />16''</span>
+
+                    <h1>Choose Your Toppings:</h1>
+                    <h3>Real Meat</h3>
+                    <span ID="CYOP-3"  runat="server" class="btn CYOP-Button" detail-id="" value="true" />Cheese</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP-4"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Peperoni</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP-5"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Sausage</span>
+                    <br />
+
+                    <span ID="CYOP-6"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Beef</span>
+                    <span ID="CYOP-7"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Italian Sausage</span>
+                    <span ID="CYOP-8"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Canadian Sausage</span>
+
+                    <h3>Fresh Vegetables</h3>
+                    <span ID="CYOP-9"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Fresh Sliced Onions</span>
+                    <span ID="CYOP-10" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Green Pepper</span>
+                    <span ID="CYOP-11" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Roma Tomatoes</span>
+                    <span ID="CYOP-12" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Black Olives</span>
+                    <br />
+
+                    <span ID="CYOP-13" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Jalapeno Peppers</span>
+                    <span ID="CYOP-14" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Banana Peppers</span>
+                    <span ID="CYOP-15" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Baby Portabella</span>
+                    <span ID="CYOP-16" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Mushrooms</span>
+
+                    <div>
+                        <button type="button" class="btn btn-danger">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
 

@@ -228,47 +228,20 @@ ul.nav a:hover {
 
 
 
-/* Add some padding between the buttons */
-.sizeEightWrapper {
-    padding-right: 10px;
-}
-
-.cheesePizzaWrapper, .sausagePizzaWrapper {
-    padding-right: 10px;
-}
-
-.sizeEightButton, .sizeSixteenButton, .cheesePizzaButton, 
-.sausagePizzaButton, .peperoniPizzaButton {
-    padding: 8px 15px 8px 15px;
-    font-size: 16pt;
-}
-
-.baconToppingButton, .peperoniToppingButton, .sausageToppingButton, .beefToppingButton,
-.italianSausageToppingButton, .canadianBacconToppingButton, .freshSlicedOnionsButton,
-.greenPepperButton, .romaTomatoesButton, .blackOlivesButton, .jalapenoPeppersButton,
-.bananaPeppersButton, .babyPortabellaButton, .mushroomsButton {
+/* Create Your Own Pizza modal */
+.CYOP-Button {
     padding: 8px 15px 8px 15px;
     font-size: 16pt;
     margin-bottom: 10px;
 }
 
-.sizeEightButton:active, .sizeSixteenButton:active, .cheesePizzaButton:active, .sausagePizzaButton:active, .peperoniPizzaButton:active {
+.CYOP-Button:active {
     background-color: red;
 }
 
-.sizeEightButton:focus, .sizeSixteenButton:focus, .cheesePizzaButton:focus, .sausagePizzaButton:focus, .peperoniPizzaButton:focus {
+.CYOP-Button:focus {
     background-color: red;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -278,7 +251,6 @@ ul.nav a:hover {
     background-color: indianred;
 
 }
-
 
 
 

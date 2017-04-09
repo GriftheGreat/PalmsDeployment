@@ -333,34 +333,34 @@
                 </div>
                 <div class="modal-body">
                     <h1>Select size:</h1>
-                    <span ID="CYOP-1"  runat="server" class="btn CYOP-Button" detail-id="" value="true" />8''</span><span style="width:10px;">&nbsp;</span>
-                    <span ID="CYOP-2"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />16''</span>
+                    <span ID="CYOP_1"  runat="server" class="btn CYOP-Button" value="true" />8''</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP_2"  runat="server" class="btn CYOP-Button" value=""     />16''</span>
 
                     <h1>Choose Your Toppings:</h1>
                     <h3>Real Meat</h3>
-                    <span ID="CYOP-3"  runat="server" class="btn CYOP-Button" detail-id="" value="true" />Cheese</span><span style="width:10px;">&nbsp;</span>
-                    <span ID="CYOP-4"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Peperoni</span><span style="width:10px;">&nbsp;</span>
-                    <span ID="CYOP-5"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Sausage</span>
+                    <span ID="CYOP_3"  runat="server" class="btn CYOP-Button" value="true" />Cheese</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP_4"  runat="server" class="btn CYOP-Button" value=""     />Peperoni</span><span style="width:10px;">&nbsp;</span>
+                    <span ID="CYOP_5"  runat="server" class="btn CYOP-Button" value=""     />Sausage</span>
                     <br />
 
-                    <span ID="CYOP-6"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Beef</span>
-                    <span ID="CYOP-7"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Italian Sausage</span>
-                    <span ID="CYOP-8"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Canadian Sausage</span>
+                    <span ID="CYOP_6"  runat="server" class="btn CYOP-Button" value=""     />Beef</span>
+                    <span ID="CYOP_7"  runat="server" class="btn CYOP-Button" value=""     />Italian Sausage</span>
+                    <span ID="CYOP_8"  runat="server" class="btn CYOP-Button" value=""     />Canadian Sausage</span>
 
                     <h3>Fresh Vegetables</h3>
-                    <span ID="CYOP-9"  runat="server" class="btn CYOP-Button" detail-id="" value=""     />Fresh Sliced Onions</span>
-                    <span ID="CYOP-10" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Green Pepper</span>
-                    <span ID="CYOP-11" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Roma Tomatoes</span>
-                    <span ID="CYOP-12" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Black Olives</span>
+                    <span ID="CYOP_9"  runat="server" class="btn CYOP-Button" value=""     />Fresh Sliced Onions</span>
+                    <span ID="CYOP_10" runat="server" class="btn CYOP-Button" value=""     />Green Pepper</span>
+                    <span ID="CYOP_11" runat="server" class="btn CYOP-Button" value=""     />Roma Tomatoes</span>
+                    <span ID="CYOP_12" runat="server" class="btn CYOP-Button" value=""     />Black Olives</span>
                     <br />
 
-                    <span ID="CYOP-13" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Jalapeno Peppers</span>
-                    <span ID="CYOP-14" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Banana Peppers</span>
-                    <span ID="CYOP-15" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Baby Portabella</span>
-                    <span ID="CYOP-16" runat="server" class="btn CYOP-Button" detail-id="" value=""     />Mushrooms</span>
+                    <span ID="CYOP_13" runat="server" class="btn CYOP-Button" value=""     />Jalapeno Peppers</span>
+                    <span ID="CYOP_14" runat="server" class="btn CYOP-Button" value=""     />Banana Peppers</span>
+                    <span ID="CYOP_15" runat="server" class="btn CYOP-Button" value=""     />Baby Portabella</span>
+                    <span ID="CYOP_16" runat="server" class="btn CYOP-Button" value=""     />Mushrooms</span>
 
                     <div>
-                        <button type="button" class="btn btn-danger">Add to Cart</button>
+                        <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-danger" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
                     </div>
                 </div>
             </div>

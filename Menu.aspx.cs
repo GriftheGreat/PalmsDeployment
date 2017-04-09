@@ -42,7 +42,7 @@ public partial class Menu : System.Web.UI.Page
             MenuData = Data_Provider.Transact_Interface.Get_Menu("", Request);
         }
 
-        if(MenuData.Count == 1 && MenuData[0].Columns.Count == 1 && MenuData[0].Rows.Count == 0)
+        if (MenuData.Count == 1 && MenuData[0].Columns.Count == 1 && MenuData[0].Rows.Count == 0)
         {
             throw new Exception(MenuData[0].Columns[0].ColumnName); // error to be caught on the error page.
         }
@@ -50,7 +50,7 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_PreRender(object sender, EventArgs e)
     {
-       // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
+        // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
         // ASP.NET Page Life Cycle Overview 
         // https://msdn.microsoft.com/en-us/library/ms178472.aspx
         string menu = "PG";
@@ -75,7 +75,7 @@ public partial class Menu : System.Web.UI.Page
         categories.Columns.Add("sort");
 
         //put values in the sort column (these are for PG foods, look up the DB data)
-        foreach(DataRow row in categories.Rows)
+        foreach (DataRow row in categories.Rows)
         {
             if (row["food_type_meal"].ToString() == "B")
             {
@@ -93,7 +93,7 @@ public partial class Menu : System.Web.UI.Page
 
         //create the data used   ie.  SELECT ft.*, CASE ... END AS sort FROM food_type WHERE food_type_vendor = :menu AND food_type_name = 'Create Your Own Pizza' ORDER BY sort
         EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu &&
-                                                                                               row["food_type_name"].ToString()   != "Create Your Own Pizza")
+                                                                                               row["food_type_name"].ToString() != "Create Your Own Pizza")
                                                                                .OrderBy(row => row["sort"].ToString());
 
         //bind data to repeater
@@ -114,7 +114,7 @@ public partial class Menu : System.Web.UI.Page
             row["FoodIDs"] = " "; // preceeding space used to match
             foreach (DataRow row2 in MenuData[2].Rows)
             {
-                if(row["detail_id_pk"].ToString() == row2["detail_id_fk"].ToString())
+                if (row["detail_id_pk"].ToString() == row2["detail_id_fk"].ToString())
                 {
                     row["FoodIDs"] += row2["food_id_fk"].ToString() + " "; // following space used to match
                 }
@@ -167,8 +167,8 @@ public partial class Menu : System.Web.UI.Page
     protected void btnAdd_Click(object sender, EventArgs e)
     {
         string correspondingDetails = " "; // preceeding space used to match
-        Order tempOrder   = MyOrder;
-        DataRow food      = MenuData[0].AsEnumerable().Where(row => row["food_id_pk"].ToString() == this.hidChosenFoodId.Value).CopyToDataTable().Rows[0];
+        Order tempOrder = MyOrder;
+        DataRow food = MenuData[0].AsEnumerable().Where(row => row["food_id_pk"].ToString() == this.hidChosenFoodId.Value).CopyToDataTable().Rows[0];
         DataTable details = new DataTable();
         details.Columns.Add("chosen");
         details.Columns.Add("cost");
@@ -187,14 +187,14 @@ public partial class Menu : System.Web.UI.Page
 
         foreach (RepeaterItem item in this.rptDetailList.Items)
         {
-            if(correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
+            if (correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
             {
-                DataRow newRow        = details.NewRow();
-                newRow["chosen"]      = ((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "N";
-                newRow["cost"]        = ((Label)item.FindControl("lblDetailCost")).Text.Replace("$", "");
+                DataRow newRow = details.NewRow();
+                newRow["chosen"] = ((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "N";
+                newRow["cost"] = ((Label)item.FindControl("lblDetailCost")).Text.Replace("$", "");
                 newRow["description"] = ((CheckBox)item.FindControl("chbChooseDetail")).Text;
-                newRow["id"]          = ((HiddenField)item.FindControl("hidDetailID")).Value;
-                newRow["groupName"]   = ((HiddenField)item.FindControl("hidGroupmName")).Value;
+                newRow["id"] = ((HiddenField)item.FindControl("hidDetailID")).Value;
+                newRow["groupName"] = ((HiddenField)item.FindControl("hidGroupmName")).Value;
                 details.Rows.Add(newRow);
             }
         }
@@ -213,7 +213,55 @@ public partial class Menu : System.Web.UI.Page
                                                        food["food_descr"].ToString(),
                                                        details,
                                                        food["food_name"].ToString(),
-                                                       Convert.ToSingle(food["food_cost"].ToString()) ));
-         MyOrder = tempOrder;
+                                                       Convert.ToSingle(food["food_cost"].ToString())));
+        MyOrder = tempOrder;
+    }
+
+    protected void AddPizzaToCart_Click(object sender, EventArgs e)
+    {
+        Order tempOrder = MyOrder;
+        DataRow newRow;
+        DataTable details = new DataTable();
+        details.Columns.Add("chosen");
+        details.Columns.Add("cost");
+        details.Columns.Add("description");
+        details.Columns.Add("id");
+        details.Columns.Add("groupName");
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_1.GetAttribute("value") == "true" ? "Y" : "N");
+        newRow["cost"]        = this.CYOP_1.GetAttribute("value").Replace("$", "");
+        newRow["description"] = this.CYOP_1.GetAttribute("value");
+        newRow["id"]          = "7777";
+        newRow["groupName"]   = "size";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_2.GetAttribute("value") == "true" ? "Y" : "N");
+        newRow["cost"]        = this.CYOP_2.GetAttribute("").Replace("$", "");
+        newRow["description"] = this.CYOP_2.GetAttribute("");
+        newRow["id"]          = "7777";
+        newRow["groupName"]   = "size";
+        details.Rows.Add(newRow);
+
+        //...
+
+
+        if (tempOrder == null)
+        {
+            tempOrder = new Order(this.hidOrderType.Value);
+        }
+
+        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+
+        tempOrder.Order_Elements.Add(new Order_Element("Y",
+                                                       8888,
+                                                       "",
+                                                       "",
+                                                       details,
+                                                       "Create Your Own",
+                                                       99.99f));
+        MyOrder = tempOrder;
     }
 }

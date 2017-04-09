@@ -227,12 +227,11 @@
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
                             <br />
                             <div class="item-detail-list">
-                                <asp:Repeater ID="rptDetails" runat="server">
+                                <asp:Repeater ID="rptDetails" runat="server" OnItemDataBound="rptDetails_ItemDataBound">
                                     <ItemTemplate>
-                                        <asp:CheckBox      ID="chbAdded"    runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
-                                        <asp:Label         ID="Label1" runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
-<asp:Label         ID="Label2" runat="server" Text='<%# Eval("GroupName") %>' />
-                                        <asp:HiddenField   ID="hid1"   runat="server" Value='<%# Eval("ID") %>' />
+<%--                                        <asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />--%>
+                                        <asp:Label         ID="Label1"    runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' />
                                         <br />
 <%-- (use div like menu...?)
     if...group name and others have same group name... make radio button else make use checkbox.

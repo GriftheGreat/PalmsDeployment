@@ -70,8 +70,11 @@ public partial class Menu : System.Web.UI.Page
 
         // must select where either "PG" or "PJ" and manage food type meals (PG only)
         DataTable categories = MenuData[1];
+
+        //add a sort column
         categories.Columns.Add("sort");
 
+        //put values in the sort column (these are for PG foods, look up the DB data)
         foreach(DataRow row in categories.Rows)
         {
             if (row["food_type_meal"].ToString() == "B")
@@ -88,8 +91,12 @@ public partial class Menu : System.Web.UI.Page
             }
         }
 
-        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu)
-                                                                                  .OrderBy(row => row["food_type_meal"].ToString());
+        //create the data used   ie.  SELECT ft.*, CASE ... END AS sort FROM food_type WHERE food_type_vendor = :menu AND food_type_name = 'Create Your Own Pizza' ORDER BY sort
+        EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu &&
+                                                                                               row["food_type_name"].ToString()   != "Create Your Own Pizza")
+                                                                               .OrderBy(row => row["sort"].ToString());
+
+        //bind data to repeater
         if (selectedRows.Count() > 0)
         {
             this.rptCategories.DataSource = selectedRows.CopyToDataTable();
@@ -101,6 +108,7 @@ public partial class Menu : System.Web.UI.Page
         detailsAndCorrespondingFoodIDs.Columns.Add("FoodIDs");
 
         // find foodIDs corresponding to a details (yes the backward relationship)
+        // do this because we need to match the food clicked with what details correspond and show them later
         foreach (DataRow row in detailsAndCorrespondingFoodIDs.Rows)
         {
             row["FoodIDs"] = " "; // preceeding space used to match
@@ -123,6 +131,8 @@ public partial class Menu : System.Web.UI.Page
 
     protected void rptCategories_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
+        #region Big Categories
+        //this section requires the categories to be ordered by the "sort" column
         if (!(Request.QueryString["menu"] == "PapaJohns"))
         {
             if (e.Item.ItemIndex == 0)
@@ -142,6 +152,7 @@ public partial class Menu : System.Web.UI.Page
                 currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
             }
         }
+        #endregion
 
         Repeater rpt = ((Repeater)e.Item.FindControl("rptFood"));
         EnumerableRowCollection<DataRow> selectedRows = MenuData[0].AsEnumerable().Where(row => row["food_type_id_fk"].ToString() == ((DataRowView)e.Item.DataItem)["food_type_id_pk"].ToString())
@@ -193,10 +204,8 @@ public partial class Menu : System.Web.UI.Page
             tempOrder = new Order(this.hidOrderType.Value);
         }
 
-        if (this.hidOrderType.Value == "PickUp")
-        {
-            tempOrder.Location = "Palm's Grille";
-        }
+        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
                                                        Convert.ToInt32(this.hidChosenFoodId.Value),

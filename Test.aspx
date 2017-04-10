@@ -28,7 +28,8 @@
                     $("lbl2").val("Fail");
                 }
             });
-        }    </script>
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">

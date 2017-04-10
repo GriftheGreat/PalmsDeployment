@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data;
 using Oracle.DataAccess.Client;
 using System.Configuration;
-
 
 [System.Web.Script.Services.ScriptService]
 public partial class _Bump_Board : Page
@@ -22,6 +17,7 @@ public partial class _Bump_Board : Page
         SALAD,
         PIZZA,
     };
+
     protected void Page_Load(object sender, EventArgs e)
     {
         string output = get_more_orders(8, 1);

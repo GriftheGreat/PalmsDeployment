@@ -5,17 +5,14 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
    <title>
        Palms Grille Online Ordering Bumb Boards
    </title>
-   <link rel="stylesheet" type="text/css" href="~/Includes/stylesheets/Bump_Board.css" />
-   <script>
-       setInterval(function () { document.getElementById("time").innerHTML = (new Date()).toLocaleTimeString(); }, 1000);
-       //setInterval(function () { get_orders(); }, 3000);
-   </script>
-   
+
+	<meta charset="utf-8" />
+
    <asp:ContentPlaceHolder ID="Styles" runat="server">
    </asp:ContentPlaceHolder>
 
@@ -43,7 +40,7 @@
         <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<%-- Include all compiled plugins (below), or include individual files as needed --%>
-		<script type="text/javascript" src="//bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src=<%= "\"" + URL.root(Request) + "bootstrap/js/bootstrap.min.js\"" %>></script>
       </footer>
    </form>
 </body>

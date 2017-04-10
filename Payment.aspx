@@ -97,12 +97,6 @@
 }
 
 
-        /*OLD .payment-item
-        {
-            margin-left: -100px;
-            position: inherit;
-            display: inline-block;
-        }*/
         .payment-item
         {
             margin-left: -100px;
@@ -127,13 +121,6 @@
             overflow: hidden;
         }
 
-        /*OLD .order-summary-info
-        {
-            border: 2px solid rgb(128, 128, 128);
-            border-radius: 20px;
-            display: block;
-            height: 40px;
-        }*/
         .order-summary-info
         {
             border: 2px solid rgb(128, 128, 128);
@@ -418,7 +405,6 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-<%--    <div class="container col-md-">  --%>
         <div class="row" style="text-align: center;">
             <div class="order-summary">
                 <div class="order-summary-info">
@@ -439,7 +425,6 @@
                     Total Price: <asp:Literal ID="litPrice" runat="server" />
                 </div>
             </div>
-
             <div>
                 <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
             </div>
@@ -482,6 +467,12 @@
                         <tr id="locationPlaceContainer" runat="server">
                             <td><span id="lbllocationPlace" runat="server"></span></td>
                             <td><asp:TextBox ID="txtLocationPlace"     runat="server" Width="3em" /></td>
+                        </tr>
+                        <tr>
+                            <td>Time Wanted Today:</td>
+                            <td>
+                                <asp:DropDownList ID="ddlTimes"        runat="server" DataTextField="time_slot" DataValueField="time_slot_id_pk" />
+                            </td>
                         </tr>
                     </table>
                 </div>

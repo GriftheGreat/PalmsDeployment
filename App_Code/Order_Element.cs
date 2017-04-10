@@ -209,7 +209,10 @@ public class Order_Element
         float cost = this.Price;
         foreach (Detail detail in this.Details)
         {
-            cost += detail.Cost;
+            if (detail.Chosen)
+            {
+                cost += detail.Cost;
+            }
         }
         return cost;
     }

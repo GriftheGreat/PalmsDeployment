@@ -88,7 +88,6 @@
 
             if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
-                //alert('1');
                 $('body').one("click", 'input[chooseDetail]', function ()
                 {
                     $('#modalOrderType').modal('show');
@@ -97,6 +96,7 @@
                     var purchaseButton = $(this);
                     var hidFoodID = purchaseButton.attr("chooseDetail");
                     foodID = $('#' + hidFoodID).val();// assign global variable
+
                     $('#modalDesc').text(purchaseButton.attr("descr"));
                 });
             }
@@ -132,7 +132,8 @@
             $('div[detail]').each(function () {
                 var DetailDiv = $(this);
                 var hidFoodIds = DetailDiv.attr("detail");
-                if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
+
+                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
                 {
                     DetailDiv.show();
                 }
@@ -232,6 +233,9 @@
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigCategoryEnd" runat="server" Visible="false">
+                    </div>
+                </asp:PlaceHolder>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
@@ -256,8 +260,7 @@
                                     </strong></h4>
                                     <div class="productInfo">
                                         <h4 class="text-center">
-                                            <asp:Label ID="lblfood_description" runat="server"  Text='<%# Eval("food_descr").ToString().Substring(0,Math.Min(67,Eval("food_descr").ToString().Length)) + (Eval("food_descr").ToString().Length > 67 ? "..." : "") %>' />
-                                            
+                                            <asp:Label ID="lblfood_description" runat="server"  Text='<%# Eval("food_descr").ToString().Substring(0,Math.Min(67,Eval("food_descr").ToString().Length)) + (Eval("food_descr").ToString().Length > 67 ? "..." : "") %>' />                                          
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
@@ -269,9 +272,6 @@
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
-                    <asp:PlaceHolder ID="plhBigCategoryEnd" runat="server" Visible="false">
-                        </div>
-                    </asp:PlaceHolder>
                 </div>
             </ItemTemplate>
         </asp:Repeater>
@@ -337,7 +337,7 @@
                 </div>
                 <div class="modal-body">
                     <input id="btnDelivery" name="btnDelivery" type="button" value="Delivery"     class="btn btn-danger" onclick="ClickOrderTypeChosen('Delivery');" />
-                    <input id="btnPickUp"   name="btnPickUp"   type="button" value="Pick-Up"      class="btn btn-danger" onclick="ClickOrderTypeChosen('Pick-Up');" />
+                    <input id="btnPickUp"   name="btnPickUp"   type="button" value="Pick-Up"      class="btn btn-danger" onclick="ClickOrderTypeChosen('PickUp');" />
                     <input id="Button1"     name="Button1"     type="button" value="Choose Later" class="btn btn-danger" onclick="ClickOrderTypeChosen('');" />
                 </div>
             </div>

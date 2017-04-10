@@ -153,7 +153,8 @@
                 var DetailDiv = $(this);
                 var hidFoodIds = DetailDiv.attr("detail");
 
-                if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
+                //if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' ')) || ($.inArray("#" + foodID, $('#' + hidFoodIds).val()) != -1)
+                if ($('#' + hidFoodIds).val().indexOf(foodID) != -1) // use global variable
                 {
                     DetailDiv.show();
                 }
@@ -172,6 +173,8 @@
         function AccordionTrigger2(open)
         {
             var clickedElement = $('div[AccordionControl2="' + open + '"]').first();
+
+            window.alert($('div[AccordionControl2="' + open + '"]').first());
 
             $('div[AccordionControl2]:visible').each(function (index) {
                 $( this ).slideUp();

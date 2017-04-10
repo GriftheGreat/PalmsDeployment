@@ -32,12 +32,6 @@
             display: block;
         }
 
-        /*OLD .payment-item
-        {
-            margin-left: -100px;
-            position: inherit;
-            display: inline-block;
-        }*/
         .payment-item
         {
             margin-left: -100px;
@@ -62,13 +56,6 @@
             overflow: hidden;
         }
 
-        /*OLD .order-summary-info
-        {
-            border: 2px solid rgb(128, 128, 128);
-            border-radius: 20px;
-            display: block;
-            height: 40px;
-        }*/
         .order-summary-info
         {
             border: 2px solid rgb(128, 128, 128);
@@ -353,7 +340,6 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-<%--    <div class="container col-md-">  --%>
         <div class="row" style="text-align: center;">
             <div class="order-summary">
                 <div class="order-summary-info">
@@ -374,7 +360,6 @@
                     Total Price: <asp:Literal ID="litPrice" runat="server" />
                 </div>
             </div>
-
             <div>
                 <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
             </div>

@@ -19,6 +19,7 @@ public partial class Payment : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        this.Form.DefaultButton = this.lnkSubmit.UniqueID;
         if (MyOrder == null)
         {
             Response.Redirect(URL.root(Request) + "Cart.aspx", true);

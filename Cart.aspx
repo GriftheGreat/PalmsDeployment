@@ -222,7 +222,7 @@
                             <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' />
                             <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />
 
-                            <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;background-color: green;\" title=\"Deliverable\" />" : "" %>
+                            <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_non_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
                             <br />
@@ -245,7 +245,7 @@
                 </ItemTemplate>
             </asp:Repeater>
             <div class="row" style="text-align: center;">
-                <asp:LinkButton ID="lnkGoPay"     runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-button" />
+                <asp:LinkButton ID="lnkGoPay"    runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-button" />
             </div>
         </asp:PlaceHolder>
     </div>

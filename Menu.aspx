@@ -16,7 +16,7 @@
             outline: none;
             width: 100%;
             height: 100%;
-            color: sandybrown;
+            color: sandybrown
             background-color: darkred;
             font-weight: bold;   
 
@@ -88,7 +88,6 @@
 
             if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
-                //alert('1');
                 $('body').one("click", 'input[chooseDetail]', function ()
                 {
                     $('#modalOrderType').modal('show');
@@ -97,6 +96,8 @@
                     var purchaseButton = $(this);
                     var hidFoodID = purchaseButton.attr("chooseDetail");
                     foodID = $('#' + hidFoodID).val();// assign global variable
+
+                    $('#modalDesc').text(purchaseButton.attr("descr"));
                 });
             }
             else
@@ -124,6 +125,8 @@
             var hidFoodID = purchaseButton.attr("chooseDetail");
             foodID = $('#' + hidFoodID).val();// assign global variable
 
+            $('#modalDesc').text(purchaseButton.attr("descr"));
+
             putOptionsOnModal();// needs global variable
             
             // show modal
@@ -137,7 +140,7 @@
                 var DetailDiv = $(this);
                 var hidFoodIds = DetailDiv.attr("detail");
 
-                if ($('#' + hidFoodIds).val().includes(' ' + foodID + ' '))// use global variable
+                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
                 {
                     DetailDiv.show();
                 }
@@ -205,7 +208,6 @@
         {
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
-            //$('#modalFoodDetails').modal('show');  REMOVED because this is handled by   $('#modalOrderType').on("hidden.bs.modal", function ()
         }
     </script>
 </asp:Content>
@@ -260,18 +262,18 @@
                                 </div>
                                 <div class="back">
                                     <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
-                                    <h3 class="text-center productName">
-                                        <asp:Literal     ID="litfood_name"        runat="server" Text='<%# Eval("food_name") %>' />
-                                    </h3>
-<%--combo?--%>                      <div class="productInfo">
-<%--combo?--%>                          <h4 class="text-center">
-                                            <asp:Literal ID="litfood_description" runat="server" Text='<%# Eval("food_descr") %>' />
-                                            <asp:Label   ID="lblprice"            runat="server" Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' />
-                                            <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: right;\" title=\"Deliverable\" />" : "" %>
+                                    <h4 class="text-center productName"><strong>
+                                        <asp:Literal     ID="litfood_name" runat="server" Text='<%# Eval("food_name") %>' />
+                                    </strong></h4>
+                                    <div class="productInfo">
+                                        <h4 class="text-center">
+                                            <asp:Label   ID="lblfood_description" runat="server"  Text='<%# Eval("food_descr").ToString().Substring(0,Math.Min(67,Eval("food_descr").ToString().Length)) + (Eval("food_descr").ToString().Length > 67 ? "..." : "") %>' />                                          
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
-                                        <input           id="Button2"             runat="server" value="View" type="button"      class="btn btn-sm btn-danger text-center" chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>'/>
+                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost").ToString().Insert(Eval("food_cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
+                                        <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
                                     </div>
                                 </div>
                             </div>
@@ -299,22 +301,26 @@
                 </div>
                 <div class="modal-body">
                     <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
-
-                    <div class="item-detail-list">
-                        <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
-                            <ItemTemplate>
-                                <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
-                                    <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                    <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
-                                    <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
-<asp:Label   ID="lbl1"                runat="server" Text='<%# Eval("group_name") %>' />
-                                    <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
-                                    <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
-                                </div>
-<%-- if...group name... make radio button too.  (Use javascript to choose if only ONE with that group name corrosponds to chosen food use checkbox else use radio button).
-    if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>
-                            </ItemTemplate>
-                        </asp:Repeater>
+                    <div>
+                        <div class="item-detail-list" style="display:inline-block">
+                            <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
+                                <ItemTemplate>
+                                    <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
+                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
+                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
+    <asp:Label   ID="lbl1"                runat="server" Text='<%# Eval("group_name") %>' />
+                                        <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
+                                        <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
+                                    </div>
+    <%-- if...group name... make radio button too.  (Use javascript to choose if only ONE with that group name corrosponds to chosen food use checkbox else use radio button).
+        if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </div>
+                        <div style="display:inline-block; padding-left:20;">
+                            <p id="modalDesc"> Description</p>
+                        </div>
                     </div>
                     <asp:Button ID="btnAdd2" runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
                 </div>

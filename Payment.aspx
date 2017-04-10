@@ -32,12 +32,6 @@
             display: block;
         }
 
-        /*OLD .payment-item
-        {
-            margin-left: -100px;
-            position: inherit;
-            display: inline-block;
-        }*/
         .payment-item
         {
             margin-left: -100px;
@@ -62,13 +56,6 @@
             overflow: hidden;
         }
 
-        /*OLD .order-summary-info
-        {
-            border: 2px solid rgb(128, 128, 128);
-            border-radius: 20px;
-            display: block;
-            height: 40px;
-        }*/
         .order-summary-info
         {
             border: 2px solid rgb(128, 128, 128);

@@ -150,8 +150,6 @@
         {
             var clickedElement = $('div[AccordionControl2="' + open + '"]').first();
 
-            window.alert($('div[AccordionControl2="' + open + '"]').first());
-
             $('div[AccordionControl2]:visible').each(function (index) {
                 $( this ).slideUp();
             });

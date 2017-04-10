@@ -10,27 +10,92 @@
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <%-- cart styles --%>
     <style type="text/css">
-        .card-front-name
-        {
-            position: absolute;
-            top: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
 
-        .card-front-price
-        {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
+.help-tip{
+	position: relative;
+    top: 1px;
+    bottom: 10px;
+	right: 10px;
+	text-align: center;
+	background-color: #BCDBEA;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	font-size: 17px;
+	line-height: 26px;
+	cursor: default;
+}
+
+.help-tip:before{
+	content:'?';
+	font-weight: bold;
+	color:#fff;
+}
+
+.help-tip:hover p{
+    z-index: 100;
+	display:block;
+	transform-origin: 100% 0%;
+
+	-webkit-animation: fadeIn 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{	/* The tooltip */
+	display: none;
+	text-align: left;
+	background-color: #1E2021;
+	padding: 20px;
+	width: 300px;
+	position: absolute;
+	border-radius: 3px;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	right: -4px;
+	color: #FFF;
+	font-size: 17px;
+	line-height: 1.4;
+}
+
+.help-tip p:before{ /* The pointer of the tooltip */
+	position: absolute;
+	content: '';
+	width:0;
+	height: 0;
+	border:6px solid transparent;
+	border-bottom-color:#1E2021;
+	right:10px;
+	top:-12px;
+}
+
+.help-tip p:after{ /* Prevents the tooltip from being hidden */
+	width:100%;
+	height:40px;
+	content:'';
+	position: absolute;
+	top:-40px;
+	left:0;
+}
+
+/* CSS animation */
+
+@-webkit-keyframes fadeIn {
+	0% { 
+		opacity:0; 
+		transform: scale(0.6);
+	}
+
+	100% {
+		opacity:100%;
+		transform: scale(1);
+	}
+}
+
+@keyframes fadeIn {
+	0% { opacity:0; }
+	100% { opacity:100%; }
+}
+
 
         /*OLD .payment-item
         {
@@ -432,19 +497,32 @@
                 <div class="payment-options-section" tabSection="1">
                     <table>
                         <tr>
-                            <td>Credit Card Number:</td>
+                            <td>Credit Card Number: </td>
+                            <td class="help-tip">
+	                                <p>Must be 16 digits long</p>
+                           </td>
+
                             <td><asp:TextBox ID="txtCreditCardNumber" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
+                            <td class="help-tip">
+	                                <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
+                           </td>
                             <td><asp:TextBox ID="txtCreditCardSecurityCode" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
+                            <td class="help-tip">
+	                                <p>Format: mm/yy</p>
+                            </td>
                             <td><asp:TextBox ID="txtCreditCardExpDate" runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
+                            <td class="help-tip">
+	                                <p>Format: Firstname Lastname</p>
+                           </td>
                             <td><asp:TextBox ID="txtCreditCardOwnerName" runat="server" /></td>
                         </tr>
                     </table>
@@ -461,7 +539,6 @@
                         </tr>
                     </table>
                 </div>
-
                 <asp:LinkButton ID="lnkSubmit" runat="server" Text="Submit" OnClick="lnkSubmit_Click" CssClass="payment-submit-button" />
             </div>
         </div>

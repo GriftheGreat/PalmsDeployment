@@ -230,9 +230,18 @@ ul.nav a:hover {
 
 /* Create Your Own Pizza modal */
 .CYOP-Button {
-    padding: 8px 15px 8px 15px;
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
     font-size: 16pt;
     margin-bottom: 10px;
+}
+
+.CYOP-Button-focus {
+    background-color: red;
+}
+
+.CYOP-Button:hover {
+    background-color: red;
 }
 
 .CYOP-Button:active {

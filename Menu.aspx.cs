@@ -228,24 +228,122 @@ public partial class Menu : System.Web.UI.Page
         details.Columns.Add("id");
         details.Columns.Add("groupName");
 
+        #region did
+        #region sizes
         newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_1.GetAttribute("value") == "true" ? "Y" : "N");
-        newRow["cost"]        = this.CYOP_1.GetAttribute("value").Replace("$", "");
-        newRow["description"] = this.CYOP_1.GetAttribute("value");
-        newRow["id"]          = "7777";
+        newRow["chosen"]      = (this.CYOP_1.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "-6.5";
+        newRow["description"] = this.CYOP_1.InnerHtml;
+        newRow["id"]          = "177";
         newRow["groupName"]   = "size";
         details.Rows.Add(newRow);
 
         newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_2.GetAttribute("value") == "true" ? "Y" : "N");
-        newRow["cost"]        = this.CYOP_2.GetAttribute("").Replace("$", "");
-        newRow["description"] = this.CYOP_2.GetAttribute("");
-        newRow["id"]          = "7777";
+        newRow["chosen"]      = (this.CYOP_2.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_2.InnerHtml;
+        newRow["id"]          = "178";
         newRow["groupName"]   = "size";
         details.Rows.Add(newRow);
+        #endregion
 
+        #region crusts
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_3.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_3.InnerHtml;
+        newRow["id"]          = "51";
+        newRow["groupName"]   = "cru";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_4.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_4.InnerHtml;
+        newRow["id"]          = "77";
+        newRow["groupName"]   = "cru";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_5.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "1";
+        newRow["description"] = this.CYOP_5.InnerHtml;
+        newRow["id"]          = "191";
+        newRow["groupName"]   = "cru";
+        details.Rows.Add(newRow);
+        #endregion
+
+        #region meats
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_6.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_6.InnerHtml;
+        newRow["id"]          = "40";
+        newRow["groupName"]   = "";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_7.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_7.InnerHtml;
+        newRow["id"]          = "72";
+        newRow["groupName"]   = "";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_8.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "1";
+        newRow["description"] = this.CYOP_8.InnerHtml;
+        newRow["id"]          = "75";
+        newRow["groupName"]   = "";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_9.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_9.InnerHtml;
+        newRow["id"]          = "74";
+        newRow["groupName"]   = "";
+        details.Rows.Add(newRow);
+
+        newRow = details.NewRow();
+        newRow["chosen"]      = (this.CYOP_10.Attributes["value"] == "true" ? "Y" : "N");
+        newRow["cost"]        = "0";
+        newRow["description"] = this.CYOP_10.InnerHtml;
+        newRow["id"]          = "64";
+        newRow["groupName"]   = "";
+        details.Rows.Add(newRow);
+        #endregion
+
+        // 177	8"	-6.5	size
+        // 178	16"	0	size
+
+        // 51	Thin Crust	0	cru
+        // 77	Pan Crust	0	cru
+        // 191	Stuffed Crust	1	cru
+
+        // 40	Bacon	0	
+        // 72	Beef	0	
+        // 75	Canadian Bacon	0	
+        // 74	Italian Sausage	0	
+        // 64	Pepperoni	0	
+        #endregion
+        // 50	Black Olives	0	
+        // 62	Fresh-Sliced Onions	0	
+        // 63	Green Peppers	0	
+        // 65	Roma Tomatoes	0	
+        // 67	Jalapeno	0	
+        // 68	Banana Peppers	0	
+        // 69	Baby portabello Mushrooms	0	
+
+        // 84	Ranch Sauce	0	sau
+        // 85	BBQ Sauce	0	sau
+        // 89	Spinach Alfredo Sauce	0	sau
+        // 183	Original Pizza Sauce	0	sau
         //...
 
+
+        ////121	17	Create Your Own		11.99	Y		Pizza
 
         if (tempOrder == null)
         {
@@ -255,13 +353,13 @@ public partial class Menu : System.Web.UI.Page
         tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
         tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
-        tempOrder.Order_Elements.Add(new Order_Element("Y",
-                                                       8888,
-                                                       "",
-                                                       "",
-                                                       details,
-                                                       "Create Your Own",
-                                                       99.99f));
+        //tempOrder.Order_Elements.Add(new Order_Element("Y",
+        //                                               8888,
+        //                                               "",
+        //                                               "",
+        //                                               details,
+        //                                               "Create Your Own",
+        //                                               99.99f));
         MyOrder = tempOrder;
     }
 }

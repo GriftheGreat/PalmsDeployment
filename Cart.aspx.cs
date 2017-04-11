@@ -126,7 +126,7 @@ public partial class Cart : System.Web.UI.Page
             r.ID = "Added";
             r.Text = ((Detail)e.Item.DataItem).Description;
             r.Checked = ((Detail)e.Item.DataItem).Chosen;
-            r.GroupName = ((Detail)e.Item.DataItem).GroupName;
+            r.Attributes["name"] = ((Detail)e.Item.DataItem).GroupName;
             e.Item.Controls.AddAt(0, r);
         }
         else

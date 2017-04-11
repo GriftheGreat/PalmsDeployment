@@ -13,7 +13,7 @@
         {
             padding: 15px 0px 15px 0px;
             margin-bottom: 16px;
-            border-bottom: 1px solid rgb(192,192,192);
+            border-bottom: 1px solid gray;
             /*border-radius: 12px;*/
            
         }
@@ -56,6 +56,7 @@
             height: 150px;
             overflow: auto;
             text-align: left;
+            
         }
 
 
@@ -109,10 +110,10 @@
     <style type="text/css">
         .payment-options-section
         {
-            border-width: 0px 2px 2px 2px;
+            border-width: 1px 2px 2px 2px;
             border-style: solid;
-            border-color: rgb(128, 128, 128);
-            padding: 20px 80px;
+            border-color: gray;
+            padding: 20px 40px;
             width: 100%;
             text-align: left;
             display: inline-block;
@@ -166,20 +167,20 @@
     <div class="container">
         <asp:PlaceHolder ID="plhNoItemsInOrder" runat="server">
             <div class="row" style="text-align: center;">
-                <div class="col-lg-12" style="margin-bottom: 20px;">
+                <div class="col-lg-12" style="margin-bottom: 20px; margin-top: 40px; color: red;">
                     There are no items in your cart right now.
                 </div>
             </div>
         </asp:PlaceHolder>
         <asp:PlaceHolder ID="plhItemsAreInOrder" runat="server">
             <div class="row" style="text-align: center;">
-                <div class="col-lg-12" style="margin-bottom: 20px;">
+                <div class="col-lg-12" style="margin-bottom: 35px; margin-top: 40px; ">
                     The Cart allows you to modify your food how you like. When you are done, click Pay at the bottom to proceed.
                 </div>
                 <div>
                     <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
                 </div>
-                <div class="payment-options-section" style="border-width: 2px 2px 2px 2px;">
+                <div class="payment-options-section" style="border-width: 2px 2px 2px 2px; background-color: sandybrown;">
                     <table>
                         <tr>
                             <td>

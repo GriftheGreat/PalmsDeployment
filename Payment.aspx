@@ -93,7 +93,7 @@
 
 @keyframes fadeIn {
 	0% { opacity:0; }
-	100% { opacity:100%; }
+	100% { opacity:1; }
 }
 
 
@@ -101,7 +101,7 @@
         {
             margin-left: -100px;
             position: relative;
-            margin-right: 50px;
+            margin-right: 5px;
             display: inline-block;
             float: left;
         }
@@ -116,8 +116,7 @@
         .order-summary
         {
             display: inline-block;
-            width: 600px;
-/*            height: 300px;*/
+            width: 80%;
             overflow: hidden;
         }
 
@@ -136,7 +135,7 @@
         .order-summary-items
         {
             padding-left: 100px;
-            width: 1000px;
+            width: 100%;
             height: 200px;
             text-align: left;
         }
@@ -146,7 +145,12 @@
         .payment-options
         {
             display: inline-block;
-            width: 600px;
+           /*// width: 600px;*/
+            width: 80%
+        }
+
+        .inputText {
+            width: 100%;
         }
 
         .payment-options-button-container
@@ -193,18 +197,19 @@
 
         .payment-submit-button
         {
-            margin-top: 20px;
+            margin: 20px 0px 30px 0px;
             padding: 10px 30px 10px 30px;
-            border: 2px solid rgb(36, 156, 202);
+            border: 2px solid gray;
             border-radius: 10px;
-            color: rgb(36, 156, 202);
+            color: black;
             display: inline-block;
+            background-color: sandybrown;
         }
 
         .payment-submit-button:hover
         {
-            border: 2px solid rgb(25, 77, 157);
-            color: rgb(25, 77, 157);
+            border: 2px solid rgba(13,86,55, .9);
+            color: rgba(13,86,55, .9);
             text-decoration: none;
         }
 
@@ -410,7 +415,7 @@
                 <div class="order-summary-info">
                     Items: <asp:Literal ID="litSummaryNumber" runat="server" />
                 </div>
-                <div class="order-summary-items">
+                <div class="order-summary-items ">
                     <asp:Repeater ID="rptItems" runat="server">
                         <ItemTemplate>
                             <div class="front payment-item <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
@@ -435,11 +440,11 @@
                     <table>
                         <tr>
                             <td>Customer First Name:</td>
-                            <td><asp:TextBox      ID="txtFirstName"    runat="server" /></td>
+                            <td><asp:TextBox      ID="txtFirstName"    class="inputText"  runat  ="server" /></td>
                         </tr>
                         <tr>
                             <td>Customer last Name:</td>
-                            <td><asp:TextBox      ID="txtLastName"     runat="server" /></td>
+                            <td><asp:TextBox      ID="txtLastName"     class="inputText"    runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Order Type:</td>
@@ -454,7 +459,7 @@
                         <tr id="deliveryLocationContainer" runat="server">
                             <td>Delivery Location:</td>
                             <td>
-                                <asp:DropDownList ID="ddlLocations"    runat="server" onchange="pickLocation(this);" >
+                                <asp:DropDownList ID="ddlLocations"    runat="server"   class="inputText"   onchange="pickLocation(this);" >
                                     <asp:ListItem Text=""                   Value="" />
                                     <asp:ListItem Text="Palm's Grille"      Value="Palm's Grille" Enabled="false" />
                                     <asp:ListItem Text="Campus House Lobby" Value="Campus House Lobby" />
@@ -488,33 +493,32 @@
                 <div class="payment-options-section" tabSection="1">
                     <table>
                         <tr>
-                            <td>Credit Card Number: </td>
+                            <td>Credit Card Number:</td>
                             <td class="help-tip">
 	                                <p>Must be 16 digits long</p>
-                           </td>
-
-                            <td><asp:TextBox ID="txtCreditCardNumber" runat="server" /></td>
+                            </td>
+                            <td><asp:TextBox ID="txtCreditCardNumber"    class="inputText"       runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
                             <td class="help-tip">
 	                                <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
-                           </td>
-                            <td><asp:TextBox ID="txtCreditCardSecurityCode" runat="server" /></td>
+                            </td>
+                            <td><asp:TextBox ID="txtCreditCardSecurityCode"   class="inputText"          runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
                             <td class="help-tip">
 	                                <p>Format: mm/yy</p>
                             </td>
-                            <td><asp:TextBox ID="txtCreditCardExpDate" runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardExpDate"    class="inputText"      runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
                             <td class="help-tip">
 	                                <p>Format: Firstname Lastname</p>
-                           </td>
-                            <td><asp:TextBox ID="txtCreditCardOwnerName" runat="server" /></td>
+                            </td>
+                            <td><asp:TextBox ID="txtCreditCardOwnerName"    class="inputText"            runat="server" /></td>
                         </tr>
                     </table>
                 </div>

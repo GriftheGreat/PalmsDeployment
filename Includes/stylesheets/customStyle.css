@@ -12,6 +12,7 @@
     position: relative; 
     z-index: 5;
 }
+
 ul.navbar .navbar-nav li {
     display: inline-block;
     float: none !important;
@@ -19,19 +20,11 @@ ul.navbar .navbar-nav li {
     
 } 
 
-/*.navbar-nav > ul {
-  float: none;
-  display: inline-block;
-}*/
-
-
 nav.navbar .navbar-collapse {
   text-align: center;
 }
 
-
 .nav {
-    /*background-color: red;*/
     width: 100%;
 }
 
@@ -54,8 +47,9 @@ ul.nav a:hover {
     z-index: 10;
 }
 
-
-
+.slideShowCaption {
+    color: red;
+}
 /* Navigation bar css code ends here */
 
 /* Home page */
@@ -80,9 +74,9 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-    perspective: 1000px;
-	-webkit-perspective: 1000px;
+	 -webkit-perspective: 1000px;
     -moz-perspective: 1000px;
+    perspective: 1000px;
 }
 
 .front, .back {
@@ -91,16 +85,24 @@ ul.nav a:hover {
     border-width: 1px;
     border-color: rgba(189,195,199, .5);
 
+	 transition: -webkit-transform 1s;
+    transition: -moz-transform 1s;
     transition: transform 1s;
-	transition: -webkit-transform 1s;
-    /*transition: -moz-transform 1s;*/
 
-    transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-
-    backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   .front, .back {
+       border-radius: 12px;
+       border-style: solid;
+       border-width: 1px;
+       border-color: rgba(189,195,199, .5);
+       transition: transform 1s;
+       backface-visibility: hidden;
+   }
 }
 
 .front {
@@ -119,20 +121,20 @@ ul.nav a:hover {
     transform: rotateY(-180deg);
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
-    /*background-color: rgba(52,73,94, .9);  Pickle bluewood*/
+    transform: rotateY(-180deg);
     background-color: rgba(13,86,55, .8);
 }
 
 .info-card:hover .back {
-    transform: rotateY(0);
-	-webkit-transform: rotateY(0);
+	 -webkit-transform: rotateY(0);
     -moz-transform: rotateY(0);
+    transform: rotateY(0);
 }
 
 .info-card:hover .front {
-    transform: rotateY(180deg);
-	-webkit-transform: rotateY(180deg);
+	 -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 .card-image {
@@ -164,34 +166,26 @@ ul.nav a:hover {
 
 }
 
-
 .papaJohnFront, .papaJohnBack {
     border-radius: 12px;
     border-style: solid;
     border-width: 1px;
     border-color: rgba(189,195,199, .8);
 
+    transition: -webkit-transform 1s;
+    transition: -moz-transform 1s;
     transition: transform 1s;
-	transition: -webkit-transform 1s;
-    /*transition: -moz-transform 1s;*/
 
-    transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-
-    backface-visibility: hidden;
-	-webkit-backface-visibility: hidden;
+	 -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
-
 
 .customPizzaHeader {
     text-align: center;
     font-weight: bold;
     font-size: 38pt;
 }
-
-
-
 
 .modal-content {
     background-color: sandybrown;
@@ -206,6 +200,7 @@ ul.nav a:hover {
 
 .modal-dialog {
    max-width: 920px; 
+
 }
 
 
@@ -223,47 +218,29 @@ ul.nav a:hover {
 
 
 
-/* Add some padding between the buttons */
-.sizeEightWrapper {
-    padding-right: 10px;
-}
-
-.cheesePizzaWrapper, .sausagePizzaWrapper {
-    padding-right: 10px;
-}
-
-.sizeEightButton, .sizeSixteenButton, .cheesePizzaButton, 
-.sausagePizzaButton, .peperoniPizzaButton {
-    padding: 8px 15px 8px 15px;
-    font-size: 16pt;
-}
-
-.baconToppingButton, .peperoniToppingButton, .sausageToppingButton, .beefToppingButton,
-.italianSausageToppingButton, .canadianBacconToppingButton, .freshSlicedOnionsButton,
-.greenPepperButton, .romaTomatoesButton, .blackOlivesButton, .jalapenoPeppersButton,
-.bananaPeppersButton, .babyPortabellaButton, .mushroomsButton {
-    padding: 8px 15px 8px 15px;
+/* Create Your Own Pizza modal */
+.CYOP-Button {
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
     font-size: 16pt;
     margin-bottom: 10px;
 }
 
-.sizeEightButton:active, .sizeSixteenButton:active, .cheesePizzaButton:active, .sausagePizzaButton:active, .peperoniPizzaButton:active {
+.CYOP-Button-focus {
     background-color: red;
 }
 
-.sizeEightButton:focus, .sizeSixteenButton:focus, .cheesePizzaButton:focus, .sausagePizzaButton:focus, .peperoniPizzaButton:focus {
+.CYOP-Button:hover {
     background-color: red;
 }
 
+.CYOP-Button:active {
+    background-color: red;
+}
 
-
-
-
-
-
-
-
-
+.CYOP-Button:focus {
+    background-color: red;
+}
 
 
 
@@ -271,17 +248,15 @@ ul.nav a:hover {
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
-
 }
-
-
 
 .carouselWrapper {
     height: 400px;
 }
 
 .slideImages {
-     
+    width: 100%;
+    height: 500px;
 }
 
 .carousel-indicators {
@@ -290,10 +265,7 @@ ul.nav a:hover {
 
 .carousel .item {
     width:100%; 
-    
 }
-
-
 
 .carousel-caption h3:first-child {
   animation-delay: 1s;
@@ -306,8 +278,6 @@ ul.nav a:hover {
 .carousel-caption button {
   animation-delay: 3s;
 }
-
-
 
 .bottomInfo {
     /*background-color: red;*/
@@ -323,18 +293,12 @@ ul.nav a:hover {
     background-color: lightgray;
 }
 
-
-
-
 @media (max-width: 450px) {
   .modalSizing {
     width: 100%;
   }
-
     .modalButton {
-      width: 100%;
-
-      
+      width: 100%; 
   }
 
 }
@@ -342,7 +306,5 @@ ul.nav a:hover {
   .modalSizing {
     width: 900px;
   }
-
- 
 
 }

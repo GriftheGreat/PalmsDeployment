@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
+using System.Linq;
 
 public partial class Cart : System.Web.UI.Page
 {
@@ -22,6 +24,18 @@ public partial class Cart : System.Web.UI.Page
     {
         if (MyOrder != null && MyOrder.Order_Elements != null)
         {
+            if(Page.IsPostBack)
+            {
+                Order tempOrder = MyOrder;
+                foreach (RepeaterItem item in this.rptItems.Items)
+                {
+                    foreach (RepeaterItem detailitem in ((Repeater)item.FindControl("rptDetails")).Items)
+                    {
+                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("chbAdded")).Checked;
+                    }
+                }
+                MyOrder = tempOrder;
+            }
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
         }
@@ -104,6 +118,27 @@ public partial class Cart : System.Web.UI.Page
         rpt.DataBind();
     }
 
+    protected void rptDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if(((List<Detail>)((Repeater)sender).DataSource).Count(detail => !string.IsNullOrEmpty(detail.GroupName) && detail.GroupName == ((Detail)e.Item.DataItem).GroupName) > 1)
+        {
+            RadioButton r = new RadioButton();
+            r.ID = "Added";
+            r.Text = ((Detail)e.Item.DataItem).Description;
+            r.Checked = ((Detail)e.Item.DataItem).Chosen;
+            r.GroupName = ((Detail)e.Item.DataItem).GroupName;
+            e.Item.Controls.AddAt(0, r);
+        }
+        else
+        {
+            CheckBox c = new CheckBox();
+            c.ID = "Added";
+            c.Text = ((Detail)e.Item.DataItem).Description;
+            c.Checked = ((Detail)e.Item.DataItem).Chosen;
+            e.Item.Controls.AddAt(0, c);
+        }
+    }
+
     protected void lnkGoPay_Click(object sender, EventArgs e)
     {
         if (MyOrder != null)
@@ -138,6 +173,8 @@ public partial class Cart : System.Web.UI.Page
             Order tempOrder    = MyOrder;
             tempOrder.Type     = this.ddlDeliveryType.SelectedValue;
             tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
+            tempOrder.TimeSlot = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "ASAP" : "");
+
             MyOrder = tempOrder;
             this.rptItems.DataBind();
         }

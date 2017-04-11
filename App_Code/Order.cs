@@ -72,6 +72,19 @@ public class Order
         }
     }
 
+    private string _timeSlot;
+    public string TimeSlot
+    {
+        get
+        {
+            return _timeSlot;
+        }
+        set
+        {
+            _timeSlot = value;
+        }
+    }
+
     private string _type;
     public  string Type
     {
@@ -97,6 +110,7 @@ public class Order
         this.Location          = null;
         this.Order_Elements    = new List<Order_Element>();
         this.Time              = DateTime.Now;
+        this.TimeSlot          = null;
         this.Type              = type;
     }
 

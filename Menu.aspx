@@ -9,9 +9,10 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
-        .spaceBeforeMealHeaderButton {
+        .spaceAroundCategories {
             margin-top: 50px;
         }
+
         .MealHeaderButton
         {
             padding: 10px 0px 10px 0px;
@@ -234,10 +235,10 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
+        <div class="spaceAroundCategories"></div>
         <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
-                <div class="spaceBeforeMealHeaderButton"></div>
-                <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
+                <asp:PlaceHolder ID="plhBigCategoryStart"  runat="server" Visible="false">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
@@ -262,17 +263,24 @@
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhBigCategoryEnd" runat="server" Visible="false">
+                <asp:PlaceHolder ID="plhBigCategoryEnd"    runat="server" Visible="false">
                     </div>
                 </asp:PlaceHolder>
-                <div class="row">
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
-                        <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
-                            <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
-                            <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
+                            <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                                <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
+                                <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                            </div>
                         </div>
                     </div>
-                </div>
                 <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
                     <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
                         <ItemTemplate>
@@ -304,6 +312,7 @@
                 </div>
             </ItemTemplate>
         </asp:Repeater>
+        <div class="spaceAroundCategories"></div>
     </div>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>

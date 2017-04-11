@@ -9,15 +9,23 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
+        .spaceBeforeMealHeaderButton {
+            margin-top: 50px;
+        }
         .MealHeaderButton
         {
-            margin-top: 30px;
-            border: outset;
+            padding: 10px 0px 10px 0px;
+            border: none;
+            border-bottom: solid;
+            border-bottom-width: 1px;
+            border-color: white;
             outline: none;
             width: 100%;
             height: 100%;
-            color: sandybrown
-            background-color: darkred;
+            /*color: rgba(13,86,55, .9);*/
+            /*background-color: rgba(236,100,75, .9);*/
+            color: darkgreen;
+            background-color: rgba(242,120, 75, .9);
             font-weight: bold;   
 
             text-decoration: none;
@@ -27,7 +35,7 @@
         
         .HeaderButton
         {
-            margin-top: 20px;
+            margin-top: 10px;
             border: none;
             outline: none;
             width: 100%;
@@ -210,6 +218,18 @@
             $('#modalOrderType').modal('hide');
         }
     </script>
+
+    
+    <%-- Jacob, Here's where the script to handle the button listener --%>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("mushroomsBtn").value;
+
+            //document.getElementById("demo").innerHTML = x;
+
+            window.alert(x);
+        }
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
@@ -217,21 +237,26 @@
         <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
                 <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
-                    <div class="row">
+<%--                    <div class="row">
                         <div class="col-lg-12">
                             <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
                                 <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
                         </div>
-                    </div>
+                    </div>--%>
+
+                    <div class="spaceBeforeMealHeaderButton"></div>
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
+                
+
                 <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-lg-12">
+                            
                             <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
                                 <asp:Literal     ID="lblMealName2"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
@@ -244,7 +269,7 @@
                     </div>
                 </asp:PlaceHolder>
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
                         <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
                             <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
                             <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
@@ -254,7 +279,7 @@
                 <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
                     <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
                         <ItemTemplate>
-                            <div class="info-card col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                            <div class="info-card col-xs-4 col-sm-4 col-md-3 col-lg-3 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
                                 <div class="front">
                                     <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>' CssClass="card-front-name" />
@@ -291,8 +316,8 @@
     </asp:PlaceHolder>
 
     <%-- Modal --%>
-    <div id="modalFoodDetails" class="modal fade text-center modal-responsive" role="dialog">
-        <div class="modal-dialog">
+    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog modalSizing">
             <%-- Modal content--%>
             <div class="modal-content">
                 <div class="modal-header">

@@ -236,16 +236,18 @@
     <div class="container">
         <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
+                
                 <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
-<%--                    <div class="row">
+                    <div class="spaceBeforeMealHeaderButton"></div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
                                 <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
                         </div>
-                    </div>--%>
+                    </div>
 
-                    <div class="spaceBeforeMealHeaderButton"></div>
+                    
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>

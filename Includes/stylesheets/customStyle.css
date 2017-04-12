@@ -109,8 +109,6 @@ ul.nav a:hover {
 .back {
     width: 160px;
 	height: 200px;
-    width: 202px;
-	height: 280px;
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
     transform: rotateY(-180deg);

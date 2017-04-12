@@ -74,49 +74,41 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-	 -webkit-perspective: 1000px;
+	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
     perspective: 1000px;
 }
 
 .front, .back {
-	 border-radius: 12px;
+	border-radius: 12px;
     border-style: solid;
     border-width: 1px;
     border-color: rgba(189,195,199, .5);
 
-	 transition: -webkit-transform 1s;
-    transition: -moz-transform 1s;
-    transition: transform 1s;
+    transition: 1s;
 
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-   .front, .back {
-       border-radius: 12px;
-       border-style: solid;
-       border-width: 1px;
-       border-color: rgba(189,195,199, .5);
-       transition: transform 1s;
-       backface-visibility: hidden;
-   }
+    .front, .back {
+        transition: 0s;
+    }
 }
 
 .front {
-	 overflow: hidden;
+	overflow: hidden;
     width: 160px;
     height: 200px;
-	 position: absolute;
+	position: absolute;
     background-color: white;
     z-index: 1;
 }
 
 .back {
     width: 160px;
-	 height: 200px;
+	height: 200px;
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
@@ -124,7 +116,7 @@ ul.nav a:hover {
 }
 
 .info-card:hover .back {
-	 -webkit-transform: rotateY(0);
+	-webkit-transform: rotateY(0);
     -moz-transform: rotateY(0);
     transform: rotateY(0);
 }
@@ -161,7 +153,6 @@ ul.nav a:hover {
 
 .papaJohnProduct:hover {
 
-
 }
 
 .papaJohnFront, .papaJohnBack {
@@ -174,7 +165,7 @@ ul.nav a:hover {
     transition: -moz-transform 1s;
     transition: transform 1s;
 
-	 -webkit-backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }

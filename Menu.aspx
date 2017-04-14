@@ -27,7 +27,6 @@
             color: darkgreen;
             background-color: rgba(242,120, 75, .9);
             font-weight: bold;   
-
             text-decoration: none;
             text-align: center;
             display: inline-block;
@@ -427,4 +426,5 @@
             </div>
         </div>
     </div>
+
 </asp:Content>

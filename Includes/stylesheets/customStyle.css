@@ -72,7 +72,7 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-	 -webkit-perspective: 1000px;
+	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
     perspective: 1000px;
 }
@@ -83,29 +83,34 @@ ul.nav a:hover {
     border-width: 1px;
     border-color: rgba(189,195,199, .5);
 
-	 transition: -webkit-transform 1s;
-    transition: -moz-transform 1s;
-    transition: transform 1s;
+    transition: 1s;
 
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
+<<<<<<< HEAD
 
+=======
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .front, .back {
+        transition: 0s;
+    }
+}
+>>>>>>> origin/master
 
 .front {
 	overflow: hidden;
-    width: 202px;
-    height: 280px;
+    width: 160px;
+    height: 200px;
 	position: absolute;
     background-color: white;
     z-index: 1;
 }
 
 .back {
-    width: 202px;
-	height: 280px;
-    transform: rotateY(-180deg);
+    width: 160px;
+	height: 200px;
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
@@ -113,7 +118,7 @@ ul.nav a:hover {
 }
 
 .info-card:hover .back {
-	 -webkit-transform: rotateY(0);
+	-webkit-transform: rotateY(0);
     -moz-transform: rotateY(0);
     transform: rotateY(0);
 }
@@ -149,7 +154,11 @@ ul.nav a:hover {
 }
 
 .papaJohnProduct:hover {
+<<<<<<< HEAD
  /*   Try to remember why this is here, or delete */
+=======
+
+>>>>>>> origin/master
 }
 
 .papaJohnFront, .papaJohnBack {
@@ -162,7 +171,7 @@ ul.nav a:hover {
     transition: -moz-transform 1s;
     transition: transform 1s;
 
-	 -webkit-backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -202,8 +211,12 @@ ul.nav a:hover {
 }
 /* Modal code ends here */
 
+<<<<<<< HEAD
 
 /* Create Your Own Pizza modal starts here */
+=======
+/* Create Your Own Pizza modal */
+>>>>>>> origin/master
 .CYOP-Button {
     border: 1px solid rgb(128, 128, 128);
     border-radius: 10px;
@@ -226,8 +239,11 @@ ul.nav a:hover {
 .CYOP-Button:focus {
     background-color: red;
 }
+<<<<<<< HEAD
 /* Create Your Own Pizza modal ends here */
 
+=======
+>>>>>>> origin/master
 
 /* For the amount of products in the Cart */
 .badge {

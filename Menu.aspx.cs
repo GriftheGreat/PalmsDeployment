@@ -287,7 +287,6 @@ public partial class Menu : System.Web.UI.Page
 
         #endregion
 
-
         if (tempOrder == null)
         {
             tempOrder = new Order(this.hidOrderType.Value);
@@ -310,9 +309,9 @@ public partial class Menu : System.Web.UI.Page
     {
         newRow["chosen"]      = chosen;
         newRow["cost"]        = cost;
-        newRow["description"] = this.CYOP_10.InnerHtml;
-        newRow["id"]          = "64";
-        newRow["groupName"]   = "";
+        newRow["description"] = description;
+        newRow["id"]          = id;
+        newRow["groupName"]   = groupname;
         return newRow;
     }
 }

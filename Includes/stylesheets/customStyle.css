@@ -74,7 +74,7 @@ ul.nav a:hover {
 /*************** Flippable code starts here ************************/
 .info-card {
     padding-top: 20px;
-	 -webkit-perspective: 1000px;
+	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
     perspective: 1000px;
 }
@@ -85,40 +85,30 @@ ul.nav a:hover {
     border-width: 1px;
     border-color: rgba(189,195,199, .5);
 
-	 transition: -webkit-transform 1s;
-    transition: -moz-transform 1s;
-    transition: transform 1s;
+    transition: 1s;
 
 	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-   .front, .back {
-       border-radius: 12px;
-       border-style: solid;
-       border-width: 1px;
-       border-color: rgba(189,195,199, .5);
-       transition: transform 1s;
-       backface-visibility: hidden;
-   }
+    .front, .back {
+        transition: 0s;
+    }
 }
 
 .front {
 	overflow: hidden;
-    width: 202px;
-    height: 280px;
+    width: 160px;
+    height: 200px;
 	position: absolute;
-    /*background-color: rgba(220,198,224, .99);*/
     background-color: white;
     z-index: 1;
 }
 
 .back {
-    width: 202px;
-	height: 280px;
-    transform: rotateY(-180deg);
+    width: 160px;
+	height: 200px;
 	-webkit-transform: rotateY(-180deg);
     -moz-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
@@ -126,7 +116,7 @@ ul.nav a:hover {
 }
 
 .info-card:hover .back {
-	 -webkit-transform: rotateY(0);
+	-webkit-transform: rotateY(0);
     -moz-transform: rotateY(0);
     transform: rotateY(0);
 }
@@ -163,7 +153,6 @@ ul.nav a:hover {
 
 .papaJohnProduct:hover {
 
-
 }
 
 .papaJohnFront, .papaJohnBack {
@@ -176,7 +165,7 @@ ul.nav a:hover {
     transition: -moz-transform 1s;
     transition: transform 1s;
 
-	 -webkit-backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -189,6 +178,7 @@ ul.nav a:hover {
 
 .modal-content {
     background-color: sandybrown;
+
 }
 
 .modalButton {
@@ -216,15 +206,60 @@ ul.nav a:hover {
     border-bottom: none;
 }
 
-
-
 /* Create Your Own Pizza modal */
+.CYOP-Header {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 50pt; 
+}
+
+.CYOP-Header3 {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 125pt; 
+}
+
 .CYOP-Button {
     border: 1px solid rgb(128, 128, 128);
     border-radius: 10px;
-    font-size: 16pt;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
     margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
 }
+
+#modalCreateYourOwnPizza .modal-content {
+    padding-bottom: 30px;
+}
+
+.CYOP-Button-Special {
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
+    margin-bottom: px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
+.CYOP-placeholder {
+    /*border: 1px solid rgb(128, 128, 128);*/
+    /*border-radius: 10px;*/
+    background-color: sandybrown;
+    color: sandybrown;
+    display: block;
+    float: left;
+    /*font-size: 2.8vmin; */
+    margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
 
 .CYOP-Button-focus {
     background-color: red;
@@ -241,9 +276,6 @@ ul.nav a:hover {
 .CYOP-Button:focus {
     background-color: red;
 }
-
-
-
 
 /* For the amount of products in the Cart */
 .badge {

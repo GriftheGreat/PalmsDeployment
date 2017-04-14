@@ -125,11 +125,6 @@
                 putOptionsOnModal();// needs global variable
                 $('#modalFoodDetails').modal('show');
             });
-
-            $('span.CYOP-Button').on("click", function () {
-                $(this).attr('value', 'true');
-                alert($(this).html());
-            });
         });
 
         function normalPurchaseClick()
@@ -243,6 +238,92 @@
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
         }
+
+        // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
+        // apply to only half a pizza
+        function ToggleCYOP(button) {
+            var type; // The value html attribute for the button clicked
+
+            type = button.getAttribute("type");
+
+            // Toggle the value of the clicked button
+            $("div[type='" + type + "']").each(
+                function () {
+                    if ($(this).attr("id") == button.getAttribute("id"))
+                    {
+                        $(this).attr("value", "true");
+                        $(this).addClass("CYOP-Button-focus");
+                    }
+                    else
+                    {
+                        $(this).attr("value", "false");
+                        $(this).removeClass("CYOP-Button-focus");
+                    }
+                }
+            );
+        }
+        
+        // Toggle the state of a "Choose you own pizza" button where there are possibilities 
+        // to toggle beween the detail being applied to the left, right, or all of the pizza
+        function ToggleCYOPHalves(button) {
+            var type; // The value html attribute for the button clicked
+
+            if (button.getAttribute("name") != "Baby Portabella Mushrooms")
+            {
+                if (button.getAttribute("state") == "none") {
+                    button.setAttribute("state", "whole");
+                    button.setAttribute("value", "true");
+                    button.textContent = button.getAttribute("name");
+                    button.style.backgroundColor = "#36664A";
+                    button.className = "btn CYOP-Button CYOP-Button-focus";
+                }
+                else if (button.getAttribute("state") == "whole") {
+                    button.setAttribute("state", "left");
+                    button.textContent = button.getAttribute("name") + " (left)";
+                    button.style.backgroundColor = "#996633";
+                }
+                else if (button.getAttribute("state") == "left") {
+                    button.setAttribute("state", "right");
+                    button.textContent = button.getAttribute("name") + " (right)";
+                    button.style.backgroundColor = "#ff6666";
+                }
+                else {
+                    button.setAttribute("state", "none");
+                    button.setAttribute("value", "false");
+                    button.textContent = button.getAttribute("name");
+                    button.style.backgroundColor = "transparent";
+                    button.className = "btn CYOP-Button";
+                }
+            }
+            else
+            {
+                if (button.getAttribute("state") == "none") {
+                    button.setAttribute("state", "whole");
+                    button.setAttribute("value", "true");
+                    button.innerHTML = "Baby Portabella<br />Mushrooms";
+                    button.style.backgroundColor = "#36664A";
+                    button.className = "btn CYOP-Button-Special CYOP-Button-focus";
+                }
+                else if (button.getAttribute("state") == "whole") {
+                    button.setAttribute("state", "left");
+                    button.innerHTML = "Baby Portabella<br />Mushrooms  (left)";
+                    button.style.backgroundColor = "#996633";
+                }
+                else if (button.getAttribute("state") == "left") {
+                    button.setAttribute("state", "right");
+                    button.innerHTML = "Baby Portabella<br />Mushrooms (right)";
+                    button.style.backgroundColor = "#ff6666";
+                }
+                else {
+                    button.setAttribute("state", "none");
+                    button.setAttribute("value", "false");
+                    button.innerHTML = "Baby Portabella<br />Mushrooms";
+                    button.style.backgroundColor = "transparent";
+                    button.className = "btn CYOP-Button-Special";
+                }
+            }
+        }
+
     </script>
     <%-- checkbox clicks --%>
     <script type="text/javascript">
@@ -407,7 +488,6 @@
                         <div class="item-detail-list" style="display:inline-block">
                             <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
                                 <ItemTemplate>
-                                    <%-- <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>--%>
                                     <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
 <%-- need identifier on this element for jquery --%>                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
                                         <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' group='<%# Eval("group_name") %>' />
@@ -440,40 +520,47 @@
                     <h3 class="modal-title">Create Your Own Pizza $11.99</h3>
                 </div>
                 <div class="modal-body">
-                    <h1>Select size:</h1>
-                    <span id="CYOP_1"  runat="server" class="btn CYOP-Button CYOP-Button-focus" value="true" >8''  -$6.50</span><span style="width:10px;">&nbsp;</span>
-                    <span id="CYOP_2"  runat="server" class="btn CYOP-Button" value=""     >16''</span>
+                    <h1 class="CYOP-Header">Select size:</h1>
+                    <div id="CYOP_1"  runat="server" type="size" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true" >8''  -$6.50</div><span style="width:10px;">&nbsp;</span>
+                    <div id="CYOP_2"  runat="server" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false"  >16''</div>
 
-                    <h1>Choose Your Crust:</h1>
-                    <span id="CYOP_3"  runat="server" class="btn CYOP-Button CYOP-Button-focus" value="true" >Thin Crust</span><span style="width:10px;">&nbsp;</span>
-                    <span id="CYOP_4"  runat="server" class="btn CYOP-Button" value=""     >Pan Crust</span><span style="width:10px;">&nbsp;</span>
-                    <span id="CYOP_5"  runat="server" class="btn CYOP-Button" value=""     >Stuffed Crust $1.00</span>
-                    <br />
+                    <h1 class="CYOP-Header">Choose Your Crust:</h1>
+                    <div id="CYOP_3"  runat="server" type="crust" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true">Thin Crust</div><span style="width:10px;">&nbsp;</span>
+                    <div id="CYOP_4"  runat="server" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Pan Crust</div><span style="width:10px;">&nbsp;</span>
+                    <div id="CYOP_5"  runat="server" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Stuffed Crust $1.00</div>
+                    <div id="placeholder1"  runat="server" class="CYOP-placeholder" ></div>
+                    <div id="placeholder2"  runat="server" class="CYOP-placeholder" ></div>
 
-                    <h1>Choose Your Toppings:</h1>
+                    <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
+                    <div id="CYOP_18" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Original</div>
+                    <div id="CYOP_19" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Ranch</div>
+                    <div id="CYOP_20" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">BBQ</div>
+                    <div id="CYOP_21" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Spinach Alfredo</div>
+
+                    <h1 class="CYOP-Header">Choose Your Toppings:</h1>
+                    <p id="instructions">Select a topping multiple times to apply to only one side of the pizza</p>
                     <h3>Real Meat</h3>
                     <%--<span id=""  runat="server" class="btn CYOP-Button CYOP-Button-focus" value="true" >Cheese</span><span style="width:10px;">&nbsp;</span>
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Peperoni</span><span style="width:10px;">&nbsp;</span>
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Sausage</span>
                     <br />--%>
 
-                    <span id="CYOP_6"  runat="server" class="btn CYOP-Button" value=""     >Bacon</span>
-                    <span id="CYOP_7"  runat="server" class="btn CYOP-Button" value=""     >Beef</span>
-                    <span id="CYOP_8"  runat="server" class="btn CYOP-Button" value=""     >Canadian Bacon</span>
-                    <span id="CYOP_9"  runat="server" class="btn CYOP-Button" value=""     >Italian Sausage</span>
-                    <span id="CYOP_10" runat="server" class="btn CYOP-Button" value=""     >Pepperoni</span>
+                    <div name="Bacon" id="CYOP_6"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Bacon</div>
+                    <div name="Beef" id="CYOP_7"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Beef</div>
+                    <div name="Canadian Bacon" id="CYOP_8"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Canadian Bacon</div>
+                    <div name="Italian Sausage" id="CYOP_9"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Italian Sausage</div>
+                    <div name="Pepperoni" id="CYOP_10" runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Pepperoni</div>
 
-                    <h3>Fresh Vegetables</h3>
-                    <span id="CYOP_11" runat="server" class="btn CYOP-Button" value=""     >Fresh Sliced Onions</span>
-                    <span id="CYOP_12" runat="server" class="btn CYOP-Button" value=""     >Green Pepper</span>
-                    <span id="CYOP_13" runat="server" class="btn CYOP-Button" value=""     >Roma Tomatoes</span>
-                    <span id="CYOP_14" runat="server" class="btn CYOP-Button" value=""     >Black Olives</span>
-                    <br />
+                    <div id="placeholder3" runat="server" class="CYOP-placeholder">&ensp;&ensp;&ensp;&ensp;&ensp;</div>
+                    <h3 class="CYOP-Header3">Fresh vegetable</h3> 
+                    <div name="Fresh Sliced Onions" id="CYOP_11" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</div>
+                    <div name="Green Pepper" id="CYOP_12" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Green Pepper</div>
+                    <div name="Roma Tomatoes" id="CYOP_13" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Roma Tomatoes</div>
+                    <div name="Black Olives" id="CYOP_14" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Black Olives</div>
 
-                    <span id="CYOP_15" runat="server" class="btn CYOP-Button" value=""     >Jalapeno Peppers</span>
-                    <span id="CYOP_16" runat="server" class="btn CYOP-Button" value=""     >Banana Peppers</span>
-                    <span id="CYOP_17" runat="server" class="btn CYOP-Button" value=""     >Baby Portabella</span>
-                    <span id="CYOP_18" runat="server" class="btn CYOP-Button" value=""     >Mushrooms</span>
+                    <div name="Jalapeno Peppers" id="CYOP_15" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Jalapeno Peppers</div>
+                    <div name="Banana Peppers" id="CYOP_16" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Banana Peppers</div>
+                    <div name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</div>
 
                     <div>
                         <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-danger" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />

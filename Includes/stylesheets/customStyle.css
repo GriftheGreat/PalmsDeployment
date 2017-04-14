@@ -89,7 +89,7 @@ ul.nav a:hover {
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 
 =======
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -97,7 +97,7 @@ ul.nav a:hover {
         transition: 0s;
     }
 }
->>>>>>> origin/master
+>>>>>>> origin/master*/
 
 .front {
 	overflow: hidden;
@@ -153,14 +153,6 @@ ul.nav a:hover {
     bottom: 1px;
 }
 
-.papaJohnProduct:hover {
-<<<<<<< HEAD
- /*   Try to remember why this is here, or delete */
-=======
-
->>>>>>> origin/master
-}
-
 .papaJohnFront, .papaJohnBack {
     border-radius: 12px;
     border-style: solid;
@@ -186,6 +178,7 @@ ul.nav a:hover {
 /* Modal code starts here */
 .modal-content {
     background-color: sandybrown;
+
 }
 
 .modalButton {
@@ -211,18 +204,61 @@ ul.nav a:hover {
 }
 /* Modal code ends here */
 
-<<<<<<< HEAD
-
 /* Create Your Own Pizza modal starts here */
-=======
-/* Create Your Own Pizza modal */
->>>>>>> origin/master
+
+.CYOP-Header {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 50pt; 
+}
+
+.CYOP-Header3 {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 125pt; 
+}
+
 .CYOP-Button {
     border: 1px solid rgb(128, 128, 128);
     border-radius: 10px;
-    font-size: 16pt;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
     margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
 }
+
+#modalCreateYourOwnPizza .modal-content {
+    padding-bottom: 30px;
+}
+
+.CYOP-Button-Special {
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
+    margin-bottom: px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
+.CYOP-placeholder {
+    /*border: 1px solid rgb(128, 128, 128);*/
+    /*border-radius: 10px;*/
+    background-color: sandybrown;
+    color: sandybrown;
+    display: block;
+    float: left;
+    /*font-size: 2.8vmin; */
+    margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
 
 .CYOP-Button-focus {
     background-color: red;
@@ -242,8 +278,6 @@ ul.nav a:hover {
 <<<<<<< HEAD
 /* Create Your Own Pizza modal ends here */
 
-=======
->>>>>>> origin/master
 
 /* For the amount of products in the Cart */
 .badge {

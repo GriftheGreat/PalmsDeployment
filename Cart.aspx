@@ -18,6 +18,10 @@
            
         }
 
+        .food-name {
+            font-size: 28px;
+            font-weight: bold;
+        }
 
         .card-front {
             margin-right: 40px;
@@ -26,28 +30,6 @@
             display: inline-block;
             float: left;
         }
-
-        /*.card-front-name
-        {
-            position: absolute;
-            top: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
-
-        .card-front-price
-        {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }*/
 
         .item-detail-list
         {
@@ -220,8 +202,8 @@
                             <div class="front card-front <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
                             </div>
-                            <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name") %>' />
-                            <asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />
+                            <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
+                        <!--<asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />-->
 
                             <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_non_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
@@ -230,10 +212,9 @@
                             <div class="item-detail-list">
                                 <asp:Repeater ID="rptDetails" runat="server" OnItemDataBound="rptDetails_ItemDataBound">
                                     <ItemTemplate>
-<%--                                        <asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />--%>
+                                    <%--<asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />--%>
                                         <asp:Label         ID="Label1"    runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
-                                        <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' />
-                                        <br />
+                                        <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' /><br />
 <%-- (use div like menu...?)
     if...group name and others have same group name... make radio button else make use checkbox.
     if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>

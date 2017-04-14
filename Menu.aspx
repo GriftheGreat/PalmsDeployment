@@ -279,9 +279,9 @@
                                 <ItemTemplate>
                                     <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
                                         <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
-                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
-    <asp:Label   ID="lbl1"                runat="server" Text='<%# Eval("group_name") %>' />
+                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text= '<%# Eval("detail_descr") %>' />
+                                        <asp:Label       ID="lblDetailCost"   runat="server" Text= '<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <asp:Label       ID="lbl1"            runat="server" Text= '<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
                                     </div>
@@ -291,7 +291,7 @@
                             </asp:Repeater>
                         </div>
                         <div style="display:inline-block; padding-left:20;">
-                            <p id="modalDesc"> Description</p>
+                            <p id="modalDesc">Description</p>
                         </div>
                     </div>
                     <asp:Button ID="btnAdd2" runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
@@ -327,23 +327,23 @@
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Sausage</span>
                     <br />--%>
 
-                    <span id="CYOP_6"  runat="server" class="btn CYOP-Button" value=""     >Bacon</span>
-                    <span id="CYOP_7"  runat="server" class="btn CYOP-Button" value=""     >Beef</span>
-                    <span id="CYOP_8"  runat="server" class="btn CYOP-Button" value=""     >Canadian Bacon</span>
-                    <span id="CYOP_9"  runat="server" class="btn CYOP-Button" value=""     >Italian Sausage</span>
-                    <span id="CYOP_10" runat="server" class="btn CYOP-Button" value=""     >Pepperoni</span>
+                    <span id="CYOP_6"  runat="server" class="btn CYOP-Button" value="">Bacon</span>
+                    <span id="CYOP_7"  runat="server" class="btn CYOP-Button" value="">Beef</span>
+                    <span id="CYOP_8"  runat="server" class="btn CYOP-Button" value="">Canadian Bacon</span>
+                    <span id="CYOP_9"  runat="server" class="btn CYOP-Button" value="">Italian Sausage</span>
+                    <span id="CYOP_10" runat="server" class="btn CYOP-Button" value="">Pepperoni</span>
 
                     <h3>Fresh Vegetables</h3>
-                    <span id="CYOP_11" runat="server" class="btn CYOP-Button" value=""     >Fresh Sliced Onions</span>
-                    <span id="CYOP_12" runat="server" class="btn CYOP-Button" value=""     >Green Pepper</span>
-                    <span id="CYOP_13" runat="server" class="btn CYOP-Button" value=""     >Roma Tomatoes</span>
-                    <span id="CYOP_14" runat="server" class="btn CYOP-Button" value=""     >Black Olives</span>
+                    <span id="CYOP_11" runat="server" class="btn CYOP-Button" value="">Fresh Sliced Onions</span>
+                    <span id="CYOP_12" runat="server" class="btn CYOP-Button" value="">Green Pepper</span>
+                    <span id="CYOP_13" runat="server" class="btn CYOP-Button" value="">Roma Tomatoes</span>
+                    <span id="CYOP_14" runat="server" class="btn CYOP-Button" value="">Black Olives</span>
                     <br />
 
-                    <span id="CYOP_15" runat="server" class="btn CYOP-Button" value=""     >Jalapeno Peppers</span>
-                    <span id="CYOP_16" runat="server" class="btn CYOP-Button" value=""     >Banana Peppers</span>
-                    <span id="CYOP_17" runat="server" class="btn CYOP-Button" value=""     >Baby Portabella</span>
-                    <span id="CYOP_18" runat="server" class="btn CYOP-Button" value=""     >Mushrooms</span>
+                    <span id="CYOP_15" runat="server" class="btn CYOP-Button" value="">Jalapeno Peppers</span>
+                    <span id="CYOP_16" runat="server" class="btn CYOP-Button" value="">Banana Peppers</span>
+                    <span id="CYOP_17" runat="server" class="btn CYOP-Button" value="">Baby Portabella</span>
+                    <span id="CYOP_18" runat="server" class="btn CYOP-Button" value="">Mushrooms</span>
 
                     <div>
                         <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-danger" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />

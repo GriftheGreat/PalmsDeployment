@@ -167,6 +167,26 @@
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 
+       //     private string currentDetail = "";
+       //     private int currentDetailCounter = 0;
+       //     protected void rptDetailList_ItemDataBound(object sender, RepeaterItemEventArgs e)
+       // {
+       // if (string.IsNullOrEmpty(currentDetail))
+       // {
+       //     currentDetail = ((DataRowView)e.Item.DataItem)["group_name"].ToString();
+       //     currentDetailCounter = 0;
+       // }
+       // else if (currentDetail != ((DataRowView)e.Item.DataItem)["group_name"].ToString() && currentDetailCounter > 1)
+       // {
+       //     ((Panel)e.Item.FindControl("pnlDetail")).CssClass += " BorderAboveDetail";
+       //     currentDetail = ((DataRowView)e.Item.DataItem)["group_name"].ToString();
+       //     currentDetailCounter = 0;
+       // }
+       // currentDetailCounter += 1;
+       // }
+
+
+
             foodID = null;// clear global variable
         }
 
@@ -385,15 +405,16 @@
                     <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
                     <div>
                         <div class="item-detail-list" style="display:inline-block">
-                            <asp:Repeater    ID="rptDetailList" runat="server" OnItemDataBound="rptDetailList_ItemDataBound" ><%-- set DataSource in Page_Load --%>
+                            <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
                                 <ItemTemplate>
-<%-- need to be panel ID="pnlDetail" --%>                                    <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
+                                    <%-- <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>--%>
+                                    <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
 <%-- need identifier on this element for jquery --%>                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
                                         <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' group='<%# Eval("group_name") %>' />
                                         <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
                                         <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
-                                    </div>
+                                    </asp:Panel>
     <%-- if...group name... make radio button too.  (Use javascript to choose if only ONE with that group name corrosponds to chosen food use checkbox else use radio button).
         if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>
                                 </ItemTemplate>

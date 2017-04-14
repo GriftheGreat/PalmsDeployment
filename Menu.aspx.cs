@@ -26,8 +26,6 @@ public partial class Menu : System.Web.UI.Page
 
     #region Variables
     public string currentBigCategory = "";
-    private string currentDetail = "";
-    private int currentDetailCounter = 0;
     #endregion
 
     public List<DataTable> MenuData;
@@ -219,22 +217,6 @@ public partial class Menu : System.Web.UI.Page
                                                        food["food_name"].ToString(),
                                                        Convert.ToSingle(food["food_cost"].ToString())));
         MyOrder = tempOrder;
-    }
-
-    protected void rptDetailList_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (string.IsNullOrEmpty(currentDetail))
-        {
-            currentDetail = ((DataRow)e.Item.DataItem)["group_name"].ToString();
-            currentDetailCounter = 0;
-        }
-        else if (currentDetail != ((DataRow)e.Item.DataItem)["group_name"].ToString() && currentDetailCounter > 1)
-        {
-            ((Panel)e.Item.FindControl("pnlDetail")).CssClass += " BorderAboveDetail";
-            currentDetail = ((DataRow)e.Item.DataItem)["group_name"].ToString();
-            currentDetailCounter = 0;
-        }
-        currentDetailCounter += 1;
     }
 
     protected void AddPizzaToCart_Click(object sender, EventArgs e)

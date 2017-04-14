@@ -16,7 +16,7 @@
             outline: none;
             width: 100%;
             height: 100%;
-            color: sandybrown
+            color: sandybrown;
             background-color: darkred;
             font-weight: bold;   
 
@@ -347,6 +347,13 @@
                     <span id="CYOP_4"  runat="server" class="btn CYOP-Button" value=""     >Pan Crust</span><span style="width:10px;">&nbsp;</span>
                     <span id="CYOP_5"  runat="server" class="btn CYOP-Button" value=""     >Stuffed Crust $1.00</span>
                     <br />
+                     
+                    <h1>Choose Your Sauce:</h1>
+                    <span id="CYOP_18"  runat="server" class="btn CYOP-Button CYOP-Button-focus" value="true" >Original</span><span style="width:10px;">&nbsp;</span>
+                    <span id="CYOP_19"  runat="server" class="btn CYOP-Button" value=""     >Ranch</span><span style="width:10px;">&nbsp;</span>
+                    <span id="CYOP_20"  runat="server" class="btn CYOP-Button" value=""     >BBQ</span>
+                    <span id="CYOP_21"  runat="server" class="btn CYOP-Button" value=""     >Spinach Alfredo</span>
+                    <br />
 
                     <h1>Choose Your Toppings:</h1>
                     <h3>Real Meat</h3>
@@ -355,7 +362,7 @@
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Sausage</span>
                     <br />--%>
 
-                    <span id="CYOP_6"  runat="server" class="btn CYOP-Button" value=""     >Bacon</span>
+                    <span id="CYOP_6"  runat="server" class="btn CYOP-Button" value=""  state="whole"   >Bacon</span>
                     <span id="CYOP_7"  runat="server" class="btn CYOP-Button" value=""     >Beef</span>
                     <span id="CYOP_8"  runat="server" class="btn CYOP-Button" value=""     >Canadian Bacon</span>
                     <span id="CYOP_9"  runat="server" class="btn CYOP-Button" value=""     >Italian Sausage</span>
@@ -370,8 +377,7 @@
 
                     <span id="CYOP_15" runat="server" class="btn CYOP-Button" value=""     >Jalapeno Peppers</span>
                     <span id="CYOP_16" runat="server" class="btn CYOP-Button" value=""     >Banana Peppers</span>
-                    <span id="CYOP_17" runat="server" class="btn CYOP-Button" value=""     >Baby Portabella</span>
-                    <span id="CYOP_18" runat="server" class="btn CYOP-Button" value=""     >Mushrooms</span>
+                    <span id="CYOP_17" runat="server" class="btn CYOP-Button" value=""     >Baby Portabella Mushrooms</span>
 
                     <div>
                         <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-danger" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />

@@ -12,12 +12,10 @@ public partial class Menu : System.Web.UI.Page
     {
         get
         {
-            //Response.Write("*get::" + (Session["order"] != null ? "yep" : "null") + "*<br />\n");
             return Session["order"] != null ? (Order)Session["order"] : null;
         }
         set
         {
-            //Response.Write("*set::" + (value != null ? "yep->"+value.Type : "null") + "*<br />\n");
             Session["order"] = value;
             Session["orderItemNumber"] = value.Order_Elements != null ? value.Order_Elements.Count.ToString() : "0";
         }
@@ -220,7 +218,6 @@ public partial class Menu : System.Web.UI.Page
     protected void AddPizzaToCart_Click(object sender, EventArgs e)
     {
         Order tempOrder = MyOrder;
-        DataRow newRow;
         DataTable details = new DataTable();
         details.Columns.Add("chosen");
         details.Columns.Add("cost");
@@ -228,122 +225,68 @@ public partial class Menu : System.Web.UI.Page
         details.Columns.Add("id");
         details.Columns.Add("groupName");
 
-        #region did
-        #region sizes
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_1.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "-6.5";
-        newRow["description"] = this.CYOP_1.InnerHtml;
-        newRow["id"]          = "177";
-        newRow["groupName"]   = "size";
-        details.Rows.Add(newRow);
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_2.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_2.InnerHtml;
-        newRow["id"]          = "178";
-        newRow["groupName"]   = "size";
-        details.Rows.Add(newRow);
+        #region sizes
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_1.Attributes["value"] == "true" ? "Y" : "N", "-6.5", "8\"", "177", "size"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_2.Attributes["value"] == "true" ? "Y" : "N", "0", "16\"", "178", "size"));
         #endregion
 
         #region crusts
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_3.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_3.InnerHtml;
-        newRow["id"]          = "51";
-        newRow["groupName"]   = "cru";
-        details.Rows.Add(newRow);
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_3.Attributes["value"] == "true" ? "Y" : "N", "0", "Thin Crust", "51", "cru"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_4.Attributes["value"] == "true" ? "Y" : "N", "0", "Pan Crust", "77", "cru"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_5.Attributes["value"] == "true" ? "Y" : "N", "1", "Stuffed Crust", "191", "cru"));
+        #endregion
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_4.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_4.InnerHtml;
-        newRow["id"]          = "77";
-        newRow["groupName"]   = "cru";
-        details.Rows.Add(newRow);
-
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_5.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "1";
-        newRow["description"] = this.CYOP_5.InnerHtml;
-        newRow["id"]          = "191";
-        newRow["groupName"]   = "cru";
-        details.Rows.Add(newRow);
+        #region sauce
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_18.Attributes["value"] == "true" ? "Y" : "N", "0", "Original Pizza Sauce", "183", "sau"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_19.Attributes["value"] == "true" ? "Y" : "N", "0", "Ranch Sauce", "94", "sau"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_20.Attributes["value"] == "true" ? "Y" : "N", "0", "BBQ Sauce", "85", "sau"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_21.Attributes["value"] == "true" ? "Y" : "N", "0", "Spinach Alfredo Sauce", "89", "sau"));
         #endregion
 
         #region meats
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_6.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_6.InnerHtml;
-        newRow["id"]          = "40";
-        newRow["groupName"]   = "";
-        details.Rows.Add(newRow);
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_7.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_7.InnerHtml;
-        newRow["id"]          = "72";
-        newRow["groupName"]   = "";
-        details.Rows.Add(newRow);
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_6.Attributes["state"] == "whole" || this.CYOP_6.Attributes["state"] == "left" ? "Y" : "N", "0", "Bacon (left)", "198", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_6.Attributes["state"] == "whole" || this.CYOP_6.Attributes["state"] == "right" ? "Y" : "N", "0", "Bacon", "40", ""));
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_8.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "1";
-        newRow["description"] = this.CYOP_8.InnerHtml;
-        newRow["id"]          = "75";
-        newRow["groupName"]   = "";
-        details.Rows.Add(newRow);
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_7.Attributes["state"] == "whole" || this.CYOP_7.Attributes["state"] == "left" ? "Y" : "N", "0", "Beef (left)", "207", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_7.Attributes["state"] == "whole" || this.CYOP_7.Attributes["state"] == "right" ? "Y" : "N", "0", "Beef", "72", ""));
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_9.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_9.InnerHtml;
-        newRow["id"]          = "74";
-        newRow["groupName"]   = "";
-        details.Rows.Add(newRow);
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_8.Attributes["state"] == "whole" || this.CYOP_8.Attributes["state"] == "left" ? "Y" : "N", "0", "Canadian Bacon (left)", "209", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_8.Attributes["state"] == "whole" || this.CYOP_8.Attributes["state"] == "right" ? "Y" : "N", "0", "Canadian Bacon", "75", ""));
 
-        newRow = details.NewRow();
-        newRow["chosen"]      = (this.CYOP_10.Attributes["value"] == "true" ? "Y" : "N");
-        newRow["cost"]        = "0";
-        newRow["description"] = this.CYOP_10.InnerHtml;
-        newRow["id"]          = "64";
-        newRow["groupName"]   = "";
-        details.Rows.Add(newRow);
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_9.Attributes["state"] == "whole" || this.CYOP_9.Attributes["state"] == "left" ? "Y" : "N", "0", "Italian Sausage (left)", "208", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_9.Attributes["state"] == "whole" || this.CYOP_9.Attributes["state"] == "right" ? "Y" : "N", "0", "Italian Sausage", "74", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_10.Attributes["state"] == "whole" || this.CYOP_10.Attributes["state"] == "left" ? "Y" : "N", "0", "Pepperoni (left)", "201", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_10.Attributes["state"] == "whole" || this.CYOP_10.Attributes["state"] == "right" ? "Y" : "N", "0", "Pepperoni", "64", ""));
         #endregion
 
-        // 177	8"	-6.5	size
-        // 178	16"	0	size
+        #region vegetables 
 
-        // 51	Thin Crust	0	cru
-        // 77	Pan Crust	0	cru
-        // 191	Stuffed Crust	1	cru
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_11.Attributes["state"] == "whole" || this.CYOP_11.Attributes["state"] == "left" ? "Y" : "N", "0", "Fresh-Sliced Onions (left)", "199", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_11.Attributes["state"] == "whole" || this.CYOP_11.Attributes["state"] == "right" ? "Y" : "N", "0", "Fresh-Sliced Onions", "62", ""));
 
-        // 40	Bacon	0	
-        // 72	Beef	0	
-        // 75	Canadian Bacon	0	
-        // 74	Italian Sausage	0	
-        // 64	Pepperoni	0	
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_12.Attributes["state"] == "whole" || this.CYOP_12.Attributes["state"] == "left" ? "Y" : "N", "0", "Green Peppers (left)", "200", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_12.Attributes["state"] == "whole" || this.CYOP_12.Attributes["state"] == "right" ? "Y" : "N", "0", "Green Peppers", "63", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_13.Attributes["state"] == "whole" || this.CYOP_13.Attributes["state"] == "left" ? "Y" : "N", "0", "Roma Tomatoes (left)", "202", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_13.Attributes["state"] == "whole" || this.CYOP_13.Attributes["state"] == "right" ? "Y" : "N", "0", "Roma Tomatoes", "65", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_14.Attributes["state"] == "whole" || this.CYOP_14.Attributes["state"] == "left" ? "Y" : "N", "0", "Black Olives (left)", "203", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_14.Attributes["state"] == "whole" || this.CYOP_14.Attributes["state"] == "right" ? "Y" : "N", "0", "Black Olives", "66", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_15.Attributes["state"] == "whole" || this.CYOP_15.Attributes["state"] == "left" ? "Y" : "N", "0", "Jalapeno (left)", "204", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_15.Attributes["state"] == "whole" || this.CYOP_15.Attributes["state"] == "right" ? "Y" : "N", "0", "Jalapeno", "67", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_16.Attributes["state"] == "whole" || this.CYOP_16.Attributes["state"] == "left" ? "Y" : "N", "0", "Banana Peppers (left)", "205", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_16.Attributes["state"] == "whole" || this.CYOP_16.Attributes["state"] == "right" ? "Y" : "N", "0", "Banana Peppers", "68", ""));
+
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_17.Attributes["state"] == "whole" || this.CYOP_17.Attributes["state"] == "left" ? "Y" : "N", "0", "Baby portabello Mushrooms (left)", "206", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.CYOP_17.Attributes["state"] == "whole" || this.CYOP_17.Attributes["state"] == "right" ? "Y" : "N", "0", "Baby portabello Mushrooms", "69", ""));
+
         #endregion
-        // 50	Black Olives	0	
-        // 62	Fresh-Sliced Onions	0	
-        // 63	Green Peppers	0	
-        // 65	Roma Tomatoes	0	
-        // 67	Jalapeno	0	
-        // 68	Banana Peppers	0	
-        // 69	Baby portabello Mushrooms	0	
 
-        // 84	Ranch Sauce	0	sau
-        // 85	BBQ Sauce	0	sau
-        // 89	Spinach Alfredo Sauce	0	sau
-        // 183	Original Pizza Sauce	0	sau
-        //...
-
-
-        ////121	17	Create Your Own		11.99	Y		Pizza
 
         if (tempOrder == null)
         {
@@ -353,13 +296,24 @@ public partial class Menu : System.Web.UI.Page
         tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
         tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
-        //tempOrder.Order_Elements.Add(new Order_Element("Y",
-        //                                               8888,
-        //                                               "",
-        //                                               "",
-        //                                               details,
-        //                                               "Create Your Own",
-        //                                               99.99f));
+        tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
+                                               121, //id 
+                                               "",// image path
+                                               "", // food description
+                                               details, //detail array
+                                               "Create Your Own", // food name
+                                               11.99f)); //price
+
         MyOrder = tempOrder;
     }
+    DataRow get_new_row(DataRow newRow, string chosen, string cost, string description,string id, string groupname)
+    {
+        newRow["chosen"]      = chosen;
+        newRow["cost"]        = cost;
+        newRow["description"] = this.CYOP_10.InnerHtml;
+        newRow["id"]          = "64";
+        newRow["groupName"]   = "";
+        return newRow;
+    }
 }
+

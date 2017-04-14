@@ -276,7 +276,7 @@ public class TimeSlots : System.Web.Services.WebService
         string query = @"SELECT 'ASAP' AS time_slot, 'ASAP' AS time_slot_id_pk, 1 AS sort
                            FROM dual
                           UNION
-                         SELECT DISTINCT ts.time_slot_start_time || '-' || ts.time_slot_end_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort
+                         SELECT DISTINCT ts.time_slot_start_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort       --|| '-' || ts.time_slot_end_time 
                            FROM ticket tk
                            JOIN time_slot ts
                              ON ts.time_slot_id_pk = tk.time_slot_id_fk

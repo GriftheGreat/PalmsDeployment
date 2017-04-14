@@ -114,8 +114,16 @@ public partial class Cart : System.Web.UI.Page
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
-        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
-        rpt.DataBind();
+        if (((Order_Element)e.Item.DataItem).ID == 121)
+        {
+            rpt.DataSource = null;
+        }
+        else
+        {
+            rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+            rpt.DataBind();
+        }
+
     }
 
     protected void rptDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)

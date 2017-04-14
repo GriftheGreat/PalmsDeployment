@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Data;
 using System.Configuration;
 using Oracle.DataAccess.Client;

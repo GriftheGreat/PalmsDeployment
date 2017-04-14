@@ -29,7 +29,7 @@
                         <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="slideImages" />
                         <div class="carousel-caption slideShowCaption">
                             <h2>Fresh Garden Food</h2>
-                            <p>Food is good for you, so why not enjoy it to the fullest. - Ralph Etienne</p>
+                            <p>Food is good for you, so why not enjoy it to the fullest (lol). - Ralph Etienne</p>
                         </div>
                     </div>
                     <div class="item carouselWrapper">

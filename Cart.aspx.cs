@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using System.Linq;
+using System.Web.UI;
 
 public partial class Cart : System.Web.UI.Page
 {
@@ -20,6 +21,11 @@ public partial class Cart : System.Web.UI.Page
     }
     #endregion
 
+    #region Variables
+    private string currentDetail = "";
+    private int    currentDetailCounter = 0;
+    #endregion
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (MyOrder != null && MyOrder.Order_Elements != null)
@@ -31,7 +37,7 @@ public partial class Cart : System.Web.UI.Page
                 {
                     foreach (RepeaterItem detailitem in ((Repeater)item.FindControl("rptDetails")).Items)
                     {
-                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("chbAdded")).Checked;
+                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("Added")).Checked;
                     }
                 }
                 MyOrder = tempOrder;
@@ -114,29 +120,24 @@ public partial class Cart : System.Web.UI.Page
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
-        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;//.OrderBy(detail => (detail.GroupName.Contains("X") ? "" : detail.GroupName));
         rpt.DataBind();
     }
 
     protected void rptDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        if(((List<Detail>)((Repeater)sender).DataSource).Count(detail => !string.IsNullOrEmpty(detail.GroupName) && detail.GroupName == ((Detail)e.Item.DataItem).GroupName) > 1)
+        if (string.IsNullOrEmpty(currentDetail))
         {
-            RadioButton r = new RadioButton();
-            r.ID = "Added";
-            r.Text = ((Detail)e.Item.DataItem).Description;
-            r.Checked = ((Detail)e.Item.DataItem).Chosen;
-            r.Attributes["name"] = ((Detail)e.Item.DataItem).GroupName;
-            e.Item.Controls.AddAt(0, r);
+            currentDetail        = ((Detail)e.Item.DataItem).GroupName;
+            currentDetailCounter = 0;
         }
-        else
+        else if(currentDetail != ((Detail)e.Item.DataItem).GroupName && currentDetailCounter > 1)
         {
-            CheckBox c = new CheckBox();
-            c.ID = "Added";
-            c.Text = ((Detail)e.Item.DataItem).Description;
-            c.Checked = ((Detail)e.Item.DataItem).Chosen;
-            e.Item.Controls.AddAt(0, c);
+            ((Panel)e.Item.FindControl("pnlDetail")).CssClass += " BorderAboveDetail";
+            currentDetail        = ((Detail)e.Item.DataItem).GroupName;
+            currentDetailCounter = 0;
         }
+        currentDetailCounter += 1;
     }
 
     protected void lnkGoPay_Click(object sender, EventArgs e)

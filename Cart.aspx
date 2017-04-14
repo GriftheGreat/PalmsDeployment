@@ -59,6 +59,11 @@
             
         }
 
+        .sub-detail
+        {
+            padding-left: 20px;
+        }
+
 
         .remove-button
         {
@@ -128,10 +133,74 @@
         {
             color: rgb(200, 25, 25);
         }
+
+        .BorderAboveDetail
+        {
+            border-top: 1px solid gray;
+            padding-top: 5px;
+        }
     </style>
 </asp:Content>
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">
+    <%-- checkbox clicks --%>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $('.item-detail-list input[type="checkbox"]').each(function ()
+            {
+                var chb = $(this);
+                var chbGroup = chb.parent().attr('group');
+                if (chbGroup == "") // if this detail has no group
+                {
+                    // Be normal
+                }
+                else
+                {
+                    if (chbGroup.indexOf('X')) // if this detail is an extra
+                    {
+                        // Be normal
+                        chb.addClass('sub-detail');
+
+                        var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
+                        //chb.parent().parent().siblings().find('input[type="hidden"]').each(function ()
+                        //{
+                        //    if($(this).val() == id_of_parent_detail)
+                        //    {
+                        //        var chbParentchb = $(this).parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        //    }
+                        //});
+                        var chbParentchb = chb.parent().parent().siblings().find('input[type="hidden"][value="' + id_of_parent_detail + '"]').first().parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        
+                        chbParentchb.on('click', function ()
+                        {
+                            var id = $(this).parent().siblings('input[type="hidden"]').val();
+                            var divOfextra = $(this).parent().parent().siblings().find('span[group*="' + id + '"]').first().parent();
+                            if (divOfextra.is(':visible'))
+                            {
+                                divOfextra.hide();
+                            }
+                            else
+                            {
+                                divOfextra.show();
+                            }
+                        });
+                    }
+                    else if (chb.parent().parent().siblings().find('span[group="'+chb.attr('group')+'"]').toArray().length > 1) // if there are others in the same group
+                    {
+                        chb.parent().parent().siblings().find('span[group="' + chb.attr('group') + '"] input[type="checkbox"]').prop('checked', '');
+                        chb.prop('checked', 'checked');
+                    }
+                    else // if this is the only detail with that group
+                    {
+                        // Be normal
+                    }
+                }
+                var radioName = $(this).attr('name');
+                $(this).attr('name', radioName.substr(radioName.lastIndexOf('$') + 1));
+            });
+        });
+    </script>
     <script type="text/javascript">
         function pickLocation(ddl)
         {
@@ -230,10 +299,14 @@
                             <div class="item-detail-list">
                                 <asp:Repeater ID="rptDetails" runat="server" OnItemDataBound="rptDetails_ItemDataBound">
                                     <ItemTemplate>
-<%--                                        <asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />--%>
-                                        <asp:Label         ID="Label1"    runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
-                                        <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' />
-                                        <br />
+<%-- Panels generate as a div --%>
+                                        <asp:Panel  ID="pnlDetail" runat="server">
+                                            <%-- <span> is generated here --%>
+                                            <asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' group='<%# Eval("GroupName") %>' />
+                                            <asp:Label         ID="Label1"    runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
+                                             <%-- </span> is generated here --%>
+                                           <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' />
+                                        </asp:Panel>
 <%-- (use div like menu...?)
     if...group name and others have same group name... make radio button else make use checkbox.
     if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>

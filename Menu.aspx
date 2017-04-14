@@ -85,6 +85,11 @@
             overflow: auto;
             text-align: left;
         }
+
+        .sub-detail
+        {
+            padding-left: 20px;
+        }
     </style>
 </asp:Content>
 
@@ -219,17 +224,63 @@
             $('#modalOrderType').modal('hide');
         }
     </script>
+    <%-- checkbox clicks --%>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $('.item-detail-list input[type="checkbox"]').each(function ()
+            {
+                var chb = $(this);
+                var chbGroup = chb.parent().attr('group');
+                if (chbGroup == "") // if this detail has no group
+                {
+                    // Be normal
+                }
+                else
+                {
+                    if (chbGroup.indexOf('X')) // if this detail is an extra
+                    {
+                        // Be normal
+                        chb.addClass('sub-detail');
 
-    
-    <%-- Jacob, Here's where the script to handle the button listener --%>
-    <script>
-        function myFunction() {
-            var x = document.getElementById("mushroomsBtn").value;
-
-            //document.getElementById("demo").innerHTML = x;
-
-            window.alert(x);
-        }
+                        var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
+                        //chb.parent().parent().siblings().find('input[type="hidden"]').each(function ()
+                        //{
+                        //    if($(this).val() == id_of_parent_detail)
+                        //    {
+                        //        var chbParentchb = $(this).parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        //    }
+                        //});
+                        var chbParentchb = chb.parent().parent().siblings().find('input[type="hidden"][value="' + id_of_parent_detail + '"]').first().parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        
+                        chbParentchb.on('click', function ()
+                        {
+                            var id = $(this).parent().siblings('input[type="hidden"]').val();
+                            var divOfextra = $(this).parent().parent().siblings().find('span[group*="' + id + '"]').first().parent();
+                            if (divOfextra.is(':visible'))
+                            {
+                                divOfextra.hide();
+                            }
+                            else
+                            {
+                                divOfextra.show();
+                            }
+                        });
+                    }
+                    else if (chb.parent().parent().siblings().find('span[group="'+chb.attr('group')+'"]').toArray().length > 1) // if there are others in the same group
+                    {
+                        chb.parent().parent().siblings().find('span[group="' + chb.attr('group') + '"] input[type="checkbox"]').prop('checked', '');
+                        chb.prop('checked', 'checked');
+                    }
+                    else // if this is the only detail with that group
+                    {
+                        // Be normal
+                    }
+                }
+                var radioName = $(this).attr('name');
+                $(this).attr('name', radioName.substr(radioName.lastIndexOf('$') + 1));
+            });
+        });
     </script>
 </asp:Content>
 
@@ -334,13 +385,12 @@
                     <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
                     <div>
                         <div class="item-detail-list" style="display:inline-block">
-                            <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
+                            <asp:Repeater    ID="rptDetailList" runat="server" OnItemDataBound="rptDetailList_ItemDataBound" ><%-- set DataSource in Page_Load --%>
                                 <ItemTemplate>
-                                    <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
-                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
+<%-- need to be panel ID="pnlDetail" --%>                                    <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
+<%-- need identifier on this element for jquery --%>                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' group='<%# Eval("group_name") %>' />
                                         <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
-    <asp:Label   ID="lbl1"                runat="server" Text='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
                                     </div>

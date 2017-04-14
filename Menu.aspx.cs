@@ -143,6 +143,8 @@ public partial class Menu : System.Web.UI.Page
             {
                 // sort column makes sure this is done at last item being bound
                 e.Item.FindControl("plhBigCategoryEnd").Visible = true;
+                e.Item.FindControl("plhNormalHeader").Visible = false;
+                e.Item.FindControl("plhBigHeader").Visible = true;
                 currentBigCategory = ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString();
             }
             else if (currentBigCategory != ((DataRowView)e.Item.DataItem)["food_type_meal"].ToString())

@@ -149,6 +149,7 @@
             {
                 var DetailDiv = $(this);
                 var hidFoodIds = DetailDiv.attr("detail");
+                
                 if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
                 {
                     DetailDiv.show();
@@ -157,9 +158,11 @@
                 {
                     DetailDiv.hide();
                 }
+                
                 DetailDiv.children()[1].checked = false;
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
+            
        //     private string currentDetail = "";
        //     private int currentDetailCounter = 0;
        //     protected void rptDetailList_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -179,12 +182,15 @@
        // }
             foodID = null;// clear global variable
         }
+        
         function AccordionTrigger2(open)
         {
             var clickedElement = $('div[AccordionControl2="' + open + '"]').first();
+            
             $('div[AccordionControl2]:visible').each(function (index) {
                 $( this ).slideUp();
             });
+            
             if (clickedElement.is(":visible"))
             {
                 clickedElement.slideUp();
@@ -192,6 +198,7 @@
             else
             {
                 clickedElement.slideDown();
+                
                 setTimeout(function () {
                     $('body,html').animate({
                         scrollTop: clickedElement.offset().top - 100
@@ -199,12 +206,15 @@
                 }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
             }
         }
+        
         function AccordionTrigger(open)
         {
             var clickedElement = $('div[AccordionControl="' + open + '"]').first();
+            
             $('div[AccordionControl]:visible').each(function (index) {
                 $( this ).slideUp();
             });
+            
             if (clickedElement.is(":visible"))
             {
                 clickedElement.slideUp();
@@ -212,6 +222,7 @@
             else
             {
                 clickedElement.slideDown();
+                
                 setTimeout(function () {
                     $('body,html').animate({
                         scrollTop: clickedElement.offset().top - 100
@@ -219,16 +230,20 @@
                 }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
             }
         }
+        
         function ClickOrderTypeChosen(type)
         {
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
         }
+        
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
         function ToggleCYOP(button) {
             var type; // The value html attribute for the button clicked
+            
             type = button.getAttribute("type");
+            
             // Toggle the value of the clicked button
             $("div[type='" + type + "']").each(
                 function () {
@@ -250,6 +265,7 @@
         // to toggle beween the detail being applied to the left, right, or all of the pizza
         function ToggleCYOPHalves(button) {
             var type; // The value html attribute for the button clicked
+            
             if (button.getAttribute("name") != "Baby Portabella Mushrooms")
             {
                 if (button.getAttribute("state") == "none") {
@@ -324,6 +340,7 @@
                     {
                         // Be normal
                         chb.addClass('sub-detail');
+                        
                         var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
                         //chb.parent().parent().siblings().find('input[type="hidden"]').each(function ()
                         //{

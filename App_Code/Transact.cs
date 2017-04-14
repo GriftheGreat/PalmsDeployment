@@ -287,7 +287,8 @@ public class TimeSlots : System.Web.Services.WebService
                        ORDER BY sort";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query, myConnection);
-
+        //   var  ts.time_slot_start_time
+        //  (the_num(1-2 char of(var)) %12)+1 || 3-5 char of(var) || case when the_num(1-2 char of(var)) ... then "" else "" end
         try
         {
             myConnection.Open();

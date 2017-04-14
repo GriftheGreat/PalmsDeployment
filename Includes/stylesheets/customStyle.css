@@ -38,18 +38,16 @@ ul.nav a:hover {
     color: rgba(272,120,75, .99) !important;
 }
 
-.navbar-brand {
+.logo {
     position: absolute;
     top: 0px;
     left: 0px;
-    height: inherit !important;
+    margin-left: 32px;
     float: none !important;
     z-index: 10;
 }
 
-.slideShowCaption {
-    color: red;
-}
+
 /* Navigation bar css code ends here */
 
 /* Home page */
@@ -91,11 +89,15 @@ ul.nav a:hover {
     -moz-backface-visibility: hidden;
     backface-visibility: hidden;
 }
+/*<<<<<<< HEAD
+
+=======
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .front, .back {
         transition: 0s;
     }
 }
+>>>>>>> origin/master*/
 
 .front {
 	overflow: hidden;
@@ -151,10 +153,6 @@ ul.nav a:hover {
     bottom: 1px;
 }
 
-.papaJohnProduct:hover {
-
-}
-
 .papaJohnFront, .papaJohnBack {
     border-radius: 12px;
     border-style: solid;
@@ -176,6 +174,8 @@ ul.nav a:hover {
     font-size: 38pt;
 }
 
+
+/* Modal code starts here */
 .modal-content {
     background-color: sandybrown;
 
@@ -185,14 +185,11 @@ ul.nav a:hover {
     position: fixed;
     right: 25px;
     top: 110px;
-
 }
 
 .modal-dialog {
    max-width: 920px; 
-
 }
-
 
 .modal-header {
     border-bottom: none;
@@ -205,8 +202,10 @@ ul.nav a:hover {
     font-size: 40pt;
     border-bottom: none;
 }
+/* Modal code ends here */
 
-/* Create Your Own Pizza modal */
+/* Create Your Own Pizza modal starts here */
+
 .CYOP-Header {
     display: block;
     width: auto;
@@ -276,27 +275,54 @@ ul.nav a:hover {
 .CYOP-Button:focus {
     background-color: red;
 }
+/* Create Your Own Pizza modal ends here */
+
 
 /* For the amount of products in the Cart */
 .badge {
     background-color: indianred;
 }
 
-.carouselWrapper {
-    height: 400px;
+
+/* Slide show code starts here */
+
+.slideShowCaption {
+    background-color: white;
+    opacity: .6;
+    color: red;
+    
 }
 
 .slideImages {
     width: 100%;
-    height: 500px;
+    height: 696px !important;
+    position: relative;  
+    margin-bottom: 0px;
 }
 
 .carousel-indicators {
     bottom: 0;
 }
 
-.carousel .item {
-    width:100%; 
+.carousel-indicators li {
+    width: 14px;
+    height: 14px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    text-indent: 0;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    background-color: lightgray;
+    box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.5);    
+}
+
+.carousel-indicators .active {
+    width: 14px;
+    height: 14px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    background-color: sandybrown;
 }
 
 .carousel-caption h3:first-child {
@@ -310,19 +336,64 @@ ul.nav a:hover {
 .carousel-caption button {
   animation-delay: 3s;
 }
+/* Slide show code ends here */
 
-.bottomInfo {
-    /*background-color: red;*/
-    margin-top: 10px;
+
+/* Thumbnail images code starts here */
+.bottomImages {
     margin-bottom: 0px;
+    width: 80%;
 }
 
-.firstThumbnail, .secondThumbnail, .thirdThumbnail {
-    height: 266px !important;  
+.firstThumbnail, .secondThumbnail, .thirdThumbnail, .fourthThumbnail {
+    height: 220px !important;
+    width: 100% !important;
 }
 
 .thumbnail {
-    background-color: lightgray;
+    padding: 0px;
+    border-color: orangered;
+    /*background-color: rgba(13,86,55, .9);*/
+    border-width: 2px;
+    margin-top: -230px;
+    position: relative;
+    margin-bottom: 0px;
+    opacity: 0.95;
+}
+
+.thumbnail:hover {
+    opacity: 0.8;
+}
+
+.thumbnailCaption {
+    margin-top: -50px;
+    color: rgba(13,86,55, .9);
+    padding-bottom: 0px;
+    padding-left: 10px;
+}
+
+.thumbnailButton {
+    margin-top: -44px;
+    position: relative;
+    float: right;
+    margin-right: 10px;
+}
+
+
+
+/* Thumbnail images code ends here */
+
+
+/* All the media screen code starts here */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+   .front, .back {
+       border-radius: 12px;
+       border-style: solid;
+       border-width: 1px;
+       border-color: rgba(189,195,199, .5);
+       transition: transform 1s;
+       backface-visibility: hidden;
+   }
 }
 
 @media (max-width: 450px) {
@@ -332,11 +403,56 @@ ul.nav a:hover {
     .modalButton {
       width: 100%; 
   }
-
 }
+
 @media (min-width: 992px) {
   .modalSizing {
     width: 900px;
   }
-
 }
+
+@media (max-width: 767px) {
+
+    .slideImages {
+        width: 100%;
+        height: 406px !important;
+        position: relative;  
+        margin-bottom: 0px;
+    }
+
+    .thumbnail {
+        padding: 0px;
+        border-color: sandybrown;
+        margin-top: 20px;
+        position: relative;
+        margin-bottom: 0px;
+       
+    }
+
+    .firstThumbnail, .secondThumbnail, .thirdThumbnail, .fourthThumbnail {
+        height: 280px !important;
+        width: 100% !important; 
+    }
+
+    .carousel-indicators li {
+        width: 12px;
+        height: 12px;
+        margin: 6px;
+        text-indent: 0;
+        cursor: pointer;
+        border: none;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.5);    
+    }
+
+    .carousel-indicators .active {
+        width: 12px;
+        height: 12px;
+        margin: 6px;
+        background-color: rgba(13,86,55, .9);
+    }
+}
+
+
+/* All the media screen code ends here */

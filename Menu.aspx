@@ -28,7 +28,6 @@
             color: darkgreen;
             background-color: rgba(242,120, 75, .9);
             font-weight: bold;   
-
             text-decoration: none;
             text-align: center;
             display: inline-block;
@@ -323,7 +322,6 @@
                 }
             }
         }
-
     </script>
     <%-- checkbox clicks --%>
     <script type="text/javascript">
@@ -403,7 +401,7 @@
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-lg-12">
                             

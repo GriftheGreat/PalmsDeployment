@@ -483,6 +483,10 @@ public class Order_Data
         if(result.Contains("ERROR"))
         {
             result = "Fail:" + result.Replace("Pass:", "") + ".";
+            if (result.Contains("ORA-20002") || result.Contains("ORA-20001"))
+            {
+                result = "Fail:" + result.Substring(result.IndexOf(":",10) + 1);
+            }
         }
 
         return result;

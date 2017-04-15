@@ -24,9 +24,7 @@
             outline: none;
             width: 100%;
             height: 100%;
-            /*color: rgba(13,86,55, .9);*/
-            /*background-color: rgba(236,100,75, .9);*/
-            color: darkgreen;
+            color: rgba(13,86,55, .9);
             background-color: rgba(242,120, 75, .9);
             font-weight: bold;   
             text-decoration: none;

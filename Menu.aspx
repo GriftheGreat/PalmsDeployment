@@ -104,7 +104,7 @@
         var foodID;// global variable
 
         $(document).ready(function () {
-            $('div[AccordionControl]').first().show();
+            $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
             if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {

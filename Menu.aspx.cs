@@ -25,6 +25,7 @@ public partial class Menu : System.Web.UI.Page
 
     #region Variables
     public string currentBigCategory = "";
+    public string tabToReopen = "";
     #endregion
 
     public List<DataTable> MenuData;
@@ -227,6 +228,8 @@ public partial class Menu : System.Web.UI.Page
                                                        food["food_name"].ToString(),
                                                        Convert.ToSingle(food["food_cost"].ToString())));
         MyOrder = tempOrder;
+
+        tabToReopen = this.hidChosenFoodId.Value;
     }
 
     protected void AddPizzaToCart_Click(object sender, EventArgs e)

@@ -58,6 +58,9 @@ public partial class Test : System.Web.UI.Page
     }
 }
 
+// ASP.NET Page Life Cycle Overview 
+// https://msdn.microsoft.com/en-us/library/ms178472.aspx
+
 //https://msdn.microsoft.com/en-us/library/ms164642(v=vs.80).aspx
 //
 //<pages>

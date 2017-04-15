@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -29,7 +28,7 @@ public partial class Menu : System.Web.UI.Page
     #endregion
 
     public List<DataTable> MenuData;
-    //queries[0] = @"SELECT * FROM food";
+    //queries[0] = @"SELECT Food.*, TO_CHAR(food_cost, '99.99') as food_cost FROM food;";
     //queries[1] = @"SELECT * FROM food_type";
     //queries[2] = @"SELECT * FROM food_detail_line";
     //queries[3] = @"SELECT * FROM detail";

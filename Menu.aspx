@@ -351,8 +351,6 @@
             });
            idArray.push(customID);
            $('#<%= this.hidPizzaBtnValues.ClientID %>').val(idArray.toString());
-           alert($('#<%= this.hidPizzaBtnValues.ClientID %>').val());
-
 
             //btn.attr("value", "true");
             btn.addClass("CYOP-Button-focus");

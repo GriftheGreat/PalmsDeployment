@@ -33,7 +33,7 @@ public class CreditCard
             // Logic for checking amount of money student has goes here.
             // To simulate, the "check" will randomly pass or fail.
             Random rnd = new Random();
-            token = rnd.Next(100) < 50 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
+            token = rnd.Next(100) < 75 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
         }
         else
         {

@@ -13,12 +13,22 @@
     z-index: 5;
 }
 
+.myNavbar-center {
+    margin: 0px !important;
+    display: inline-block;
+    float: none !important;
+    width: initial !important;
+}
+
 ul.navbar .navbar-nav li {
     display: inline-block;
     float: none !important;
     text-align: center;
-    
 } 
+
+.navbar-nav {
+    margin: initial;
+}
 
 nav.navbar .navbar-collapse {
   text-align: center;
@@ -32,6 +42,7 @@ ul.nav a {
     font-size: 22px;
     font-family: 'Josefin Sans', sans-serif;
     color: rgb(255, 255, 255) !important;
+    white-space: nowrap;
 }
 
 ul.nav a:hover {
@@ -46,133 +57,7 @@ ul.nav a:hover {
     float: none !important;
     z-index: 10;
 }
-
-
 /* Navigation bar css code ends here */
-
-/* Home page */
-#papaJohnImage {
-    padding-top: 50px;
-    min-height: 400px;
-}
-
-#palmsImage {
-    padding-top:40px;
-    min-height: 400px;
-}
-
-#papaJohnImage:hover {
-     background-color: rgba(210,215,211, .99);
-}
-
-#palmsImage:hover {
-    background-color: rgba(210,215,211, .99);
-}
-
-/*************** Flippable code starts here ************************/
-.info-card {
-    padding-top: 20px;
-	-webkit-perspective: 1000px;
-    -moz-perspective: 1000px;
-    perspective: 1000px;
-}
-
-.front, .back {
-	border-radius: 12px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(189,195,199, .5);
-
-    transition: 1s;
-
-	-webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-/*<<<<<<< HEAD
-
-=======
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    .front, .back {
-        transition: 0s;
-    }
-}
->>>>>>> origin/master*/
-
-.front {
-	overflow: hidden;
-    width: 160px;
-    height: 200px;
-	position: absolute;
-    background-color: white;
-    z-index: 1;
-}
-
-.back {
-    width: 160px;
-	height: 200px;
-	-webkit-transform: rotateY(-180deg);
-    -moz-transform: rotateY(-180deg);
-    transform: rotateY(-180deg);
-    background-color: rgba(13,86,55, .8);
-}
-
-.info-card:hover .back {
-	-webkit-transform: rotateY(0);
-    -moz-transform: rotateY(0);
-    transform: rotateY(0);
-}
-
-.info-card:hover .front {
-	 -webkit-transform: rotateY(180deg);
-    -moz-transform: rotateY(180deg);
-    transform: rotateY(180deg);
-}
-
-.card-image {
-    width: 100%;
-    height: 100%;
-}
-
-.productName {
-    color: white;
-    margin-top: 6px;
-}
-
-.productInfo {
-    color: white;
-    text-align: center;
-    margin-top: -5px;
-    padding: 0px 5px 0px 5px;
-}
-
-.addToCartButton {
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    bottom: 1px;
-}
-
-.papaJohnFront, .papaJohnBack {
-    border-radius: 12px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgba(189,195,199, .8);
-
-    transition: -webkit-transform 1s;
-    transition: -moz-transform 1s;
-    transition: transform 1s;
-
-	-webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-.customPizzaHeader {
-    text-align: center;
-    font-weight: bold;
-    font-size: 38pt;
-}
 
 
 /* Modal code starts here */
@@ -202,90 +87,35 @@ ul.nav a:hover {
     font-size: 40pt;
     border-bottom: none;
 }
+
+@media (max-width: 450px)
+{
+  .modalSizing {
+    width: 100%;
+  }
+    .modalButton {
+      width: 100%; 
+  }
+}
+
+@media (min-width: 992px)
+{
+  .modalSizing {
+    width: 900px;
+  }
+}
 /* Modal code ends here */
-
-/* Create Your Own Pizza modal starts here */
-
-.CYOP-Header {
-    display: block;
-    width: auto;
-    align-content: center;
-    padding-top: 50pt; 
-}
-
-.CYOP-Header3 {
-    display: block;
-    width: auto;
-    align-content: center;
-    padding-top: 125pt; 
-}
-
-.CYOP-Button {
-    border: 1px solid rgb(128, 128, 128);
-    border-radius: 10px;
-    display: block;
-    float: left;
-    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
-    margin-bottom: 10px;
-    margin-left: 1em;
-    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
-}
-
-#modalCreateYourOwnPizza .modal-content {
-    padding-bottom: 30px;
-}
-
-.CYOP-Button-Special {
-    border: 1px solid rgb(128, 128, 128);
-    border-radius: 10px;
-    display: block;
-    float: left;
-    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
-    margin-bottom: px;
-    margin-left: 1em;
-    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
-}
-
-.CYOP-placeholder {
-    /*border: 1px solid rgb(128, 128, 128);*/
-    /*border-radius: 10px;*/
-    background-color: sandybrown;
-    color: sandybrown;
-    display: block;
-    float: left;
-    /*font-size: 2.8vmin; */
-    margin-bottom: 10px;
-    margin-left: 1em;
-    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
-}
-
-
-.CYOP-Button-focus {
-    background-color: red;
-}
-
-.CYOP-Button:hover {
-    background-color: red;
-}
-
-.CYOP-Button:active {
-    background-color: red;
-}
-
-.CYOP-Button:focus {
-    background-color: red;
-}
-/* Create Your Own Pizza modal ends here */
 
 
 /* For the amount of products in the Cart */
 .badge {
+    margin-left: 5px;
     background-color: indianred;
+    vertical-align: bottom;
 }
 
 
 /* Slide show code starts here */
-
 .slideShowCaption {
     background-color: white;
     opacity: .6;
@@ -336,102 +166,14 @@ ul.nav a:hover {
 .carousel-caption button {
   animation-delay: 3s;
 }
-/* Slide show code ends here */
 
-
-/* Thumbnail images code starts here */
-.bottomImages {
-    margin-bottom: 0px;
-    width: 80%;
-}
-
-.firstThumbnail, .secondThumbnail, .thirdThumbnail, .fourthThumbnail {
-    height: 220px !important;
-    width: 100% !important;
-}
-
-.thumbnail {
-    padding: 0px;
-    border-color: orangered;
-    /*background-color: rgba(13,86,55, .9);*/
-    border-width: 2px;
-    margin-top: -230px;
-    position: relative;
-    margin-bottom: 0px;
-    opacity: 0.95;
-}
-
-.thumbnail:hover {
-    opacity: 0.8;
-}
-
-.thumbnailCaption {
-    margin-top: -50px;
-    color: rgba(13,86,55, .9);
-    padding-bottom: 0px;
-    padding-left: 10px;
-}
-
-.thumbnailButton {
-    margin-top: -44px;
-    position: relative;
-    float: right;
-    margin-right: 10px;
-}
-
-
-
-/* Thumbnail images code ends here */
-
-
-/* All the media screen code starts here */
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-   .front, .back {
-       border-radius: 12px;
-       border-style: solid;
-       border-width: 1px;
-       border-color: rgba(189,195,199, .5);
-       transition: transform 1s;
-       backface-visibility: hidden;
-   }
-}
-
-@media (max-width: 450px) {
-  .modalSizing {
-    width: 100%;
-  }
-    .modalButton {
-      width: 100%; 
-  }
-}
-
-@media (min-width: 992px) {
-  .modalSizing {
-    width: 900px;
-  }
-}
-
-@media (max-width: 767px) {
-
+@media (max-width: 767px)
+{
     .slideImages {
         width: 100%;
         height: 406px !important;
         position: relative;  
         margin-bottom: 0px;
-    }
-
-    .thumbnail {
-        padding: 0px;
-        border-color: sandybrown;
-        margin-top: 20px;
-        position: relative;
-        margin-bottom: 0px;
-       
-    }
-
-    .firstThumbnail, .secondThumbnail, .thirdThumbnail, .fourthThumbnail {
-        height: 280px !important;
-        width: 100% !important; 
     }
 
     .carousel-indicators li {
@@ -453,6 +195,4 @@ ul.nav a:hover {
         background-color: rgba(13,86,55, .9);
     }
 }
-
-
-/* All the media screen code ends here */
+/* Slide show code ends here */

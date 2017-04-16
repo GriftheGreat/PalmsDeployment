@@ -23,7 +23,6 @@ public partial class Cart : System.Web.UI.Page
 
     #region Variables
     private string currentDetail = "";
-    private int    currentDetailCounter = 0;
     #endregion
 
     protected void Page_Load(object sender, EventArgs e)
@@ -37,7 +36,7 @@ public partial class Cart : System.Web.UI.Page
                 {
                     foreach (RepeaterItem detailitem in ((Repeater)item.FindControl("rptDetails")).Items)
                     {
-                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("Added")).Checked;
+                        tempOrder.Order_Elements[item.ItemIndex].Details[detailitem.ItemIndex].Chosen = ((CheckBox)detailitem.FindControl("chbAdded")).Checked;
                     }
                 }
                 MyOrder = tempOrder;
@@ -120,24 +119,15 @@ public partial class Cart : System.Web.UI.Page
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
-        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;//.OrderBy(detail => (detail.GroupName.Contains("X") ? "" : detail.GroupName));
-        rpt.DataBind();
-    }
-
-    protected void rptDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
-    {
-        if (string.IsNullOrEmpty(currentDetail))
+        if (((Order_Element)e.Item.DataItem).ID == 121)
         {
-            currentDetail        = ((Detail)e.Item.DataItem).GroupName;
-            currentDetailCounter = 0;
+            rpt.DataSource = null;
         }
-        else if(currentDetail != ((Detail)e.Item.DataItem).GroupName && currentDetailCounter > 1)
+        else
         {
-            ((Panel)e.Item.FindControl("pnlDetail")).CssClass += " BorderAboveDetail";
-            currentDetail        = ((Detail)e.Item.DataItem).GroupName;
-            currentDetailCounter = 0;
+            rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+            rpt.DataBind();
         }
-        currentDetailCounter += 1;
     }
 
     protected void lnkGoPay_Click(object sender, EventArgs e)

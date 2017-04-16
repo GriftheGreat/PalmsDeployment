@@ -13,6 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
+
+    <link rel="shortcut icon" href=<%= "\"" + URL.root(Request) + "Includes/images/palmsgoIcon.png\"" %>"/>
+
 	<%--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> Latest compiled and minified CSS --%>
     <link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "bootstrap/css/bootstrap.min.css\"" %> />
 	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/customStyle.css\"" %> /><%-- Custom css --%>
@@ -48,19 +51,16 @@
                             <span class="icon-bar"></span>
                         </button>
                     </div> 
-
                     <div class="collapse navbar-collapse" id="myNavbar">
-       
-                         <div class="col-md-8 col-md-offset-4 col-sm-9 col-sm-offset-3">
-                        <ul class="nav navbar-nav">
-                            <li><a href="Default.aspx"               title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
-                            <li><a href="Menu.aspx?menu=PalmsGrille" title="Palms Grille">Palms Grille</a></li>
-                            <li><a href="Menu.aspx?menu=PapaJohns"   title="Papa John's" >Papa John's</a></li>
-                            <li><a href="Cart.aspx"                  title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
-                        </ul>
-                    
+                        <div class="col-md-8 col-md-offset-4 col-sm-9 col-sm-offset-3 myNavbar-center">
+                            <ul class="nav navbar-nav">
+                                <li><a href="Default.aspx"               title="Home"        >Home</a></li> <!-- add class="active" to make the page active -->
+                                <li><a href="Menu.aspx?menu=PalmsGrille" title="Palms Grille">Palms Grille</a></li>
+                                <li><a href="Menu.aspx?menu=PapaJohns"   title="Papa John's" >Papa John's</a></li>
+                                <li><a href="Cart.aspx"                  title="Cart"        >Cart<span id="Item_Count" runat="server" class="badge"></span></a></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
                 </div>
             </nav>
             <%-- Navigation ending --%>

@@ -45,6 +45,12 @@
         {
             padding-left: 20px;
         }
+        
+        .BorderAboveDetail
+        {
+            border-top: 1px solid gray;
+            padding-top: 5px;
+        }
 
 
         .remove-button
@@ -115,12 +121,6 @@
         {
             color: rgb(200, 25, 25);
         }
-
-        .BorderAboveDetail
-        {
-            border-top: 1px solid gray;
-            padding-top: 5px;
-        }
     </style>
 </asp:Content>
 
@@ -129,60 +129,94 @@
     <script type="text/javascript">
         $(document).ready(function ()
         {
-            $('.item-detail-list input[type="checkbox"]').each(function ()
+            var currentDetail = ""; // have to clear currentDetail per each food in cart
+            $('div.row').each(function ()
             {
-                var chb = $(this);
-                var chbGroup = chb.parent().attr('group');
-                if (chbGroup == "") // if this detail has no group
+                $(this).find('.item-detail-list input[type="checkbox"]').each(function ()
                 {
-                    // Be normal
-                }
-                else
-                {
-                    if (chbGroup.indexOf('X')) // if this detail is an extra
-                    {
-                        // Be normal
-                        chb.addClass('sub-detail');
+                    var chb = $(this);
+                    var chbGroup = chb.siblings('input[id*="hidGroupName"]').val();
 
-                        var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
-                        //chb.parent().parent().siblings().find('input[type="hidden"]').each(function ()
-                        //{
-                        //    if($(this).val() == id_of_parent_detail)
-                        //    {
-                        //        var chbParentchb = $(this).parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
-                        //    }
-                        //});
-                        var chbParentchb = chb.parent().parent().siblings().find('input[type="hidden"][value="' + id_of_parent_detail + '"]').first().parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
-                        
-                        chbParentchb.on('click', function ()
-                        {
-                            var id = $(this).parent().siblings('input[type="hidden"]').val();
-                            var divOfextra = $(this).parent().parent().siblings().find('span[group*="' + id + '"]').first().parent();
-                            if (divOfextra.is(':visible'))
-                            {
-                                divOfextra.hide();
-                            }
-                            else
-                            {
-                                divOfextra.show();
-                            }
-                        });
-                    }
-                    else if (chb.parent().parent().siblings().find('span[group="'+chb.attr('group')+'"]').toArray().length > 1) // if there are others in the same group
-                    {
-                        chb.parent().parent().siblings().find('span[group="' + chb.attr('group') + '"] input[type="checkbox"]').prop('checked', '');
-                        chb.prop('checked', 'checked');
-                    }
-                    else // if this is the only detail with that group
+                    if (chbGroup == "") // if this detail has no group
                     {
                         // Be normal
                     }
-                }
-                var radioName = $(this).attr('name');
-                $(this).attr('name', radioName.substr(radioName.lastIndexOf('$') + 1));
+                    else
+                    {
+                        if (chbGroup.indexOf('X') != -1) // if this detail is an extra
+                        {
+                            // Be normal
+                            var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
+                            var chbParentchb = chb.parent().siblings().find('input[id*="hidDetailID"][value="' + id_of_parent_detail + '"]').first().siblings('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                            
+                            chb.parent().addClass('sub-detail');
+                            if (!chbParentchb.prop('checked'))
+                            {
+                                chb.parent().hide();
+                            }
+
+                            chbParentchb.on('click', function ()
+                            {
+                                var id = $(this).siblings('input[id*="hidDetailID"]').val();
+                                var divOfextra = $(this).parent().siblings().find('input[id*="hidGroupName"][value^="' + id + 'X"]').first().parent();
+
+                                if ($(this).prop('checked'))
+                                {
+                                    divOfextra.show();
+                                }
+                                else
+                                {
+                                    divOfextra.hide();
+                                    divOfextra.children('input[type="checkbox"]').prop('checked', '');
+                                }
+                            });
+                        }
+                        else if (chb.parent().siblings().find('input[id*="hidGroupName"][value="' + chbGroup + '"]').toArray().length > 0) // if there are others (not counting himself) in the same group
+                        {
+                            chb.on('click', function ()
+                            {
+                                if (!$(this).prop('checked'))
+                                {
+                                    $(this).prop('checked', 'checked')
+                                }
+                                $(this).parent().siblings().find('input[id*="hidGroupName"][value="' + chbGroup + '"]').siblings('input[type="checkbox"]').prop('checked', '');
+                            });
+                        }
+                        else // if this is the only detail with that group
+                        {
+                            // Be normal
+                        }
+                    }
+                });
+
+                currentDetail = "";
+                $(this).find('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
+                {
+                    var group = $(this).find('input[id*="hidGroupName"]').first().val();
+
+                    $(this).removeClass("BorderAboveDetail");
+
+                    if (currentDetail == null || currentDetail == "")
+                    {
+                        if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+                        {
+                            currentDetail = group;
+                            if (!(group == null || group == "") && index != 0)
+                            {
+                                $(this).addClass("BorderAboveDetail");
+                            }
+                        }
+                    }
+                    else if (currentDetail != group && group.indexOf("X") == -1)
+                    {
+                        $(this).addClass("BorderAboveDetail");
+                        currentDetail = group;
+                    }
+                });
             });
         });
     </script>
+    <%-- Location picking --%>
     <script type="text/javascript">
         function pickLocation(ddl)
         {
@@ -271,27 +305,22 @@
                             <div class="front card-front <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
                             </div>
-                            <asp:Label     ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
-                        <!--<asp:Label     ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />-->
+                            <asp:Label         ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
+                        <!--<asp:Label         ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />-->
 
                             <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_non_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
                             <br />
                             <div class="item-detail-list">
-                                <asp:Repeater ID="rptDetails" runat="server" OnItemDataBound="rptDetails_ItemDataBound">
+                                <asp:Repeater  ID="rptDetails"     runat="server">
                                     <ItemTemplate>
-<%-- Panels generate as a div --%>
-                                        <asp:Panel  ID="pnlDetail" runat="server">
-                                            <%-- <span> is generated here --%>
-                                            <asp:CheckBox      ID="chbAdded"  runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' group='<%# Eval("GroupName") %>' />
-                                            <asp:Label         ID="Label1"    runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' />
-                                             <%-- </span> is generated here --%>
-                                           <asp:HiddenField   ID="hid1"      runat="server" Value='<%# Eval("ID") %>' />
+                                        <asp:Panel ID="pnlDetail" runat="server">
+                                            <asp:CheckBox     ID="chbAdded"     runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
+                                            <asp:Label        ID="lblcost"      runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("Cost").ToString() != "0" %>' />
+                                            <asp:HiddenField  ID="hidGroupName" runat="server" Value='<%# Eval("GroupName") %>' />
+                                            <asp:HiddenField  ID="hidDetailID"  runat="server" Value='<%# Eval("ID") %>' />
                                         </asp:Panel>
-<%-- (use div like menu...?)
-    if...group name and others have same group name... make radio button else make use checkbox.
-    if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>

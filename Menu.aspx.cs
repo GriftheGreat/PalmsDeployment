@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -27,14 +26,13 @@ public partial class Menu : System.Web.UI.Page
     #endregion
 
     public List<DataTable> MenuData;
-    //queries[0] = @"SELECT * FROM food";
+    //queries[0] = @"SELECT Food.*, TO_CHAR(food_cost, '99.99') as food_cost FROM food;";
     //queries[1] = @"SELECT * FROM food_type";
     //queries[2] = @"SELECT * FROM food_detail_line";
     //queries[3] = @"SELECT * FROM detail";
 
     protected void Page_Init(object sender, EventArgs e)
     {
-        //Response.Write("|Page_Init::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "|<br />\n");
         if (MenuData == null)
         {
             MenuData = Data_Provider.Transact_Interface.Get_Menu("", Request);
@@ -48,9 +46,6 @@ public partial class Menu : System.Web.UI.Page
 
     protected void Page_PreRender(object sender, EventArgs e)
     {
-        // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
-        // ASP.NET Page Life Cycle Overview 
-        // https://msdn.microsoft.com/en-us/library/ms178472.aspx
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
@@ -104,6 +99,7 @@ public partial class Menu : System.Web.UI.Page
         // make temp detail table with added column of foodIDs
         DataTable detailsAndCorrespondingFoodIDs = MenuData[3];
         detailsAndCorrespondingFoodIDs.Columns.Add("FoodIDs");
+        detailsAndCorrespondingFoodIDs.Columns.Add("sort");
 
         // find foodIDs corresponding to a details (yes the backward relationship)
         // do this because we need to match the food clicked with what details correspond and show them later
@@ -117,12 +113,26 @@ public partial class Menu : System.Web.UI.Page
                     row["FoodIDs"] += row2["food_id_fk"].ToString() + " "; // following space used to match
                 }
             }
+
+            // order the details
+            // 'extras' make their parents sort
+            row["sort"] = row["group_name"].ToString();
+            if (row["group_name"].ToString().Contains("X"))
+            {
+                foreach (DataRow row2 in detailsAndCorrespondingFoodIDs.Rows)
+                {
+                    if (row2["detail_id_pk"].ToString() == row["group_name"].ToString().Substring(0, row["group_name"].ToString().IndexOf("X")) && string.IsNullOrEmpty(row2["group_name"].ToString()))
+                    {
+                        row2["sort"] = row["group_name"].ToString();
+                    }
+                }
+            }
         }
 
         // use temp detail table with added column of foodIDs
         if (detailsAndCorrespondingFoodIDs.Rows.Count > 0)
         {
-            this.rptDetailList.DataSource = detailsAndCorrespondingFoodIDs;
+            this.rptDetailList.DataSource = detailsAndCorrespondingFoodIDs.AsEnumerable().OrderBy(row => row["sort"]).CopyToDataTable();
             this.rptDetailList.DataBind();
         }
     }
@@ -190,11 +200,11 @@ public partial class Menu : System.Web.UI.Page
             if (correspondingDetails.Contains(" " + ((HiddenField)item.FindControl("hidDetailID")).Value + " "))
             {
                 DataRow newRow = details.NewRow();
-                newRow["chosen"] = ((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "N";
-                newRow["cost"] = ((Label)item.FindControl("lblDetailCost")).Text.Replace("$", "");
+                newRow["chosen"]      = ((CheckBox)item.FindControl("chbChooseDetail")).Checked ? "Y" : "N";
+                newRow["cost"]        = ((Label)item.FindControl("lblDetailCost")).Text.Replace("$", "");
                 newRow["description"] = ((CheckBox)item.FindControl("chbChooseDetail")).Text;
-                newRow["id"] = ((HiddenField)item.FindControl("hidDetailID")).Value;
-                newRow["groupName"] = ((HiddenField)item.FindControl("hidGroupmName")).Value;
+                newRow["id"]          = ((HiddenField)item.FindControl("hidDetailID")).Value;
+                newRow["groupName"]   = ((HiddenField)item.FindControl("hidGroupName")).Value;
                 details.Rows.Add(newRow);
             }
         }

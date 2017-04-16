@@ -48,8 +48,8 @@ public partial class Menu : System.Web.UI.Page
         }
     }
 
-    protected void Page_PreRender(object sender, EventArgs e)
-    {
+     protected void Page_PreRender(object sender, EventArgs e)
+     {
         // Response.Write("*Page_PreRender::" + (MyOrder != null ? MyOrder.Type : "MyOrder=null") + "*<br />\n");
         // ASP.NET Page Life Cycle Overview 
         // https://msdn.microsoft.com/en-us/library/ms178472.aspx
@@ -73,6 +73,7 @@ public partial class Menu : System.Web.UI.Page
 
         //add a sort column
         categories.Columns.Add("sort");
+        categories.Columns.Add("sort2");
 
         //put values in the sort column (these are for PG foods, look up the DB data)
         foreach (DataRow row in categories.Rows)
@@ -89,12 +90,67 @@ public partial class Menu : System.Web.UI.Page
             {
                 row["sort"] = "3";
             }
+
+            switch (row["food_type_name"].ToString())
+            {
+                case "Desserts":
+                    row["sort2"] = "16";
+                    break;
+                case "Breakfast Sandwiches":
+                    row["sort2"] = "3";
+                    break;
+                case "Breakfast Sides":
+                    row["sort2"] = "5";
+                    break;
+                case "Bakery":
+                    row["sort2"] = "4";
+                    break;
+                case "Beverages":
+                    row["sort2"] = "1";
+                    break;
+                case "Burgers":
+                    row["sort2"] = "6";
+                    break;
+                case "Soups &amp; Salads":
+                    row["sort2"] = "11";
+                    break;
+                case "Sandwiches":
+                    row["sort2"] = "7";
+                    break;
+                case "Paninis":
+                    row["sort2"] = "8";
+                    break;
+                case "Quesadillas":
+                    row["sort2"] = "10";
+                    break;
+                case "Wraps":
+                    row["sort2"] = "9";
+                    break;
+                case "Appetizers":
+                    row["sort2"] = "2";
+                    break;
+                case "Ice Cream":
+                    row["sort2"] = "15";
+                    break;
+                case "Classic Pizzas":
+                    row["sort2"] = "12";
+                    break;
+                case "Create Your Own Pizza":
+                    row["sort2"] = "17";
+                    break;
+                case "Specialty Pizzas":
+                    row["sort2"] = "13";
+                    break;
+                case "Papa Johns Sides":
+                    row["sort2"] = "14";
+                    break;
+            }
         }
 
         //create the data used   ie.  SELECT ft.*, CASE ... END AS sort FROM food_type WHERE food_type_vendor = :menu AND food_type_name = 'Create Your Own Pizza' ORDER BY sort
         EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu &&
                                                                                                row["food_type_name"].ToString() != "Create Your Own Pizza")
-                                                                               .OrderBy(row => row["sort"].ToString());
+                                                                               .OrderBy(row => row["sort"].ToString() + " " + row["sort2"].ToString());
 
         //bind data to repeater
         if (selectedRows.Count() > 0)

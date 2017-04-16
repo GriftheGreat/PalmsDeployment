@@ -119,7 +119,7 @@ public partial class Cart : System.Web.UI.Page
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
-        if (((Order_Element)e.Item.DataItem).ID == 121)
+        if (((Order_Element)e.Item.DataItem).ID == 130)
         {
             rpt.DataSource = null;
         }

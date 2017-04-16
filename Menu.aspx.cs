@@ -321,7 +321,7 @@ public partial class Menu : System.Web.UI.Page
 
         tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
                                                130, //id 
-                                               "",// image path
+                                               "/Papa Johns/PJ_TheWorksPizza.jpg",// image path
                                                "", // food description
                                                details, //detail array
                                                "Create Your Own", // food name

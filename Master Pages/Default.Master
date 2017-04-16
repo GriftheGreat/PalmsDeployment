@@ -34,7 +34,9 @@
     <form id="form1" runat="server">
         <header>
             <%-- Navigation beginning --%>
-            <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src=<%= "\"" + URL.root(Request) + "Includes/images/palmsgo-sandybrown.png\"" %> /></a>
+            <div class="logo">
+            <a class="navbar-brand" href="Default.aspx"><img alt="Palms" src=<%= "\"" + URL.root(Request) + "Includes/images/palmsgoSandybrown.png\"" %> /></a>
+            </div>
 
             <nav class="navbar navbar-default navbar-fixed-top">
 

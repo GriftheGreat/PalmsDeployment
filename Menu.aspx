@@ -9,9 +9,10 @@
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
     <style type="text/css">
-        .spaceBeforeMealHeaderButton {
+        .spaceAroundCategories {
             margin-top: 50px;
         }
+
         .MealHeaderButton
         {
             padding: 10px 0px 10px 0px;
@@ -27,7 +28,6 @@
             color: darkgreen;
             background-color: rgba(242,120, 75, .9);
             font-weight: bold;   
-
             text-decoration: none;
             text-align: center;
             display: inline-block;
@@ -84,6 +84,11 @@
             overflow: auto;
             text-align: left;
         }
+
+        .sub-detail
+        {
+            padding-left: 20px;
+        }
     </style>
 </asp:Content>
 
@@ -110,7 +115,6 @@
             }
             else
             {
-                //alert('2');
                 $('input[chooseDetail]').on("click", normalPurchaseClick);
             }
 
@@ -155,6 +159,26 @@
                 DetailDiv.children()[1].checked = false;
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
+
+       //     private string currentDetail = "";
+       //     private int currentDetailCounter = 0;
+       //     protected void rptDetailList_ItemDataBound(object sender, RepeaterItemEventArgs e)
+       // {
+       // if (string.IsNullOrEmpty(currentDetail))
+       // {
+       //     currentDetail = ((DataRowView)e.Item.DataItem)["group_name"].ToString();
+       //     currentDetailCounter = 0;
+       // }
+       // else if (currentDetail != ((DataRowView)e.Item.DataItem)["group_name"].ToString() && currentDetailCounter > 1)
+       // {
+       //     ((Panel)e.Item.FindControl("pnlDetail")).CssClass += " BorderAboveDetail";
+       //     currentDetail = ((DataRowView)e.Item.DataItem)["group_name"].ToString();
+       //     currentDetailCounter = 0;
+       // }
+       // currentDetailCounter += 1;
+       // }
+
+
 
             foodID = null;// clear global variable
         }
@@ -216,31 +240,73 @@
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
         function ToggleCYOP(button) {
-            var type; // The value html attribute for the button clicked
+            var btn = $(button);
+            var message = "";
+            var customID = btn.attr("customID");
+            var btnType = btn.attr("type");
 
-            type = button.getAttribute("type");
+            var idArray = $('#<%= this.hidPizzaBtnValues.ClientID %>').val().split(",")
+
+            jQuery.each(idArray, function (index, element) {
+                if($("[customID=" + element + "]").attr("type") == btnType)
+                {
+                    idArray.splice(index, 1);
+                    return false;
+                }
+            });
+           idArray.push(customID);
+           $('#<%= this.hidPizzaBtnValues.ClientID %>').val(idArray.toString());
+           alert($('#<%= this.hidPizzaBtnValues.ClientID %>').val());
+
+
+            //btn.attr("value", "true");
+            btn.addClass("CYOP-Button-focus");
 
             // Toggle the value of the clicked button
-            $("div[type='" + type + "']").each(
-                function () {
-                    if ($(this).attr("id") == button.getAttribute("id"))
-                    {
-                        $(this).attr("value", "true");
-                        $(this).addClass("CYOP-Button-focus");
-                    }
-                    else
-                    {
-                        $(this).attr("value", "false");
-                        $(this).removeClass("CYOP-Button-focus");
-                    }
-                }
-            );
+            btn.siblings("span[type='" + btnType + "']").each(function ()
+            {
+                //$(this).attr("value", "false");
+                $(this).removeClass("CYOP-Button-focus");
+            });
         }
         
         // Toggle the state of a "Choose you own pizza" button where there are possibilities 
         // to toggle beween the detail being applied to the left, right, or all of the pizza
+        var states = ["+none", "+whole", "+left", "+right"];
         function ToggleCYOPHalves(button) {
-            var type; // The value html attribute for the button clicked
+            var btn = $(button);
+            var customID = btn.attr("customID");
+            var IDString;
+            var btnType = btn.attr("type");
+            var stringIndex;
+            var statesIndexText;
+            var statesIndexNum = 1;
+
+            var idArray = $('#<%= this.hidPizzaBtnValues.ClientID %>').val().split(",");
+
+            jQuery.each(idArray, function (index, element)
+            {
+                stringIndex = element.indexOf("+");
+                if (stringIndex != -1)
+                {
+                    if (element.substr(0, stringIndex) == customID)
+                    {
+                        statesIndexText = element.substr(stringIndex);
+                        statesIndexNum = states.indexOf(statesIndexText);
+                        statesIndexNum = (statesIndexNum + 1) % 4;
+                        idArray.splice(index, 1);
+                        return false;
+                    }
+                }                
+            });
+
+            if (statesIndexNum != 0)
+            {
+                IDString = customID + states[statesIndexNum];
+                idArray.push(IDString);
+            }
+            $('#<%= this.hidPizzaBtnValues.ClientID %>').val(idArray.toString());
+            alert($('#<%= this.hidPizzaBtnValues.ClientID %>').val());
 
             if (button.getAttribute("name") != "Baby Portabella Mushrooms")
             {
@@ -297,44 +363,86 @@
                 }
             }
         }
-
     </script>
+    <%-- checkbox clicks --%>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            $('.item-detail-list input[type="checkbox"]').each(function ()
+            {
+                var chb = $(this);
+                var chbGroup = chb.parent().attr('group');
+                if (chbGroup == "") // if this detail has no group
+                {
+                    // Be normal
+                }
+                else
+                {
+                    if (chbGroup.indexOf('X')) // if this detail is an extra
+                    {
+                        // Be normal
+                        chb.addClass('sub-detail');
 
-    
-    <%-- Jacob, Here's where the script to handle the button listener --%>
-    <script>
-        function myFunction() {
-            var x = document.getElementById("mushroomsBtn").value;
-
-            //document.getElementById("demo").innerHTML = x;
-
-            window.alert(x);
-        }
+                        var id_of_parent_detail = chbGroup.substr(0, chbGroup.indexOf('X'));
+                        //chb.parent().parent().siblings().find('input[type="hidden"]').each(function ()
+                        //{
+                        //    if($(this).val() == id_of_parent_detail)
+                        //    {
+                        //        var chbParentchb = $(this).parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        //    }
+                        //});
+                        var chbParentchb = chb.parent().parent().siblings().find('input[type="hidden"][value="' + id_of_parent_detail + '"]').first().parent().find('input[type="checkbox"]');// the checkbox of the 'normal' relative to this extra
+                        
+                        chbParentchb.on('click', function ()
+                        {
+                            var id = $(this).parent().siblings('input[type="hidden"]').val();
+                            var divOfextra = $(this).parent().parent().siblings().find('span[group*="' + id + '"]').first().parent();
+                            if (divOfextra.is(':visible'))
+                            {
+                                divOfextra.hide();
+                            }
+                            else
+                            {
+                                divOfextra.show();
+                            }
+                        });
+                    }
+                    else if (chb.parent().parent().siblings().find('span[group="'+chb.attr('group')+'"]').toArray().length > 1) // if there are others in the same group
+                    {
+                        chb.parent().parent().siblings().find('span[group="' + chb.attr('group') + '"] input[type="checkbox"]').prop('checked', '');
+                        chb.prop('checked', 'checked');
+                    }
+                    else // if this is the only detail with that group
+                    {
+                        // Be normal
+                    }
+                }
+                var radioName = $(this).attr('name');
+                $(this).attr('name', radioName.substr(radioName.lastIndexOf('$') + 1));
+            });
+        });
     </script>
 </asp:Content>
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
+        <div class="spaceAroundCategories"></div>
         <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
             <ItemTemplate>
-                <asp:PlaceHolder ID="plhBigCategoryStart" runat="server" Visible="false">
-<%--                    <div class="row">
+                <asp:PlaceHolder ID="plhBigCategoryStart"  runat="server" Visible="false">
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
                                 <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
                             </div>
                         </div>
-                    </div>--%>
-
-                    <div class="spaceBeforeMealHeaderButton"></div>
+                    </div>
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
-                
-
                 <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-lg-12">
                             
@@ -346,17 +454,24 @@
 
                     <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
                 </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhBigCategoryEnd" runat="server" Visible="false">
+                <asp:PlaceHolder ID="plhBigCategoryEnd"    runat="server" Visible="false">
                     </div>
                 </asp:PlaceHolder>
-                <div class="row">
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
-                        <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
-                            <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
-                            <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
+                            <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                                <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
+                                <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                            </div>
                         </div>
                     </div>
-                </div>
                 <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
                     <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
                         <ItemTemplate>
@@ -388,6 +503,7 @@
                 </div>
             </ItemTemplate>
         </asp:Repeater>
+        <div class="spaceAroundCategories"></div>
     </div>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
@@ -411,14 +527,13 @@
                         <div class="item-detail-list" style="display:inline-block">
                             <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
                                 <ItemTemplate>
-                                    <div detail='<%# ((DataBoundLiteralControl)sender).FindControl("hidFoodIds").ClientID %>'>
-                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
+                                    <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
+<%-- need identifier on this element for jquery --%>                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' group='<%# Eval("group_name") %>' />
                                         <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' />
-    <asp:Label   ID="lbl1"                runat="server" Text='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidGroupmName"   runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
-                                    </div>
+                                    </asp:Panel>
     <%-- if...group name... make radio button too.  (Use javascript to choose if only ONE with that group name corrosponds to chosen food use checkbox else use radio button).
         if group name = id + "X..." then use (detailID) id to make this detail a subdetail that shows when the corrosponding one is checked. --%>
                                 </ItemTemplate>
@@ -444,23 +559,40 @@
                     <h3 class="modal-title">Create Your Own Pizza $11.99</h3>
                 </div>
                 <div class="modal-body">
-
+                    
                     <h1 class="CYOP-Header">Select size:</h1>
-                    <div id="CYOP_1"  runat="server" type="size" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true" >8''  -$6.50</div><span style="width:10px;">&nbsp;</span>
-                    <div id="CYOP_2"  runat="server" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false"  >16''</div>
+                    <%-- %><asp:LinkButton ID="CYOP_1"  runat="server" type="size" CssClass="btn CYOP-Button CYOP-Button-focus" OnClientClick="ToggleCYOP(this); return false;" value="true">8''  -$6.50</asp:LinkButton> --%>
+                    <%--<asp:LinkButton ID="CYOP_2"  runat="server" type="size" CssClass="btn CYOP-Button " OnClientClick="ToggleCYOP(this); return false;" value="false"> 16''</asp:LinkButton>--%>
+                    <asp:Label id="CYOP_01"  runat="server" customID="CYOP_01" type="size" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true" >8''  -$6.50</asp:Label><span style="width:10px;">&nbsp;</span> 
+                    <asp:Label id="CYOP_02"  runat="server" customID="CYOP_02" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false"  >16''</asp:Label>
+               
 
                     <h1 class="CYOP-Header">Choose Your Crust:</h1>
+<%--                    <div id="CYOP_1"  runat="server" type="size" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true" >8''  -$6.50</div><span style="width:10px;">&nbsp;</span> 
+                    <div id="CYOP_2"  runat="server" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false"  >16''</div>
                     <div id="CYOP_3"  runat="server" type="crust" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true">Thin Crust</div><span style="width:10px;">&nbsp;</span>
                     <div id="CYOP_4"  runat="server" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Pan Crust</div><span style="width:10px;">&nbsp;</span>
                     <div id="CYOP_5"  runat="server" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Stuffed Crust $1.00</div>
                     <div id="placeholder1"  runat="server" class="CYOP-placeholder" ></div>
-                    <div id="placeholder2"  runat="server" class="CYOP-placeholder" ></div>
+                    <div id="placeholder2"  runat="server" class="CYOP-placeholder" ></div>--%>
+
+
+                    <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Pan Crust</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Stuffed Crust $1.00</asp:Label>
+                    <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
+                    <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>
 
                     <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
-                    <div id="CYOP_18" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Original</div>
+<%--                    <div id="CYOP_18" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="true" state="none">Original</div>
                     <div id="CYOP_19" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Ranch</div>
                     <div id="CYOP_20" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">BBQ</div>
-                    <div id="CYOP_21" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Spinach Alfredo</div>
+                    <div id="CYOP_21" runat="server" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false" state="none">Spinach Alfredo</div>--%>
+
+                    <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-focus" onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
+                    <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
+                    <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
+                    <asp:Label id="CYOP_21" runat="server" customID="CYOP_21" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Spinach Alfredo</asp:Label>
 
                     <h1 class="CYOP-Header">Choose Your Toppings:</h1>
                     <p id="instructions">Select a topping multiple times to apply to only one side of the pizza</p>
@@ -469,30 +601,45 @@
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Peperoni</span><span style="width:10px;">&nbsp;</span>
                     <span id=""  runat="server" class="btn CYOP-Button" value=""     >Sausage</span>
                     <br />--%>
-                    <div name="Bacon" id="CYOP_6"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Bacon</div>
+<%--                    <div name="Bacon" id="CYOP_6"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Bacon</div>
                     <div name="Beef" id="CYOP_7"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Beef</div>
                     <div name="Canadian Bacon" id="CYOP_8"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Canadian Bacon</div>
                     <div name="Italian Sausage" id="CYOP_9"  runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Italian Sausage</div>
-                    <div name="Pepperoni" id="CYOP_10" runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Pepperoni</div>
+                    <div name="Pepperoni" id="CYOP_10" runat="server" type="meat" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Pepperoni</div>--%>
+
+                    <asp:Label id="CYOP_06"  name="Bacon"            runat="server" customID="CYOP_06" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Bacon</asp:Label>
+                    <asp:Label id="CYOP_07"  name="Beef"             runat="server" customID="CYOP_07" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Beef</asp:Label>
+                    <asp:Label id="CYOP_08"  name="Canadian Bacon"   runat="server" customID="CYOP_08" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Canadian Bacon</asp:Label>
+                    <asp:Label id="CYOP_09"  name="Italian Sausage"  runat="server" customID="CYOP_09" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Italian Sausage</asp:Label>
+                    <asp:Label id="CYOP_10" name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
 
                     <div id="placeholder3" runat="server" class="CYOP-placeholder">&ensp;&ensp;&ensp;&ensp;&ensp;</div>
                     <h3 class="CYOP-Header3">Fresh vegetable</h3> 
-                    <div name="Fresh Sliced Onions" id="CYOP_11" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</div>
+<%--                    <div name="Fresh Sliced Onions" id="CYOP_11" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</div>
                     <div name="Green Pepper" id="CYOP_12" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Green Pepper</div>
                     <div name="Roma Tomatoes" id="CYOP_13" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Roma Tomatoes</div>
                     <div name="Black Olives" id="CYOP_14" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Black Olives</div>
-
                     <div name="Jalapeno Peppers" id="CYOP_15" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Jalapeno Peppers</div>
                     <div name="Banana Peppers" id="CYOP_16" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Banana Peppers</div>
-                    <div name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</div>
+                    <div name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</div>--%>
+
+                    <asp:Label name="Fresh Sliced Onions"   id="CYOP_11" runat="server" customID="CYOP_11" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</asp:Label>
+                    <asp:Label name="Green Pepper"          id="CYOP_12" runat="server" customID="CYOP_12" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Green Pepper</asp:Label>
+                    <asp:Label name="Roma Tomatoes"         id="CYOP_13" runat="server" customID="CYOP_13" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Roma Tomatoes</asp:Label>
+                    <asp:Label name="Black Olives"          id="CYOP_14" runat="server" customID="CYOP_14" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Black Olives</asp:Label>
+                    <asp:Label name="Jalapeno Peppers"      id="CYOP_15" runat="server" customID="CYOP_15" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Jalapeno Peppers</asp:Label>
+                    <asp:Label name="Banana Peppers"        id="CYOP_16" runat="server" customID="CYOP_16" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Banana Peppers</asp:Label>
+                    <asp:Label name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" customID="CYOP_17" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</asp:Label>
 
                     <div>
+                        <asp:HiddenField ID="hidPizzaBtnValues" runat="server" value="CYOP_01,CYOP_03,CYOP_18" />
                         <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-danger" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
                     </div>
                 </div>
+              </div>
             </div>
         </div>
-    </div>
+
 
     <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
 

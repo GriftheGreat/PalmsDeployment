@@ -276,7 +276,7 @@ public class TimeSlots : System.Web.Services.WebService
         string query = @"SELECT 'ASAP' AS time_slot, 'ASAP' AS time_slot_id_pk, 1 AS sort
                            FROM dual
                           UNION
-                         SELECT DISTINCT ts.time_slot_start_time || '-' || ts.time_slot_end_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort
+                         SELECT DISTINCT ts.time_slot_start_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort       --|| '-' || ts.time_slot_end_time 
                            FROM ticket tk
                            JOIN time_slot ts
                              ON ts.time_slot_id_pk = tk.time_slot_id_fk
@@ -287,7 +287,8 @@ public class TimeSlots : System.Web.Services.WebService
                        ORDER BY sort";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query, myConnection);
-
+        //   var  ts.time_slot_start_time
+        //  (the_num(1-2 char of(var)) %12)+1 || 3-5 char of(var) || case when the_num(1-2 char of(var)) ... then "" else "" end
         try
         {
             myConnection.Open();

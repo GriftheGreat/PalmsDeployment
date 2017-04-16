@@ -103,20 +103,19 @@
     width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
 }
 
-
 .CYOP-Button-focus {
-    background-color: red;
+    background-color: #ff3333;
 }
 
 .CYOP-Button:hover {
-    background-color: red;
+    background-color: #ff3333;
 }
 
 .CYOP-Button:active {
-    background-color: red;
+    background-color: #ff3333;
 }
 
 .CYOP-Button:focus {
-    background-color: red;
+    background-color: #ff3333;
 }
 /* Create Your Own Pizza modal ends here */

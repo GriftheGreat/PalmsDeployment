@@ -118,10 +118,16 @@ public partial class Cart : System.Web.UI.Page
 
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
-        currentDetail = "";
-        Repeater rpt   = ((Repeater)e.Item.FindControl("rptDetails"));
-        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;//.OrderBy(detail => (detail.GroupName.Contains("X") ? "" : detail.GroupName));
-        rpt.DataBind();
+        Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
+        if (((Order_Element)e.Item.DataItem).ID == 121)
+        {
+            rpt.DataSource = null;
+        }
+        else
+        {
+            rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+            rpt.DataBind();
+        }
     }
 
     protected void lnkGoPay_Click(object sender, EventArgs e)

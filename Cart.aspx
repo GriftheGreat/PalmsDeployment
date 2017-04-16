@@ -8,97 +8,9 @@
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
-    <style type="text/css">
-        .cart-item
-        {
-            padding: 15px 0px 15px 0px;
-            margin-bottom: 16px;
-            border-bottom: 1px solid gray;
-            /*border-radius: 12px;*/
-           
-        }
-
-        .food-name {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .card-front {
-            margin-right: 40px;
-            width: 180px;
-            position: inherit;
-            display: inline-block;
-            float: left;
-        }
-
-        .item-detail-list
-        {
-            /*border: 1px solid rgb(128, 128, 128);*/
-            width: 300px;
-            height: 150px;
-            overflow: auto;
-            text-align: left;
-            
-        }
-
-        .sub-detail
-        {
-            padding-left: 20px;
-        }
-        
-        .BorderAboveDetail
-        {
-            border-top: 1px solid gray;
-            padding-top: 5px;
-        }
-
-
-        .remove-button
-        {
-            font-size: 11pt;
-            margin: 10px 0px 10px 10px;
-            padding: 5px 10px 5px 10px;
-            border: 1px solid rgb(202, 41, 36);
-            border-radius: 10px;
-            color: rgb(202, 41, 36);
-            display: inline-block;
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
-        }
-
-        .remove-button:hover
-        {
-            border: 2px solid rgb(157, 25, 25);
-            color: rgb(157, 25, 25);
-            text-decoration: none;
-        }
-
-
-
-        .payment-button
-        {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            padding: 10px 30px 10px 30px;
-            border: 2px solid rgb(36, 156, 202);
-            border-radius: 10px;
-            color: rgb(36, 156, 202);
-            display: inline-block;
-        }
-
-        .payment-button:hover
-        {
-            border: 2px solid rgb(25, 77, 157);
-            color: rgb(25, 77, 157);
-            text-decoration: none;
-        }
-
-        .cannot-deliver
-        {
-            border: 5px solid rgb(200, 25, 25) !important;
-        }
-    </style>
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CartStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CardStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/DetailStyles.css\"" %> />
     <%-- payment options --%>
     <style type="text/css">
         .payment-options-section
@@ -279,12 +191,12 @@
                             <td id="deliveryLocationContainer" runat="server">
                                 Delivery Location:
                                 <asp:DropDownList ID="ddlLocations"    runat="server" onchange="pickLocation(this);" >
-                                    <asp:ListItem Text=""                   Value="" />
-                                    <asp:ListItem Text="Palm's Grille"      Value="Palm's Grille" />
-                                    <asp:ListItem Text="Campus House Lobby" Value="Campus House Lobby" />
-                                    <asp:ListItem Text="Sports Center"      Value="Sports Center" />
-                                    <asp:ListItem Text="Dorm Room"          Value="DR" />
-                                    <asp:ListItem Text="Waveland Apartment" Value="WA" />
+                                    <asp:ListItem Text=""                    Value="" />
+                                    <asp:ListItem Text="Palm's Grille"       Value="Palm's Grille" />
+                                    <asp:ListItem Text="Campus House Lobby"  Value="Campus House Lobby" />
+                                    <asp:ListItem Text="Sports Center"       Value="Sports Center" />
+                                    <asp:ListItem Text="Residence Hall Room" Value="DR" />
+                                    <asp:ListItem Text="Waveland Apartment"  Value="WA" />
                                 </asp:DropDownList>
                             </td>
                             <td id="locationPlaceContainer" runat="server">
@@ -330,7 +242,7 @@
                 </ItemTemplate>
             </asp:Repeater>
             <div class="row" style="text-align: center;">
-                <asp:LinkButton ID="lnkGoPay"    runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-button" />
+                <asp:LinkButton ID="lnkGoPay"    runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-submit-button" />
             </div>
         </asp:PlaceHolder>
     </div>

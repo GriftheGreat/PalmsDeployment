@@ -8,93 +8,9 @@
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
-    <style type="text/css">
-        .spaceAroundCategories
-        {
-            margin-top: 50px;
-        }
-
-        .MealHeaderButton
-        {
-            padding: 10px 0px 10px 0px;
-            border: none;
-            border-bottom: solid;
-            border-bottom-width: 1px;
-            border-color: white;
-            outline: none;
-            width: 100%;
-            height: 100%;
-            color: rgba(13,86,55, .9);
-            background-color: rgba(242,120, 75, .9);
-            font-weight: bold;   
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .HeaderButton
-        {
-            margin-top: 10px;
-            border: none;
-            outline: none;
-            width: 100%;
-            height: 100%;
-            color: rgba(13,86,55, .9);
-            background-color: sandybrown;
-            font-weight: bold;   
-
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .navbar
-        {
-            margin-bottom: 0px;
-        }
-
-        .card-front-name
-        {
-            position: absolute;
-            top: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
-
-        .card-front-price
-        {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
-
-        .item-detail-list
-        {
-            border: 1px solid rgb(128, 128, 128);
-            width: 300px;
-            height: 150px;
-            overflow: auto;
-            text-align: left;
-        }
-
-        .sub-detail
-        {
-            padding-left: 20px;
-        }
-
-        .BorderAboveDetail
-        {
-            border-top: 1px solid gray;
-            padding-top: 5px;
-        }
-    </style>
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/MenuStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CardStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/DetailStyles.css\"" %> />
 </asp:Content>
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">
@@ -243,7 +159,7 @@
                     // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
                     detailsInGroup.each(function ()
                     {
-                        if ($(this).siblings('label').first().html() == "Whole")
+                        if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
                         {
                             detailInGroupToCheck = $(this);
                         }

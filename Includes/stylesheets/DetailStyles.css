@@ -1,0 +1,24 @@
+﻿.item-detail-list
+{
+    border: 1px solid rgb(128, 128, 128);
+    width: 300px;
+    height: 150px;
+    overflow: auto;
+    text-align: left;
+}
+
+.sub-detail
+{
+    padding-left: 20px !important;
+}
+
+.BorderAboveDetail
+{
+    border-top: 1px solid gray;
+    padding-top: 5px;
+}
+
+.item-detail-list div
+{
+    padding-left: 5px;
+}

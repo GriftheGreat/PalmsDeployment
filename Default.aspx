@@ -7,6 +7,7 @@
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/HomeStyles.css\"" %> />
 </asp:Content>
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">

@@ -39,7 +39,7 @@ public class IDCard
             // Logic for checking amount of money student has goes here.
             // To simulate, the "check" will randomly pass or fail.
             Random rnd = new Random();
-            status = rnd.Next(100) < 25 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
+            status = rnd.Next(100) < 75 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
 
             if (status == "Pass")
             {

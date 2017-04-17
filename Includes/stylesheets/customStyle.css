@@ -232,7 +232,7 @@ ul.nav a:hover {
     display: block;
     float: left;
     font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
-    margin-bottom: px;
+    margin-bottom: 10px;
     margin-left: 1em;
     width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
 }
@@ -252,19 +252,40 @@ ul.nav a:hover {
 
 
 .CYOP-Button-focus {
-    background-color: #ff3333;
+    background-color: rgba(13,86,55, .9);
+    color: white;
+}
+
+.CYOP-Button-whole {
+    background-color: #0d5637;
+    color: white;
+}
+
+.CYOP-Button-whole:hover {
+        box-shadow: 0px 5px 5px #888888;
+        color: white;
+}
+.CYOP-Button-left {
+    background-color: #ffcc99;
+    color: black;
+}
+
+.CYOP-Button-right {
+    background-color: #ffff99;
+    color: black;
 }
 
 .CYOP-Button:hover {
-    background-color: #ff3333;
+    box-shadow: 0px 5px 5px #888888;
 }
 
 .CYOP-Button:active {
-    background-color: #ff3333;
+
 }
 
 .CYOP-Button:focus {
-    background-color: #ff3333;
+    background-color: rgba(13,86,55, .9);
+    color: white;
 }
 /* Create Your Own Pizza modal ends here */
 

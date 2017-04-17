@@ -33,6 +33,11 @@
         {
             color: rgb(200, 25, 25);
         }
+
+        .bad-data
+        {
+            border: 2px solid rgb(200, 25, 25);
+        }
     </style>
 </asp:Content>
 

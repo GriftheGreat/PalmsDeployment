@@ -568,8 +568,8 @@
                                 </ItemTemplate>
                             </asp:Repeater>
                         </div>
-                        <div style="display:inline-block; padding-left:20px;">
                         <br />
+                        <div style="display:inline-block; padding-left:20px;">
                             <p id="modalDesc"> Description</p>
                         </div>
                     </div>

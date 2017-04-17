@@ -39,7 +39,7 @@ nav.navbar .navbar-collapse {
 }
 
 ul.nav a {
-    font-size: 22px;
+    font-size: 23px;
     font-family: 'Josefin Sans', sans-serif;
     color: rgb(255, 255, 255) !important;
     white-space: nowrap;
@@ -70,6 +70,12 @@ ul.nav a:hover {
     position: fixed;
     right: 25px;
     top: 110px;
+    background-color: orangered;
+    border: none;
+}
+
+.modalButton:hover {
+    background-color: rgba(13,86,55, .9);
 }
 
 .modal-dialog {
@@ -94,8 +100,23 @@ ul.nav a:hover {
     width: 100%;
   }
     .modalButton {
-      width: 100%; 
-  }
+        top: -20px;
+      width:  76%;
+      position: relative;
+      margin-left: 69px;
+      background-color: orangered;
+      border: none;
+    }
+
+    .modalButton:hover {
+        background-color: rgba(13,86,55, .9);
+    }
+
+    .thankYou {
+        padding-top: 20px;
+    }
+
+  
 }
 
 @media (min-width: 992px)
@@ -115,10 +136,19 @@ ul.nav a:hover {
 }
 
 
+
+
 /* Slide show code starts here */
+
+
+.carousel {
+    height: 100% !important;
+}
+
+
 .slideShowCaption {
     background-color: white;
-    opacity: .6;
+    opacity: .63;
     color: red;
     
 }
@@ -167,6 +197,8 @@ ul.nav a:hover {
   animation-delay: 3s;
 }
 
+/* Slide show code ends here */
+
 @media (max-width: 767px)
 {
     .slideImages {
@@ -194,5 +226,23 @@ ul.nav a:hover {
         margin: 6px;
         background-color: rgba(13,86,55, .9);
     }
+
+    .info-card {
+        margin-left: 40px !important;
+        /*background-color: red;*/
+        width: 100%;
+    }
 }
-/* Slide show code ends here */
+
+
+.thankYou {
+    background-color: sandybrown;
+    margin-top: 60px;
+    text-align: center;
+    padding-top: 60px;
+    width: 46%;
+    height: 400px;
+    border-radius: 40px;
+    opacity: .85;
+    color: black;
+}

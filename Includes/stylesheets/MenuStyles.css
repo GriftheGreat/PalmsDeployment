@@ -1,0 +1,142 @@
+﻿/* Menu tab modal starts here */
+.spaceAroundCategories
+{
+    margin-top: 50px;
+}
+
+.MealHeaderButton
+{
+    padding: 10px 0px 10px 0px;
+    border: none;
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-color: white;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    color: rgba(13,86,55, .9);
+    background-color: rgba(242,120, 75, .9);
+    font-weight: bold;   
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.HeaderButton
+{
+    margin-top: 10px;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    color: rgba(13,86,55, .9);
+    background-color: sandybrown;
+    font-weight: bold;   
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+}
+/* Menu tab modal ends here */
+
+
+/* trying to adjust card separation */
+.info-card
+{               
+    margin: 0px 7% 0px 7%;
+    width: 190px;
+}
+
+
+/* Create Your Own Pizza modal starts here */
+.CYOP-Header {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 50pt; 
+}
+
+.CYOP-Header3 {
+    display: block;
+    width: auto;
+    align-content: center;
+    padding-top: 125pt; 
+}
+
+.CYOP-Button {
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
+    margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
+#modalCreateYourOwnPizza .modal-content {
+    padding-bottom: 30px;
+}
+
+.CYOP-Button-Special {
+    border: 1px solid rgb(128, 128, 128);
+    border-radius: 10px;
+    display: block;
+    float: left;
+    font-size: 2.8vmin; /* 2.7 for portabello mushrooms 2.8 for fresh sliced onions*/
+    margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
+.CYOP-placeholder {
+    /*border: 1px solid rgb(128, 128, 128);*/
+    /*border-radius: 10px;*/
+    background-color: sandybrown;
+    color: sandybrown;
+    display: block;
+    float: left;
+    /*font-size: 2.8vmin; */
+    margin-bottom: 10px;
+    margin-left: 1em;
+    width: 44%; /* 46%: default, 20%: Beef, Bacon.. 94%: */
+}
+
+.CYOP-Button-focus {
+    background-color: rgba(13,86,55, .9);
+    color: white;
+}
+
+.CYOP-Button-whole {
+    background-color: #0d5637;
+    color: white;
+}
+
+.CYOP-Button-whole:hover {
+        box-shadow: 0px 5px 5px #888888;
+        color: white;
+}
+.CYOP-Button-left {
+    background-color: #ffcc99;
+    color: black;
+}
+
+.CYOP-Button-right {
+    background-color: #ffff99;
+    color: black;
+}
+
+.CYOP-Button:hover {
+    box-shadow: 0px 5px 5px #888888;
+}
+
+.CYOP-Button:active {
+
+}
+
+.CYOP-Button:focus {
+    background-color: rgba(13,86,55, .9);
+    color: white;
+}
+/* Create Your Own Pizza modal ends here */

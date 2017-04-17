@@ -204,7 +204,7 @@ public class Order_Element
     //    return data;
     //}
 
-    internal float CalculateCost()
+    public float CalculateCost()
     {
         float cost = this.Price;
         foreach (Detail detail in this.Details)

@@ -1,0 +1,66 @@
+﻿.cart-item
+{
+    padding: 15px 0px 15px 0px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid gray;
+    /*border-radius: 12px;*/
+   
+}
+
+.food-name
+{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.food-cost
+{
+    margin-top: 70px;
+    float: right;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+.remove-button
+{
+    font-size: 11pt;
+    margin: 10px 0px 10px 10px;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid rgb(202, 41, 36);
+    border-radius: 10px;
+    color: rgb(202, 41, 36);
+    display: inline-block;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.remove-button:hover
+{
+    border: 2px solid rgb(157, 25, 25);
+    color: rgb(157, 25, 25);
+    text-decoration: none;
+}
+
+.payment-submit-button
+{
+    margin: 20px 0px 30px 0px;
+    padding: 10px 30px 10px 30px;
+    border: 2px solid gray;
+    border-radius: 10px;
+    color: black;
+    display: inline-block;
+    background-color: sandybrown;
+}
+
+.payment-submit-button:hover
+{
+    border: 2px solid rgba(13,86,55, .9);
+    color: rgba(13,86,55, .9);
+    text-decoration: none;
+}
+
+.cannot-deliver
+{
+    border: 5px solid rgb(200, 25, 25) !important;
+}

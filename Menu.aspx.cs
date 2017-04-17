@@ -23,6 +23,7 @@ public partial class Menu : System.Web.UI.Page
 
     #region Variables
     public string currentBigCategory = "";
+    public string tabToReopen = "";
     #endregion
 
     public List<DataTable> MenuData;
@@ -49,10 +50,10 @@ public partial class Menu : System.Web.UI.Page
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
-        if (MyOrder != null)
-        {
-            this.hidOrderType.Value = MyOrder.Type;
-        }
+        //if (MyOrder != null)
+        //{
+        //    this.hidOrderType.Value = MyOrder.Type;
+        //}
 
         if (Request.QueryString["menu"] == "PapaJohns")
         {
@@ -66,6 +67,7 @@ public partial class Menu : System.Web.UI.Page
 
         //add a sort column
         categories.Columns.Add("sort");
+        categories.Columns.Add("sort2");
 
         //put values in the sort column (these are for PG foods, look up the DB data)
         foreach (DataRow row in categories.Rows)
@@ -82,12 +84,67 @@ public partial class Menu : System.Web.UI.Page
             {
                 row["sort"] = "3";
             }
+
+            switch (row["food_type_name"].ToString())
+            {
+                case "Desserts":
+                    row["sort2"] = "16";
+                    break;
+                case "Breakfast Sandwiches":
+                    row["sort2"] = "03";
+                    break;
+                case "Breakfast Sides":
+                    row["sort2"] = "05";
+                    break;
+                case "Bakery":
+                    row["sort2"] = "04";
+                    break;
+                case "Beverages":
+                    row["sort2"] = "01";
+                    break;
+                case "Burgers":
+                    row["sort2"] = "06";
+                    break;
+                case "Soups &amp; Salads":
+                    row["sort2"] = "11";
+                    break;
+                case "Sandwiches":
+                    row["sort2"] = "07";
+                    break;
+                case "Paninis":
+                    row["sort2"] = "08";
+                    break;
+                case "Quesadillas":
+                    row["sort2"] = "10";
+                    break;
+                case "Wraps":
+                    row["sort2"] = "09";
+                    break;
+                case "Appetizers":
+                    row["sort2"] = "02";
+                    break;
+                case "Ice Cream":
+                    row["sort2"] = "15";
+                    break;
+                case "Classic Pizzas":
+                    row["sort2"] = "12";
+                    break;
+                case "Create Your Own Pizza":
+                    row["sort2"] = "17";
+                    break;
+                case "Specialty Pizzas":
+                    row["sort2"] = "13";
+                    break;
+                case "Papa Johns Sides":
+                    row["sort2"] = "14";
+                    break;
+            }
         }
 
         //create the data used   ie.  SELECT ft.*, CASE ... END AS sort FROM food_type WHERE food_type_vendor = :menu AND food_type_name = 'Create Your Own Pizza' ORDER BY sort
         EnumerableRowCollection<DataRow> selectedRows = categories.AsEnumerable().Where(row => row["food_type_vendor"].ToString() == menu &&
                                                                                                row["food_type_name"].ToString() != "Create Your Own Pizza")
-                                                                               .OrderBy(row => row["sort"].ToString());
+                                                                               .OrderBy(row => row["sort"].ToString() + " " + row["sort2"].ToString());
 
         //bind data to repeater
         if (selectedRows.Count() > 0)
@@ -211,11 +268,11 @@ public partial class Menu : System.Web.UI.Page
 
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
                                                        Convert.ToInt32(this.hidChosenFoodId.Value),
@@ -225,6 +282,8 @@ public partial class Menu : System.Web.UI.Page
                                                        food["food_name"].ToString(),
                                                        Convert.ToSingle(food["food_cost"].ToString())));
         MyOrder = tempOrder;
+
+        tabToReopen = this.hidChosenFoodId.Value;
     }
 
     protected void AddPizzaToCart_Click(object sender, EventArgs e)
@@ -310,15 +369,15 @@ public partial class Menu : System.Web.UI.Page
         }
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
                                                130, //id 
-                                               "",// image path
+                                               "/Papa Johns/PJ_TheWorksPizza.jpg",// image path
                                                "", // food description
                                                details, //detail array
                                                "Create Your Own", // food name
@@ -337,4 +396,3 @@ public partial class Menu : System.Web.UI.Page
         return newRow;
     }
 }
-

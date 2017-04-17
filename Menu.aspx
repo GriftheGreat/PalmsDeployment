@@ -8,95 +8,9 @@
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
 <asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
-    <style type="text/css">
-        .spaceAroundCategories
-        {
-            margin-top: 50px;
-        }
-
-        .MealHeaderButton
-        {
-            padding: 10px 0px 10px 0px;
-            border: none;
-            border-bottom: solid;
-            border-bottom-width: 1px;
-            border-color: white;
-            outline: none;
-            width: 100%;
-            height: 100%;
-            /*color: rgba(13,86,55, .9);*/
-            /*background-color: rgba(236,100,75, .9);*/
-            color: darkgreen;
-            background-color: rgba(242,120, 75, .9);
-            font-weight: bold;   
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .HeaderButton
-        {
-            margin-top: 10px;
-            border: none;
-            outline: none;
-            width: 100%;
-            height: 100%;
-            color: rgba(13,86,55, .9);
-            background-color: sandybrown;
-            font-weight: bold;   
-
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .navbar
-        {
-            margin-bottom: 0px;
-        }
-
-        .card-front-name
-        {
-            position: absolute;
-            top: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
-
-        .card-front-price
-        {
-            position: absolute;
-            bottom: 0px;
-            width: 100%;
-            text-align: center;
-            background-color: none;
-            background-color: rgba(255, 255, 255, .5);
-            display: block;
-        }
-
-        .item-detail-list
-        {
-            border: 1px solid rgb(128, 128, 128);
-            width: 300px;
-            height: 150px;
-            overflow: auto;
-            text-align: left;
-        }
-
-        .sub-detail
-        {
-            padding-left: 20px;
-        }
-
-        .BorderAboveDetail
-        {
-            border-top: 1px solid gray;
-            padding-top: 5px;
-        }
-    </style>
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/MenuStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CardStyles.css\"" %> />
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/DetailStyles.css\"" %> />
 </asp:Content>
 
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">
@@ -104,9 +18,9 @@
         var foodID;// global variable
 
         $(document).ready(function () {
-            $('div[AccordionControl]').first().show();
+            $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
-            if($('#<%= this.hidOrderType.ClientID %>').val() == "")
+        <%--if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
                 $('body').one("click", 'input[chooseDetail]', function ()
                 {
@@ -123,50 +37,13 @@
             else
             {
                 $('input[chooseDetail]').on("click", normalPurchaseClick);
-            }
+            }--%>
 
-            $('#modalOrderType').on("hidden.bs.modal", function ()
+        <%--$('#modalOrderType').on("hidden.bs.modal", function ()
             {
                 putOptionsOnModal();// needs global variable
                 $('#modalFoodDetails').modal('show');
-            });
-        });
-
-        function normalPurchaseClick()
-        {
-            // get the foodID from hidFoodID from <this> purchase button
-            var purchaseButton = $(this);
-            var hidFoodID = purchaseButton.attr("chooseDetail");
-            foodID = $('#' + hidFoodID).val();// assign global variable
-
-            $('#modalDesc').text(purchaseButton.attr("descr"));
-
-            putOptionsOnModal();// needs global variable
-            
-            // show modal
-            $('#modalFoodDetails').modal('show');
-        }
-
-        function putOptionsOnModal()
-        {
-            $('div[detail]').each(function ()
-            {
-                var DetailDiv = $(this);
-                var hidFoodIds = DetailDiv.attr("detail");
-
-                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
-                {
-                    DetailDiv.show();
-                }
-                else
-                {
-                    DetailDiv.hide();
-                }
-
-                DetailDiv.removeClass("BorderAboveDetail")
-                DetailDiv.children()[1].checked = false;
-            });
-            $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
+            });--%>
 
             // set checkbox click events
             $('.item-detail-list input[type="checkbox"]').each(function ()
@@ -229,6 +106,47 @@
                     }
                 }
             });
+        });
+
+        function normalPurchaseClick(button)<%--()--%>
+        {
+            // get the foodID from hidFoodID from <this> purchase button
+            var purchaseButton = $(button);
+            var hidFoodID = purchaseButton.attr("chooseDetail");
+            foodID = $('#' + hidFoodID).val();// assign global variable
+
+            $('#modalDesc').text(purchaseButton.attr("descr"));
+
+            putOptionsOnModal();// needs global variable
+            
+            // show modal
+            $('#modalFoodDetails').modal('show');
+        }
+
+        function putOptionsOnModal()
+        {
+            $('div[detail]').each(function ()
+            {
+                var DetailDiv = $(this);
+                var hidFoodIds = DetailDiv.attr("detail");
+
+                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
+                {
+                    DetailDiv.show();
+                }
+                else
+                {
+                    DetailDiv.hide();
+                }
+
+                // re-hide extras
+                DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
+                // remove all separators
+                DetailDiv.removeClass("BorderAboveDetail");
+                // uncheck all
+                DetailDiv.find('input[type="checkbox"]').prop('checked', '');
+            });
+            $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 
             // add separator line between checkbox groups
             var currentDetail = "";
@@ -245,7 +163,7 @@
                     // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
                     detailsInGroup.each(function ()
                     {
-                        if ($(this).siblings('label').first().html() == "Whole")
+                        if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
                         {
                             detailInGroupToCheck = $(this);
                         }
@@ -326,15 +244,16 @@
             }
         }
 
-        function ClickOrderTypeChosen(type)
+    <%--function ClickOrderTypeChosen(type)
         {
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
-        }
+        }--%>
 
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
-        function ToggleCYOP(button) {
+        function ToggleCYOP(button)
+        {
             var btn = $(button);
             var customID = btn.attr("customID");
             var btnType = btn.attr("type");
@@ -384,7 +303,8 @@
         // Toggle the state of a "Choose you own pizza" button where there are possibilities 
         // to toggle beween the detail being applied to the left, right, or all of the pizza
         var states = ["+none", "+whole", "+left", "+right"];
-        function ToggleCYOPHalves(button) {
+        function ToggleCYOPHalves(button)
+        {
             var btn = $(button);
             var customID = btn.attr("customID");
             var IDString;
@@ -480,127 +400,6 @@
 
 <asp:Content ID="Content" runat="server" ContentPlaceHolderID="Content">
     <div class="container">
-        <div class="spaceAroundCategories"></div>
-        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
-            <ItemTemplate>
-                <asp:PlaceHolder ID="plhBigCategoryStart"  runat="server" Visible="false">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
-                                <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
-                </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            
-                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
-                                <asp:Literal     ID="lblMealName2"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
-                </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhBigCategoryEnd"    runat="server" Visible="false">
-                    </div>
-                </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
-                    <div class="row">
-                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
-                            <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
-                </asp:PlaceHolder>
-                <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
-                </asp:PlaceHolder>
-                                <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
-                                <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
-                            </div>
-                        </div>
-                    </div>
-                <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
-                    <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
-                        <ItemTemplate>
-                            <div class="info-card col-xs-4 col-sm-4 col-md-3 col-lg-3 col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
-                                <div class="front">
-                                    <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
-                                    <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>' CssClass="card-front-name" />
-                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
-                                </div>
-                                <div class="back">
-                                    <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
-                                    <h4 class="text-center productName"><strong>
-                                        <asp:Literal     ID="litfood_name" runat="server" Text='<%# Eval("food_name") %>' />
-                                    </strong></h4>
-                                    <div class="productInfo">
-                                        <h4 class="text-center">
-                                            <asp:Label   ID="lblfood_description" runat="server"  Text='<%# Eval("food_descr").ToString().Substring(0,Math.Min(67,Eval("food_descr").ToString().Length)) + (Eval("food_descr").ToString().Length > 67 ? "..." : "") %>' />                                          
-                                        </h4>
-                                    </div>
-                                    <div class="addToCartButton">
-                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' />
-                                        <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
-                                        <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
-                                    </div>
-                                </div>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                </div>
-            </ItemTemplate>
-        </asp:Repeater>
-        <div class="spaceAroundCategories"></div>
-    </div>
-
-    <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
-        <div class="create-your-own-container">
-            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
-        </div>
-    </asp:PlaceHolder>
-
-    <%-- Modal --%>
-    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
-        <div class="modal-dialog modalSizing">
-            <%-- Modal content--%>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Food Details</h3>
-                </div>
-                <div class="modal-body">
-                    <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
-                    <div>
-                        <div class="item-detail-list" style="display:inline-block">
-                            <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
-                                <ItemTemplate>
-                                    <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
-                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
-                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
-                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
-                                        <asp:HiddenField ID="hidGroupName"    runat="server" Value='<%# Eval("group_name") %>' />
-                                        <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
-                                    </asp:Panel>
-                                </ItemTemplate>
-                            </asp:Repeater>
-                        </div>
-                        <br />
-                        <div style="display:inline-block; padding-left:20;">
-                            <p id="modalDesc"> Description</p>
-                        </div>
-                    </div>
-                    <asp:Button ID="btnAdd2" runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal -->
     <div id="modalCreateYourOwnPizza" class="modal fade text-center" role="dialog">
@@ -658,14 +457,135 @@
             </div>
         </div>
 
+        <div class="spaceAroundCategories"></div>
+        <asp:Repeater ID="rptCategories" runat="server" OnItemDataBound="rptCategories_ItemDataBound" ><%-- set DataSource in Page_Load --%>
+            <ItemTemplate>
+                <asp:PlaceHolder ID="plhBigCategoryStart"  runat="server" Visible="false">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                                <asp:Literal     ID="lblMealName1"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
+                            </div>
+                        </div>
+                    </div>
 
-    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigCategoryMiddle" runat="server" Visible="false">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            
+                            <div class="MealHeaderButton" onclick="AccordionTrigger2('<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>');">
+                                <asp:Literal     ID="lblMealName2"     runat="server" Text='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="display:none;" AccordionControl2='<%# Eval("food_type_meal").ToString() == "B" ? "Breakfast" : Eval("food_type_meal").ToString() == "L" ? "Lunch & Dinner" : "" %>'>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigCategoryEnd"    runat="server" Visible="false">
+                    </div>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
+                    <div class="row">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
+                            <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="MealHeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
+                </asp:PlaceHolder>
+                                <asp:Literal     ID="litCategory"   runat="server" Text='<%# Eval("food_type_name") %>' />
+                                <asp:HiddenField ID="hidFoodTypeID" runat="server" Value='<%# Eval("food_type_id_pk") %>' />
+                            </div>
+                        </div>
+                    </div>
+                <div class="row" style="display:none;" AccordionControl="<%# Eval("food_type_name") %>">
+                    <asp:Repeater ID="rptFood" runat="server" ><%-- set DataSource in rptCategories_ItemDataBound --%>
+                        <ItemTemplate>
+                            <div class="info-card col-xs-4 col-sm-4 col-md-3 col-lg-3" style="margin-left: 115px">
+                                <div class="front">
+                                    <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
+                                    <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>' CssClass="card-front-name" />
+                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
+                                </div>
+                                <div class="back">
+                                    <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
+                                    <h4 class="text-center productName"><strong>
+                                        <asp:Literal     ID="litfood_name" runat="server" Text='<%# Eval("food_name") %>' />
+                                    </strong></h4>
+                                    <div class="productInfo">
+                                        <h4 class="text-center">
+                                            <asp:Label   ID="lblfood_description" runat="server"  Text='<%# Eval("food_descr").ToString().Substring(0,Math.Min(67,Eval("food_descr").ToString().Length)) + (Eval("food_descr").ToString().Length > 67 ? "..." : "") %>' />                                          
+                                        </h4>
+                                    </div>
+                                    <div class="addToCartButton">
+                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" onclick="normalPurchaseClick(this);" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
+                                        <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
+                                    </div>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+            </ItemTemplate>
+        </asp:Repeater>
+        <div class="spaceAroundCategories"></div>
+    </div>
+
+    <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
+        <div class="create-your-own-container">
+            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
+        </div>
+    </asp:PlaceHolder>
 
     <%-- Modal --%>
-    <div id="modalOrderType" class="modal fade text-center" role="dialog">
-        <div class="modal-dialog">
+    <div id="modalFoodDetails" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog modalSizing">
             <%-- Modal content--%>
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Food Details</h3>
+                </div>
+                <div class="modal-body">
+                    <asp:HiddenField ID="hidChosenFoodId"     runat="server" Value="" />
+                    <div>
+                        <div class="item-detail-list" style="display:inline-block">
+                            <asp:Repeater    ID="rptDetailList" runat="server" ><%-- set DataSource in Page_Load --%>
+                                <ItemTemplate>
+                                    <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
+                                        <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
+                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
+                                        <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
+                                        <asp:HiddenField ID="hidGroupName"    runat="server" Value='<%# Eval("group_name") %>' />
+                                        <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
+                                    </asp:Panel>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </div>
+                        <div style="display:inline-block; padding-left:20px;">
+                        <br />
+                            <p id="modalDesc"> Description</p>
+                        </div>
+                    </div>
+                    <asp:Button ID="btnAdd2" runat="server" Text="Add to cart" UseSubmitBehavior="false" OnClick="btnAdd_Click" CssClass="btn btn-sm btn-danger text-center"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%--    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />--%>
+
+    <%-- Modal --%>
+<%--    <div id="modalOrderType" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog">--%>
+            <%-- Modal content--%>
+<%--            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title">Delivery or Pick-Up?</h3>
@@ -677,5 +597,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
 </asp:Content>

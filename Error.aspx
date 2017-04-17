@@ -9,6 +9,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+
+    <link rel="shortcut icon" href=<%= "\"" + URL.root(Request) + "Includes/images/palmsgoIcon.png\"" %>"/>
+
     <style type="text/css">
         body {
             margin: 0px;

@@ -7,7 +7,8 @@
 
 <%@ MasterType VirtualPath="~/Master Pages/Default.Master" %>
 
-<asp:Content ncludes/stylesheets/MenuStyles.css\"" %> />
+<asp:Content ID="Content1" runat="server" ContentPlaceHolderID="Styles">
+	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/MenuStyles.css\"" %> />
 	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CardStyles.css\"" %> />
 	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/DetailStyles.css\"" %> />
 </asp:Content>

@@ -11,6 +11,7 @@
        Palms Grille Online Ordering Bumb Boards
    </title>
 
+    <link rel="shortcut icon" href=<%= "\"" + URL.root(Request) + "Includes/images/palmsgoIcon.png\"" %>"/>
 	<meta charset="utf-8" />
 
    <asp:ContentPlaceHolder ID="Styles" runat="server">

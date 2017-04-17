@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#"
-         Title="Home Page"
+         Title="Bump Board"
          AutoEventWireup="true"
          CodeFile="BumpBoard.aspx.cs" 
          Inherits="_Bump_Board"

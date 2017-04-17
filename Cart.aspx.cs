@@ -119,6 +119,9 @@ public partial class Cart : System.Web.UI.Page
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
+
+        ((Label)e.Item.FindControl("lblfrontprice")).Text = ((Order_Element)e.Item.DataItem).CalculateCost().ToString().Insert(((Order_Element)e.Item.DataItem).CalculateCost().ToString().IndexOf("-") + 1, "$");
+
         if (((Order_Element)e.Item.DataItem).ID == 130)
         {
             rpt.DataSource = null;

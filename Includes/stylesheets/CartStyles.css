@@ -13,6 +13,14 @@
     font-weight: bold;
 }
 
+.food-cost
+{
+    margin-top: 70px;
+    float: right;
+    font-size: 20pt;
+    font-weight: bold;
+}
+
 .remove-button
 {
     font-size: 11pt;

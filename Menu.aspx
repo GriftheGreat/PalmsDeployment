@@ -139,8 +139,12 @@
                     DetailDiv.hide();
                 }
 
-                DetailDiv.removeClass("BorderAboveDetail")
-                DetailDiv.children()[1].checked = false;
+                // re-hide extras
+                DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
+                // remove all separators
+                DetailDiv.removeClass("BorderAboveDetail");
+                // uncheck all
+                DetailDiv.find('input[type="checkbox"]').prop('checked', '');
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 

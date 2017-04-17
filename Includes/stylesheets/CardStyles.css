@@ -1,0 +1,126 @@
+﻿.info-card {
+    padding-top: 20px;
+	-webkit-perspective: 1000px;
+    -moz-perspective: 1000px;
+    perspective: 1000px;
+}
+
+.front, .back {
+	border-radius: 12px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(189,195,199, .5);
+
+    transition: 1s;
+
+	-webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
+{
+   .front, .back
+   {
+       border-radius: 12px;
+       border-style: solid;
+       border-width: 1px;
+       border-color: rgba(189,195,199, .5);
+       transition: 0s;
+       transition: transform 1s;
+       backface-visibility: hidden;
+   }
+}*/
+/* This makes IE cards not disappear when flipping */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
+{
+    .front, .back 
+    {
+        transition: 0s;
+    }
+}
+
+.front {
+	overflow: hidden;
+    width: 160px;
+    height: 200px;
+	position: absolute;
+    background-color: white;
+    z-index: 1;
+}
+
+.back {
+    width: 160px;
+	height: 200px;
+	-webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
+    background-color: rgba(13,86,55, .8);
+}
+
+.info-card:hover .back {
+	-webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+    transform: rotateY(0);
+}
+
+.info-card:hover .front {
+	 -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+}
+
+.productName {
+    color: white;
+    margin-top: 6px;
+}
+
+.productInfo {
+    color: white;
+    text-align: center;
+    margin-top: -5px;
+    padding: 0px 5px 0px 5px;
+}
+
+.addToCartButton {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 1px;
+}
+
+.card-front-name
+{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: none;
+    background-color: rgba(255, 255, 255, .5);
+    display: block;
+}
+
+.card-front-price
+{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: none;
+    background-color: rgba(255, 255, 255, .5);
+    display: block;
+}
+
+.card-front
+{
+    margin-right: 40px;
+    width: 180px;
+    position: inherit;
+    display: inline-block;
+    float: left;
+}

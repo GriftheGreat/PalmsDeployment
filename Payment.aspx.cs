@@ -208,7 +208,7 @@ public partial class Payment : System.Web.UI.Page
             }
             else
             {
-                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + orderResultString;// getFailure(orderResultString);// "An error occurred while submitting the Order. You have been refunded.";
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + getFailure(orderResultString);
 
                 #region refund
                 if (this.hidPaymentType.Value == "1") // Credit Card

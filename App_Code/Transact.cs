@@ -39,7 +39,7 @@ public class IDCard
             // Logic for checking amount of money student has goes here.
             // To simulate, the "check" will randomly pass or fail.
             Random rnd = new Random();
-            status = rnd.Next(100) < 50 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
+            status = rnd.Next(100) < 75 ? "Pass" : "Fail:Balance has insufficient funds."; // 0 <= number < 100
 
             if (status == "Pass")
             {
@@ -138,7 +138,7 @@ public class Menu_Data
     public string Menu()
     {
         string[] queries = new string[4];
-        queries[0] = @"SELECT * FROM food";
+        queries[0] = @"SELECT Food.*, TO_CHAR(food_cost, '99.99') as food_cost_1 FROM food";
         queries[1] = @"SELECT * FROM food_type";
         queries[2] = @"SELECT * FROM food_detail_line";
         queries[3] = @"SELECT * FROM detail";
@@ -276,7 +276,7 @@ public class TimeSlots : System.Web.Services.WebService
         string query = @"SELECT 'ASAP' AS time_slot, 'ASAP' AS time_slot_id_pk, 1 AS sort
                            FROM dual
                           UNION
-                         SELECT DISTINCT ts.time_slot_start_time || '-' || ts.time_slot_end_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort
+                         SELECT DISTINCT ts.time_slot_start_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort       --|| '-' || ts.time_slot_end_time 
                            FROM ticket tk
                            JOIN time_slot ts
                              ON ts.time_slot_id_pk = tk.time_slot_id_fk
@@ -287,7 +287,8 @@ public class TimeSlots : System.Web.Services.WebService
                        ORDER BY sort";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query, myConnection);
-
+        //   var  ts.time_slot_start_time
+        //  (the_num(1-2 char of(var)) %12)+1 || 3-5 char of(var) || case when the_num(1-2 char of(var)) ... then "" else "" end
         try
         {
             myConnection.Open();
@@ -483,6 +484,10 @@ public class Order_Data
         if(result.Contains("ERROR"))
         {
             result = "Fail:" + result.Replace("Pass:", "") + ".";
+            if (result.Contains("ORA-20002") || result.Contains("ORA-20001"))
+            {
+                result = "Fail:" + result.Substring(result.IndexOf(":",10) + 1);
+            }
         }
 
         return result;

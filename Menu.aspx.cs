@@ -50,10 +50,10 @@ public partial class Menu : System.Web.UI.Page
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
-        if (MyOrder != null)
-        {
-            this.hidOrderType.Value = MyOrder.Type;
-        }
+        //if (MyOrder != null)
+        //{
+        //    this.hidOrderType.Value = MyOrder.Type;
+        //}
 
         if (Request.QueryString["menu"] == "PapaJohns")
         {
@@ -91,37 +91,37 @@ public partial class Menu : System.Web.UI.Page
                     row["sort2"] = "16";
                     break;
                 case "Breakfast Sandwiches":
-                    row["sort2"] = "3";
+                    row["sort2"] = "03";
                     break;
                 case "Breakfast Sides":
-                    row["sort2"] = "5";
+                    row["sort2"] = "05";
                     break;
                 case "Bakery":
-                    row["sort2"] = "4";
+                    row["sort2"] = "04";
                     break;
                 case "Beverages":
-                    row["sort2"] = "1";
+                    row["sort2"] = "01";
                     break;
                 case "Burgers":
-                    row["sort2"] = "6";
+                    row["sort2"] = "06";
                     break;
                 case "Soups &amp; Salads":
                     row["sort2"] = "11";
                     break;
                 case "Sandwiches":
-                    row["sort2"] = "7";
+                    row["sort2"] = "07";
                     break;
                 case "Paninis":
-                    row["sort2"] = "8";
+                    row["sort2"] = "08";
                     break;
                 case "Quesadillas":
                     row["sort2"] = "10";
                     break;
                 case "Wraps":
-                    row["sort2"] = "9";
+                    row["sort2"] = "09";
                     break;
                 case "Appetizers":
-                    row["sort2"] = "2";
+                    row["sort2"] = "02";
                     break;
                 case "Ice Cream":
                     row["sort2"] = "15";
@@ -268,11 +268,11 @@ public partial class Menu : System.Web.UI.Page
 
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
                                                        Convert.ToInt32(this.hidChosenFoodId.Value),
@@ -369,15 +369,15 @@ public partial class Menu : System.Web.UI.Page
         }
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
                                                130, //id 
-                                               "",// image path
+                                               "/Papa Johns/PJ_TheWorksPizza.jpg",// image path
                                                "", // food description
                                                details, //detail array
                                                "Create Your Own", // food name

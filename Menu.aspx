@@ -20,7 +20,7 @@
         $(document).ready(function () {
             $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
-            if($('#<%= this.hidOrderType.ClientID %>').val() == "")
+        <%--if($('#<%= this.hidOrderType.ClientID %>').val() == "")
             {
                 $('body').one("click", 'input[chooseDetail]', function ()
                 {
@@ -37,50 +37,13 @@
             else
             {
                 $('input[chooseDetail]').on("click", normalPurchaseClick);
-            }
+            }--%>
 
-            $('#modalOrderType').on("hidden.bs.modal", function ()
+        <%--$('#modalOrderType').on("hidden.bs.modal", function ()
             {
                 putOptionsOnModal();// needs global variable
                 $('#modalFoodDetails').modal('show');
-            });
-        });
-
-        function normalPurchaseClick()
-        {
-            // get the foodID from hidFoodID from <this> purchase button
-            var purchaseButton = $(this);
-            var hidFoodID = purchaseButton.attr("chooseDetail");
-            foodID = $('#' + hidFoodID).val();// assign global variable
-
-            $('#modalDesc').text(purchaseButton.attr("descr"));
-
-            putOptionsOnModal();// needs global variable
-            
-            // show modal
-            $('#modalFoodDetails').modal('show');
-        }
-
-        function putOptionsOnModal()
-        {
-            $('div[detail]').each(function ()
-            {
-                var DetailDiv = $(this);
-                var hidFoodIds = DetailDiv.attr("detail");
-
-                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
-                {
-                    DetailDiv.show();
-                }
-                else
-                {
-                    DetailDiv.hide();
-                }
-
-                DetailDiv.removeClass("BorderAboveDetail")
-                DetailDiv.children()[1].checked = false;
-            });
-            $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
+            });--%>
 
             // set checkbox click events
             $('.item-detail-list input[type="checkbox"]').each(function ()
@@ -143,6 +106,47 @@
                     }
                 }
             });
+        });
+
+        function normalPurchaseClick(button)<%--()--%>
+        {
+            // get the foodID from hidFoodID from <this> purchase button
+            var purchaseButton = $(button);
+            var hidFoodID = purchaseButton.attr("chooseDetail");
+            foodID = $('#' + hidFoodID).val();// assign global variable
+
+            $('#modalDesc').text(purchaseButton.attr("descr"));
+
+            putOptionsOnModal();// needs global variable
+            
+            // show modal
+            $('#modalFoodDetails').modal('show');
+        }
+
+        function putOptionsOnModal()
+        {
+            $('div[detail]').each(function ()
+            {
+                var DetailDiv = $(this);
+                var hidFoodIds = DetailDiv.attr("detail");
+
+                if ($('#' + hidFoodIds).val().indexOf(' ' + foodID + ' ') != -1) // use global variable
+                {
+                    DetailDiv.show();
+                }
+                else
+                {
+                    DetailDiv.hide();
+                }
+
+                // re-hide extras
+                DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
+                // remove all separators
+                DetailDiv.removeClass("BorderAboveDetail");
+                // uncheck all
+                DetailDiv.find('input[type="checkbox"]').prop('checked', '');
+            });
+            $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 
             // add separator line between checkbox groups
             var currentDetail = "";
@@ -240,15 +244,16 @@
             }
         }
 
-        function ClickOrderTypeChosen(type)
+    <%--function ClickOrderTypeChosen(type)
         {
             $('#<%= this.hidOrderType.ClientID %>').val(type);
             $('#modalOrderType').modal('hide');
-        }
+        }--%>
 
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
-        function ToggleCYOP(button) {
+        function ToggleCYOP(button)
+        {
             var btn = $(button);
             var message = "";
             var customID = btn.attr("customID");
@@ -280,7 +285,8 @@
         // Toggle the state of a "Choose you own pizza" button where there are possibilities 
         // to toggle beween the detail being applied to the left, right, or all of the pizza
         var states = ["+none", "+whole", "+left", "+right"];
-        function ToggleCYOPHalves(button) {
+        function ToggleCYOPHalves(button)
+        {
             var btn = $(button);
             var customID = btn.attr("customID");
             var IDString;
@@ -441,7 +447,7 @@
                                     </div>
                                     <div class="addToCartButton">
                                         <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' />
-                                        <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
+                                        <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" onclick="normalPurchaseClick(this);" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
                                         <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
                                     </div>
                                 </div>
@@ -534,7 +540,7 @@
                     <asp:Label id="CYOP_10" name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
 
                     <div id="placeholder3" runat="server" class="CYOP-placeholder">&ensp;&ensp;&ensp;&ensp;&ensp;</div>
-                    <h3 class="CYOP-Header3">Fresh vegetable</h3> 
+                    <h3 class="CYOP-Header3">Fresh Vegetable</h3> 
                     <asp:Label name="Fresh Sliced Onions"   id="CYOP_11" runat="server" customID="CYOP_11" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</asp:Label>
                     <asp:Label name="Green Pepper"          id="CYOP_12" runat="server" customID="CYOP_12" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Green Pepper</asp:Label>
                     <asp:Label name="Roma Tomatoes"         id="CYOP_13" runat="server" customID="CYOP_13" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Roma Tomatoes</asp:Label>
@@ -553,13 +559,13 @@
         </div>
 
 
-    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />
+<%--    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />--%>
 
     <%-- Modal --%>
-    <div id="modalOrderType" class="modal fade text-center" role="dialog">
-        <div class="modal-dialog">
+<%--    <div id="modalOrderType" class="modal fade text-center" role="dialog">
+        <div class="modal-dialog">--%>
             <%-- Modal content--%>
-            <div class="modal-content">
+<%--            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h3 class="modal-title">Delivery or Pick-Up?</h3>
@@ -571,5 +577,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>--%>
 </asp:Content>

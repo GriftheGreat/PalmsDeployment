@@ -17,6 +17,10 @@ public partial class Payment : System.Web.UI.Page
     }
     #endregion
 
+    #region Variables
+    public string tabToReopen = "1"; // "1" -> Credit Card , "2" -> PCC ID Card
+    #endregion
+
     protected void Page_Load(object sender, EventArgs e)
     {
         this.Form.DefaultButton = this.lnkSubmit.UniqueID;
@@ -123,6 +127,8 @@ public partial class Payment : System.Web.UI.Page
         MyOrder = tempOrder; // saving the delivery type is important on this page
         #endregion
 
+        tabToReopen = this.hidPaymentType.Value; // "1" -> Credit Card , "2" -> PCC ID Card
+
         #region payment
         if (this.hidPaymentType.Value == "1") // Credit Card
         {
@@ -136,10 +142,12 @@ public partial class Payment : System.Web.UI.Page
                                                                                                    Request);
             #endregion
             #region Save_Credit_Card_Info
-            string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/,
-                                                                                                paymentResultString,
-                                                                                                paymentResultString.Contains("Pass:") ? "Y" : "N",
-                                                                                                Request);
+            string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
+                                                                                             MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
+                                                                                             paymentResultString,
+                                                                                             paymentResultString.Contains("Pass:") ? "Y" : "N",
+                                                                                             Request);
+            Response.Write(saveResultString);
             #endregion
 
             success = paymentResultString.Contains("Pass") && saveResultString.Contains("Pass");
@@ -160,7 +168,8 @@ public partial class Payment : System.Web.UI.Page
         {
             //validate?
             #region SendSave_ID_Card_Info
-            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234"/*not possible... Use customer name?  MyOrder.ID.ToString()*/,
+            string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
+                                                                                                MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                 this.txtIDNumber.Text,
                                                                                                 this.txtPassword.Text,
                                                                                                 this.litPrice.Text.Replace("$", ""),
@@ -219,14 +228,16 @@ public partial class Payment : System.Web.UI.Page
                                                                                                            this.txtCreditCardOwnerName.Text,
                                                                                                            (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate
                                                                                                            Request);
-                    string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info("1234",
+                    string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
+                                                                                                     MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                      paymentResultString,
                                                                                                      paymentResultString.Contains("Pass:") ? "Y" : "N",
                                                                                                      Request);
                 }
                 else if (this.hidPaymentType.Value == "2") // PCC ID Card
                 {
-                    string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info("1234",
+                    string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
+                                                                                                        MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                         this.txtIDNumber.Text,
                                                                                                         this.txtPassword.Text,
                                                                                                         (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate
@@ -252,6 +263,8 @@ public partial class Payment : System.Web.UI.Page
 
             this.lblError.Text = "";
             checkFoodDeliverability(); // button click function happens after Page_Load check
+
+            tabToReopen = this.hidPaymentType.Value; // "1" -> Credit Card , "2" -> PCC ID Card
         }
     }
 

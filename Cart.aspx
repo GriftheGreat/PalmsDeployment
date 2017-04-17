@@ -33,6 +33,11 @@
         {
             color: rgb(200, 25, 25);
         }
+
+        .bad-data
+        {
+            border: 2px solid rgb(200, 25, 25);
+        }
     </style>
 </asp:Content>
 
@@ -126,6 +131,76 @@
                     }
                 });
             });
+
+            // validate delivery location
+            $('#<%= this.lnkGoPay.ClientID %>').on('click', function ()
+            {
+                var isValid = true;
+
+                var txtLocationPlaceCheck  = /^[0-9]{3,4}$/;
+
+                var ddlDeliveryType        = $('#<%= this.ddlDeliveryType.ClientID %>');
+                var ddlLocations           = $('#<%= this.ddlLocations.ClientID %>');
+                var locationPlaceContainer = $('#<%= this.locationPlaceContainer.ClientID %>');
+                var txtLocationPlace       = $('#<%= this.txtLocationPlace.ClientID %>');
+                var lblError               = $('#<%= this.lblError.ClientID %>');
+
+                if (ddlDeliveryType.val() != "") {
+                    ddlDeliveryType.removeClass("bad-data");
+                    lblError.html(lblError.html().replace("Please choose Pick Up or Delivery.", ""));
+                }
+                else {
+                    ddlDeliveryType.addClass("bad-data");
+                    isValid = false;
+                    if (lblError.html().indexOf("Please choose Pick Up or Delivery.") == -1) {
+                        if (lblError.html().length > 0) {
+                            lblError.html(lblError.html() + "<br />");
+                        }
+                        lblError.html(lblError.html() + "Please choose Pick Up or Delivery.");
+                    }
+                }
+
+                if (ddlLocations.val() != "") {
+                    ddlLocations.removeClass("bad-data");
+                    lblError.html(lblError.html().replace("Please choose your delivery Location.", ""));
+                }
+                else {
+                    ddlLocations.addClass("bad-data");
+                    isValid = false;
+                    if (lblError.html().indexOf("Please choose your delivery Location.") == -1) {
+                        if (lblError.html().length > 0) {
+                            lblError.html(lblError.html() + "<br />");
+                        }
+                        lblError.html(lblError.html() + "Please choose your delivery Location.");
+                    }
+                }
+
+                if (locationPlaceContainer.is(':visible'))
+                {
+                    if (txtLocationPlaceCheck.test(txtLocationPlace.val())) {
+                        txtLocationPlace.removeClass("bad-data");
+                        lblError.html(lblError.html().replace("Please give your Residence Hall Room/Waveland Apartment number.", ""));
+                    }
+                    else {
+                        txtLocationPlace.addClass("bad-data");
+                        isValid = false;
+                        if (lblError.html().indexOf("Please give your Residence Hall Room/Waveland Apartment number.") == -1) {
+                            if (lblError.html().length > 0) {
+                                lblError.html(lblError.html() + "<br />");
+                            }
+                            lblError.html(lblError.html() + "Please give your Residence Hall Room/Waveland Apartment number.");
+                        }
+                    }
+                }
+
+                if (!(isValid))
+                {
+                    $('body,html').animate({
+                        scrollTop: 0
+                    });
+                }
+                return isValid;// false stops postback
+            });
         });
     </script>
     <%-- Location picking --%>
@@ -134,7 +209,8 @@
         {
             var ddl = $(ddl);
 
-            if (ddl.val() != null && ddl.val() != '') {
+            if (ddl.val() != null && ddl.val() != '')
+            {
                 ddl.children().first().hide();
             }
 
@@ -218,10 +294,10 @@
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
                             </div>
                             <asp:Label         ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
-                        <!--<asp:Label         ID="lblfrontprice"  runat="server" Text='<%# Eval("Price").ToString().Insert(Eval("Price").ToString().IndexOf("-") + 1,"$") %>' />-->
 
-                            <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_non_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" %>
                             <asp:Label         ID="lblDescription" runat="server" Text='<%# Eval("Description") %>' />
+                            <%# (Eval("Deliverable") != null &&  Eval("Deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/inverted_non_delivery_icon.png\" style=\"float: right;\" title=\"Deliverable\" />" %>
+                            <asp:Label         ID="lblfrontprice"  runat="server" CssClass="food-cost" />
                             <asp:HiddenField   ID="hid1"           runat="server" Value='<%# Eval("Deliverable") %>' />
                             <br />
                             <div class="item-detail-list">

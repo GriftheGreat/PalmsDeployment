@@ -23,7 +23,7 @@ using System.Web.Services;
 public class IDCard
 {
     [WebMethod]
-    public string Process_ID_Card(string Order_ID, string ID_Number, string Password, string amount)
+    public string Process_ID_Card(string Customer_Name, string Order_Time, string ID_Number, string Password, string amount)
     {
         string status;
         string result = "";
@@ -44,7 +44,8 @@ public class IDCard
             if (status == "Pass")
             {
                 // Retain invoice
-                string query_string = @"BEGIN :out := PCC_account_inv_package.createPAI(p_order_id_fk => :p_order_id_fk,
+                string query_string = @"BEGIN :out := PCC_account_inv_package.createPAI(p_pai_customer_name   => :p_pai_customer_name,
+                                                                                        p_pai_order_time      => TO_DATE(:p_pai_order_time, 'YYYYMMDD HH24:MI:SS'),
                                                                                         p_confirmation_status => :p_confirmation_status); END;";
                 OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
                 OracleCommand myCommand = new OracleCommand(query_string, myConnection);
@@ -53,7 +54,8 @@ public class IDCard
                 {
                     myConnection.Open();
                     myCommand.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-                    myCommand.Parameters.Add("p_order_id_fk", Order_ID);
+                    myCommand.Parameters.Add("p_pai_customer_name", Customer_Name);
+                    myCommand.Parameters.Add("p_pai_order_time", Order_Time);
                     myCommand.Parameters.Add("p_confirmation_status", 'Y');
                     myCommand.ExecuteNonQuery();
 
@@ -221,10 +223,13 @@ public class Menu_Data
 public class CreditCardInvoice
 {
     [WebMethod]
-    public string createCCI(string p_cci_order_id_fk, string p_cci_token, string p_cci_confirmation_status)
+    public string createCCI(string Customer_Name, string Order_Time, string p_cci_token, string p_cci_confirmation_status)
     {
         string result;
-        string query_string = "BEGIN :out := credit_card_inv_package.createCCI(p_cci_order_id_fk => :p_cci_order_id_fk, p_cci_token => :p_cci_token, p_cci_confirmation_status => :p_cci_confirmation_status); END;";
+        string query_string = @"BEGIN :out := credit_card_inv_package.createCCI(p_cci_customer_name       => :p_cci_customer_name,
+                                                                                p_cci_order_time          => TO_DATE(:p_cci_order_time, 'YYYYMMDD HH24:MI:SS'),
+                                                                                p_cci_token               => :p_cci_token,
+                                                                                p_cci_confirmation_status => :p_cci_confirmation_status); END;";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query_string, myConnection);
 
@@ -232,7 +237,8 @@ public class CreditCardInvoice
         {
             myConnection.Open();
             myCommand.Parameters.Add("out", OracleDbType.Int32, ParameterDirection.Output);
-            myCommand.Parameters.Add("p_cci_order_id_fk", p_cci_order_id_fk);
+            myCommand.Parameters.Add("p_cci_customer_name", Customer_Name);
+            myCommand.Parameters.Add("p_cci_order_time", Order_Time);
             myCommand.Parameters.Add("p_cci_token", p_cci_token);
             myCommand.Parameters.Add("p_cci_confirmation_status", p_cci_confirmation_status);
             myCommand.ExecuteNonQuery();

@@ -45,20 +45,22 @@ public static class Data_Provider
         //    return true;
         //}
 
-        public static string Save_Credit_Card_Info(string order_id, string token, string confirmation_status, HttpRequest request)
+        public static string Save_Credit_Card_Info(string Customer_Name, string Order_Time, string token, string confirmation_status, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("p_cci_order_id_fk",         order_id);
+            parameters.Add("Customer_Name", Customer_Name);
+            parameters.Add("Order_Time", Order_Time);
             parameters.Add("p_cci_token",               token);
             parameters.Add("p_cci_confirmation_status", confirmation_status);
 
             return sendWebRequest(parameters, URL.root(request) + "Services/CreditCardInvoice.asmx/createCCI");
         }
 
-        public static string SendSave_ID_Card_Info(string Order_ID, string ID_Number, string Password, string amount, HttpRequest request)
+        public static string SendSave_ID_Card_Info(string Customer_Name, string Order_Time, string ID_Number, string Password, string amount, HttpRequest request)
         {
             NameValueCollection parameters = new NameValueCollection();
-            parameters.Add("Order_ID", Order_ID);
+            parameters.Add("Customer_Name", Customer_Name);
+            parameters.Add("Order_Time", Order_Time);
             parameters.Add("ID_Number", ID_Number);
             parameters.Add("Password", Password);
             parameters.Add("amount", amount);

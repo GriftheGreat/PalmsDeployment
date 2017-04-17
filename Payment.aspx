@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href=<%= "\"" + URL.root(Request) + "Includes/stylesheets/CardStyles.css\"" %> />
     <%-- cart styles --%>
     <style type="text/css">
-        .help-tip{
+        .help-tip {
 	        position: relative;
             top: 5px;
 	        text-align: center;
@@ -25,13 +25,13 @@
             display: block;
         }
 
-        .help-tip:before{
+        .help-tip:before {
 	        content:'?';
 	        font-weight: bold;
 	        color:#fff;
         }
 
-        .help-tip:hover p{
+        .help-tip:hover p {
             z-index: 100;
 	        display:block;
 	        transform-origin: 100% 0%;
@@ -40,7 +40,7 @@
 	        animation: fadeIn 0.3s ease-in-out;
         }
 
-        .help-tip p{	/* The tooltip */
+        .help-tip p {	/* The tooltip */
 	        display: none;
 	        text-align: left;
 	        background-color: #1E2021;
@@ -55,7 +55,7 @@
 	        line-height: 1.4;
         }
 
-        .help-tip p:before{ /* The pointer of the tooltip */
+        .help-tip p:before { /* The pointer of the tooltip */
 	        position: absolute;
 	        content: '';
 	        width:0;
@@ -66,7 +66,7 @@
 	        top:-12px;
         }
 
-        .help-tip p:after{ /* Prevents the tooltip from being hidden */
+        .help-tip p:after { /* Prevents the tooltip from being hidden */
 	        width:100%;
 	        height:40px;
 	        content:'';
@@ -75,24 +75,32 @@
 	        left:0;
         }
 
+        .help-tip-click p {
+            z-index: 100;
+	        display:block;
+	        transform-origin: 100% 0%;
+
+	        -webkit-animation: fadeIn 0.3s ease-in-out;
+	        animation: fadeIn 0.3s ease-in-out;
+        }
 /* CSS animation */
 
-@-webkit-keyframes fadeIn {
-	0% { 
-		opacity:0; 
-		transform: scale(0.6);
-	}
+        @-webkit-keyframes fadeIn {
+	        0% { 
+		        opacity:0; 
+		        transform: scale(0.6);
+	        }
 
-	100% {
-		opacity:100%;
-		transform: scale(1);
-	}
-}
+	        100% {
+		        opacity:100%;
+		        transform: scale(1);
+	        }
+        }
 
-@keyframes fadeIn {
-	0% { opacity:0; }
-	100% { opacity:1; }
-}
+        @keyframes fadeIn {
+	        0% { opacity:0; }
+	        100% { opacity:1; }
+        }
 
 
         .payment-item
@@ -226,9 +234,10 @@
 <asp:Content ID="Content2" runat="server" ContentPlaceHolderID="Scripts">
     <script type="text/javascript">
         $(document).ready(function () {
-            switchToTab("1");
+            switchToTab(<%= tabToReopen %>);
 
-            $('#<%= this.lnkSubmit.ClientID %>').on('click', function () {
+            $('#<%= this.lnkSubmit.ClientID %>').on('click', function ()
+            {
                 var isValid = true;
 
                 var txtLocationPlaceCheck  = /^[0-9]{3,4}$/;
@@ -352,7 +361,7 @@
                         isValid = false;
                     }
                 }
-                return isValid;// false stops postback :D
+                return isValid;// false stops postback
             });
         });
 
@@ -403,6 +412,18 @@
                 $('#<%= this.locationPlaceContainer.ClientID %>').hide();
             }
         }
+
+        function helpClick(tip)
+        {
+            if ($(tip).hasClass('help-tip-click'))
+            {
+                $(tip).removeClass('help-tip-click');
+            }
+            else
+            {
+                $(tip).addClass('help-tip-click');
+            }
+        }
     </script>
 </asp:Content>
 
@@ -439,7 +460,7 @@
                             <td><asp:TextBox      ID="txtFirstName"    class="inputText"  runat  ="server" /></td>
                         </tr>
                         <tr>
-                            <td>Customer last Name:</td>
+                            <td>Customer Last Name:</td>
                             <td><asp:TextBox      ID="txtLastName"     class="inputText"    runat="server" /></td>
                         </tr>
                         <tr>
@@ -490,29 +511,29 @@
                     <table>
                         <tr>
                             <td>Credit Card Number:</td>
-                            <td class="help-tip">
-	                                <p>Must be 16 digits long</p>
+                            <td class="help-tip" onclick="helpClick(this);">
+	                            <p>Must be 16 digits long</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardNumber"    class="inputText"       runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
-                            <td class="help-tip">
-	                                <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
+                            <td class="help-tip" onclick="helpClick(this);">
+	                            <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardSecurityCode"   class="inputText"          runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
-                            <td class="help-tip">
-	                                <p>Format: mm/yy</p>
+                            <td class="help-tip" onclick="helpClick(this);">
+	                            <p>Format: mm/yy</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardExpDate"    class="inputText"      runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
-                            <td class="help-tip">
-	                                <p>Format: Firstname Lastname</p>
+                            <td class="help-tip" onclick="helpClick(this);">
+	                            <p>Format: Firstname Lastname</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardOwnerName"    class="inputText"            runat="server" /></td>
                         </tr>

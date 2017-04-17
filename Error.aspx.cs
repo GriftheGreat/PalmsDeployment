@@ -98,4 +98,10 @@ public partial class Errors : System.Web.UI.Page
         // Clear the error from the server.
         Server.ClearError();
     }
+
+    protected void lnkbHome_Click(object sender, EventArgs e)
+    {
+        Session.Clear();
+        Response.Redirect(URL.root(Request) + "Default.aspx", true);
+    }
 }

@@ -50,10 +50,10 @@ public partial class Menu : System.Web.UI.Page
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
 
-        if (MyOrder != null)
-        {
-            this.hidOrderType.Value = MyOrder.Type;
-        }
+        //if (MyOrder != null)
+        //{
+        //    this.hidOrderType.Value = MyOrder.Type;
+        //}
 
         if (Request.QueryString["menu"] == "PapaJohns")
         {
@@ -268,11 +268,11 @@ public partial class Menu : System.Web.UI.Page
 
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element(food["is_deliverable"].ToString(),
                                                        Convert.ToInt32(this.hidChosenFoodId.Value),
@@ -369,11 +369,11 @@ public partial class Menu : System.Web.UI.Page
         }
         if (tempOrder == null)
         {
-            tempOrder = new Order(this.hidOrderType.Value);
+            tempOrder = new Order("");// this.hidOrderType.Value);
         }
 
-        tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
+        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
+        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
 
         tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
                                                130, //id 

@@ -126,6 +126,48 @@
                     }
                 });
             });
+
+            // validate delivery location
+            $('#<%= this.lnkGoPay.ClientID %>').on('click', function ()
+            {
+                var isValid = true;
+
+                var txtLocationPlaceCheck  = /^[0-9]{3,4}$/;
+
+                var ddlDeliveryType        = $('#<%= this.ddlDeliveryType.ClientID %>');
+                var ddlLocations           = $('#<%= this.ddlLocations.ClientID %>');
+                var locationPlaceContainer = $('#<%= this.locationPlaceContainer.ClientID %>');
+                var txtLocationPlace       = $('#<%= this.txtLocationPlace.ClientID %>');
+                var lblError               = $('#<%= this.lblError.ClientID %>');
+
+                if (!(lblError.html().includes("cannot be delivered")) && ddlDeliveryType.val() != "") {
+                    ddlDeliveryType.removeClass("bad-data");
+                }
+                else {
+                    ddlDeliveryType.addClass("bad-data");
+                    isValid = false;
+                }
+
+                if (ddlLocations.val() != "") {
+                    ddlLocations.removeClass("bad-data");
+                }
+                else {
+                    ddlLocations.addClass("bad-data");
+                    isValid = false;
+                }
+
+                if (locationPlaceContainer.is(':visible'))
+                {
+                    if (txtLocationPlaceCheck.test(txtLocationPlace.val())) {
+                        txtLocationPlace.removeClass("bad-data");
+                    }
+                    else {
+                        txtLocationPlace.addClass("bad-data");
+                        isValid = false;
+                    }
+                }
+                return isValid;// false stops postback
+            }
         });
     </script>
     <%-- Location picking --%>

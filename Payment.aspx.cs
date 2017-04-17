@@ -17,6 +17,10 @@ public partial class Payment : System.Web.UI.Page
     }
     #endregion
 
+    #region Variables
+    public string tabToReopen = "1"; // "1" -> Credit Card , "2" -> PCC ID Card
+    #endregion
+
     protected void Page_Load(object sender, EventArgs e)
     {
         this.Form.DefaultButton = this.lnkSubmit.UniqueID;
@@ -122,6 +126,8 @@ public partial class Payment : System.Web.UI.Page
                                                                                                  this.ddlLocations.SelectedValue + " " + this.txtLocationPlace.Text);
         MyOrder = tempOrder; // saving the delivery type is important on this page
         #endregion
+
+        tabToReopen = this.hidPaymentType.Value; // "1" -> Credit Card , "2" -> PCC ID Card
 
         #region payment
         if (this.hidPaymentType.Value == "1") // Credit Card
@@ -252,6 +258,8 @@ public partial class Payment : System.Web.UI.Page
 
             this.lblError.Text = "";
             checkFoodDeliverability(); // button click function happens after Page_Load check
+
+            tabToReopen = this.hidPaymentType.Value; // "1" -> Credit Card , "2" -> PCC ID Card
         }
     }
 

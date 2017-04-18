@@ -20,31 +20,6 @@
         $(document).ready(function () {
             $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
-        <%--if($('#<%= this.hidOrderType.ClientID %>').val() == "")
-            {
-                $('body').one("click", 'input[chooseDetail]', function ()
-                {
-                    $('#modalOrderType').modal('show');
-                    $('input[chooseDetail]').on("click", normalPurchaseClick);
-
-                    var purchaseButton = $(this);
-                    var hidFoodID = purchaseButton.attr("chooseDetail");
-                    foodID = $('#' + hidFoodID).val();// assign global variable
-
-                    $('#modalDesc').text(purchaseButton.attr("descr"));
-                });
-            }
-            else
-            {
-                $('input[chooseDetail]').on("click", normalPurchaseClick);
-            }--%>
-
-        <%--$('#modalOrderType').on("hidden.bs.modal", function ()
-            {
-                putOptionsOnModal();// needs global variable
-                $('#modalFoodDetails').modal('show');
-            });--%>
-
             // set checkbox click events
             $('.item-detail-list input[type="checkbox"]').each(function ()
             {
@@ -125,6 +100,9 @@
 
         function putOptionsOnModal()
         {
+            $('.item-detail-list').show();
+
+            // hide/show details to the selected food (see global variable)
             $('div[detail]').each(function ()
             {
                 var DetailDiv = $(this);
@@ -143,55 +121,65 @@
                 DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
                 // remove all separators
                 DetailDiv.removeClass("BorderAboveDetail");
+                // remove all group instructions
+                DetailDiv.removeClass("ExclusiveGroupInstructions");
                 // uncheck all
                 DetailDiv.find('input[type="checkbox"]').prop('checked', '');
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 
-            // add separator line between checkbox groups
-            var currentDetail = "";
-            $('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
-            {
-                var group = $(this).find('input[id*="hidGroupName"]').first().val();
-
-                // VVV added this to check first of groups VVV
-                if (!(group == null || group == "") && $(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+            if ($('.item-detail-list').children(':not(div[style*="display: none;"])').toArray().length == 0) {
+                $('.item-detail-list').hide();
+            }
+            else {
+                // add separator line between and instruction for checkbox groups (checking the default/first of necessary groups)
+                var currentDetail = "";
+                $('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
                 {
-                    var detailsInGroup = $('.item-detail-list').find(':not(div[style*="display: none;"]) input[id*="hidGroupName"][value*="' + group + '"]');
-                    var detailInGroupToCheck = detailsInGroup.first();
+                    var group = $(this).find('input[id*="hidGroupName"]').first().val();
 
-                    // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
-                    detailsInGroup.each(function ()
+                    // VVV added this to check first of groups VVV
+                    if (!(group == null || group == "") && $(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
                     {
-                        if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
+                        var detailsInGroup = $('.item-detail-list').find(':not(div[style*="display: none;"]) input[id*="hidGroupName"][value*="' + group + '"]');
+                        var detailInGroupToCheck = detailsInGroup.first();
+
+                        // set group instructions
+                        detailInGroupToCheck.parent().addClass("ExclusiveGroupInstructions");
+
+                        // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
+                        detailsInGroup.each(function ()
                         {
-                            detailInGroupToCheck = $(this);
-                        }
-                    });
+                            if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
+                            {
+                                detailInGroupToCheck = $(this);
+                            }
+                        });
 
-                    detailInGroupToCheck.siblings('input[type="checkbox"]').prop('checked', 'checked');
-                }
-                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        detailInGroupToCheck.siblings('input[type="checkbox"]').prop('checked', 'checked');
+                    }
+                    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-                $(this).removeClass("BorderAboveDetail");
+                    //$(this).removeClass("BorderAboveDetail");
 
-                if (currentDetail == null || currentDetail == "")
-                {
-                    if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+                    if (currentDetail == null || currentDetail == "")
                     {
-                        currentDetail = group;
-                        if (!(group == null || group == "") && index != 0)
+                        if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
                         {
-                            $(this).addClass("BorderAboveDetail");
+                            currentDetail = group;
+                            if (!(group == null || group == "") && index != 0)
+                            {
+                                $(this).addClass("BorderAboveDetail");
+                            }
                         }
                     }
-                }
-                else if (currentDetail != group && group.indexOf("X") == -1)
-                {
-                    $(this).addClass("BorderAboveDetail");
-                    currentDetail = group;
-                }
-            });
+                    else if (currentDetail != group && group.indexOf("X") == -1)
+                    {
+                        $(this).addClass("BorderAboveDetail");
+                        currentDetail = group;
+                    }
+                });
+            }
 
             foodID = null;// clear global variable
         }

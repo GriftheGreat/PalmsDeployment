@@ -160,8 +160,6 @@
                     }
                     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-                    //$(this).removeClass("BorderAboveDetail");
-
                     if (currentDetail == null || currentDetail == "")
                     {
                         if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)

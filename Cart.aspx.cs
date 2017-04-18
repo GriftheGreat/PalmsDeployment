@@ -109,7 +109,7 @@ public partial class Cart : System.Web.UI.Page
             if (MyOrder.Order_Elements != null)
             {
                 string cost = Math.Round(MyOrder.CalculateCost(), 2).ToString();
-                this.litPrice.Text = cost.Insert(cost.IndexOf("-") + 1, "$");
+                this.litPrice.Text = Data_Provider.correctPrices(cost);
             }
         }
         this.lblError.Text = "";
@@ -120,7 +120,7 @@ public partial class Cart : System.Web.UI.Page
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));
 
-        ((Label)e.Item.FindControl("lblfrontprice")).Text = ((Order_Element)e.Item.DataItem).CalculateCost().ToString().Insert(((Order_Element)e.Item.DataItem).CalculateCost().ToString().IndexOf("-") + 1, "$");
+        ((Label)e.Item.FindControl("lblfrontprice")).Text = Data_Provider.correctPrices(((Order_Element)e.Item.DataItem).CalculateCost().ToString());
 
         if (((Order_Element)e.Item.DataItem).ID == 130)
         {

@@ -143,7 +143,7 @@ public class Menu_Data
         queries[0] = @"SELECT Food.*, TO_CHAR(food_cost, '99.99') as food_cost_1 FROM food";
         queries[1] = @"SELECT * FROM food_type";
         queries[2] = @"SELECT * FROM food_detail_line";
-        queries[3] = @"SELECT * FROM detail";
+        queries[3] = @"select detail.*, TO_CHAR(detail_cost, 9.99) as detail_cost_1 FROM detail";
 
         DataTable menu = new DataTable();
         StringBuilder sb = new StringBuilder();

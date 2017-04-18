@@ -27,22 +27,22 @@
             <%--<div class="carouselWrapper">--%>
         <div class="carousel-inner">
              
-                    <div class="item active carouselWrapper">
-                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="slideImages" />
+                    <div class="item active">
+                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide1.jpg\"" %> alt="First Slide" class="fill" />
                         <div class="carousel-caption slideShowCaption">
                             <h2>Fresh Garden Food</h2>
                             <p>Food is good for you, so why not enjoy it to the fullest (lol). - Ralph Etienne</p>
                         </div>
                     </div>
                     <div class="item carouselWrapper">
-                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide2.jpeg\"" %> alt="second Slide" class="slideImages" />
+                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide2.jpeg\"" %> alt="second Slide" class="fill" />
                         <div class="carousel-caption slideShowCaption">
                             <h2>Fresh Garden Salad</h2>
                             <p>"What a yummy, fresh, freedom in a bowl..." - Unknown</p>
                         </div>
                     </div>
                     <div class="item carouselWrapper">
-                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide3.jpg\"" %> class="slideImages" />
+                        <img src=<%= "\"" + URL.root(Request) + "Includes/images/slideShow/slide3.jpg\"" %> class="fill" />
                         <div class="carousel-caption slideShowCaption">
                             <h2>Fresh Garden Pizza</h2>
                             <p>"We all need to make time for a pizza once in a while..." - Unknown</p>

@@ -313,8 +313,7 @@
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>
-                            <asp:Label         Visible='<%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? true : false %>' ID="Label1" runat="server" CssClass="Error" Text="This item cannot be delivered, choose &quot;Pick Up&quot; or remove from cart" />
-                                                                                                                                                                                                                                     <%--"Please change the order to a delivery or remove the product from the cart."--%>                               
+                            <asp:Label         ID="Label1" runat="server" CssClass="Error" Text="This item cannot be delivered, choose &quot;Pick Up&quot; or remove from cart" Visible='<%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? true : false %>'/>
                             <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" style="min-width:55px;min-height:35px;"/>
                         </div>
                     </div>

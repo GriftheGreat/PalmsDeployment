@@ -194,7 +194,7 @@ public partial class Cart : System.Web.UI.Page
             }
             if (!allFoodsMatchType)
             {
-                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more foods cannot be delivered. Please remove them or choose Pick-Up.";
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more foods cannot be delivered. Please remove them or choose \"Pick-Up\".";
             }
         }
         return allFoodsMatchType;

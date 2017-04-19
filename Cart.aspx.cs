@@ -115,7 +115,7 @@ public partial class Cart : System.Web.UI.Page
         this.lblError.Text = "";
         this.lnkGoPay.Enabled = checkFoodDeliverability();
     }
-
+    
     protected void rptItems_ItemDataBound(object sender, RepeaterItemEventArgs e)
     {
         Repeater rpt = ((Repeater)e.Item.FindControl("rptDetails"));

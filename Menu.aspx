@@ -402,30 +402,30 @@
                 <div class="modal-body">
                     
                     <h1 class="CYOP-Header">Select size:</h1>
-                    <asp:Label id="CYOP_01"  runat="server" customID="CYOP_01" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="true" >8''</asp:Label><span style="width:10px;">&nbsp;</span> 
-                    <asp:Label id="CYOP_02"  runat="server" customID="CYOP_02" type="size" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this)" value="false"  >16''</asp:Label>            
+                    <asp:Label id="CYOP_01"  runat="server" customID="CYOP_01" type="size" class="btn CYOP-Button"                      onclick="ToggleCYOP(this)" value="true" >8''</asp:Label><span style="width:10px;">&nbsp;</span> 
+                    <asp:Label id="CYOP_02"  runat="server" customID="CYOP_02" type="size" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this)" value="false"  >16''</asp:Label>            
 
                     <h1 class="CYOP-Header">Choose Your Crust:</h1>
-                    <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
-                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Pan Crust</asp:Label><span style="width:10px;">&nbsp;</span>
-                    <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Stuffed Crust +$1.00</asp:Label>
+                    <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-whole"   onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Pan Crus</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Stuffed Crust +$1.00</asp:Label>
                     <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
                     <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>
 
                     <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
-                    <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
-                    <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
-                    <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
-                    <asp:Label id="CYOP_21" runat="server" customID="CYOP_21" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Spinach Alfredo</asp:Label>
+                    <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
+                    <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
+                    <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
+                    <asp:Label id="CYOP_21" runat="server" customID="CYOP_21" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Spinach Alfredo</asp:Label>
 
                     <h1 class="CYOP-Header">Choose Your Toppings:</h1>
-                    <p id="instructions" style="color:rgba(13,86,55, .9); font-weight: bold;">Click a topping multiple times to apply to only one side of the pizza</p>
+                    <p id="instructions" style="color:rgba(13,86,55, .9); background-color:rgba(242,241,239, .9); font-weight: bold;">Click a topping multiple times to apply to only one side of the pizza</p>
                     <h3>Real Meat</h3>
                     <asp:Label id="CYOP_06"  name="Bacon"            runat="server" customID="CYOP_06" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Bacon</asp:Label>
                     <asp:Label id="CYOP_07"  name="Beef"             runat="server" customID="CYOP_07" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Beef</asp:Label>
                     <asp:Label id="CYOP_08"  name="Canadian Bacon"   runat="server" customID="CYOP_08" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Canadian Bacon</asp:Label>
                     <asp:Label id="CYOP_09"  name="Italian Sausage"  runat="server" customID="CYOP_09" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Italian Sausage</asp:Label>
-                    <asp:Label id="CYOP_10" name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
+                    <asp:Label id="CYOP_10"  name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
 
                     <div id="placeholder3" runat="server" class="CYOP-placeholder">&ensp;&ensp;&ensp;&ensp;&ensp;</div>
                     <h3 class="CYOP-Header3">Fresh vegetable</h3> 
@@ -438,8 +438,8 @@
                     <asp:Label name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" customID="CYOP_17" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</asp:Label>
                     <br /> <br />
                     <div>
-                        <asp:HiddenField ID="hidPizzaBtnValues" runat="server" value="CYOP_02,CYOP_03,CYOP_18" />
-                        <asp:Button  ID="AddPizzaToCart" runat="server" class="btn btn-success btn-block" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
+                        <asp:HiddenField ID="hidPizzaBtnValues" runat="server" value="CYOP_02,CYOP_03,CYOP_18" /> <!-- These are the preselected toppings -->
+                        <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-success btn-block" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
                     </div>
                 </div>
               </div>

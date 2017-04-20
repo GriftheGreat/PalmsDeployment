@@ -292,6 +292,7 @@
                         <div class="col-lg-12 cart-item">
                             <div class="front card-front <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
+                                
                             </div>
                             <asp:Label         ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
 
@@ -312,7 +313,8 @@
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>
-                            <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
+                            <asp:Label         ID="Label1" runat="server" CssClass="Error" Text="This item cannot be delivered, choose &quot;Pick Up&quot; or remove from cart" Visible='<%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? true : false %>'/>
+                            <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" style="min-width:55px;min-height:35px;"/>
                         </div>
                     </div>
                 </ItemTemplate>

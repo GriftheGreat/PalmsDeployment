@@ -4,7 +4,7 @@ public partial class ThankYou : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["orderNumber"] != null && Session["ASAPTime"] != null)
+        if (Session["orderNumber"] != null && Session["ASAPTime"] != null)
         {
             this.lblOrderNumber.Text = Session["orderNumber"].ToString();
             this.lblASAPTime.Text += Session["ASAPTime"].ToString();

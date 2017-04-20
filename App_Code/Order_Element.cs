@@ -142,68 +142,6 @@ public class Order_Element
         }
     }
 
-    //public DataTable Get_Order_Element(int food_id)
-    //{
-    //    DataTable data = new DataTable();
-    //    string query_string = @"SELECT f.food_id_pk, f.food_name, f.food_descr, f.food_cost, f.is_deliverable, f.image_path
-    //                              FROM food f
-    //                             WHERE f.food_id_pk = :food_id_pk";
-    //    OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-    //    OracleCommand myCommand = new OracleCommand(query_string, myConnection);
-
-    //    try
-    //    {
-    //        myConnection.Open();
-
-    //        myCommand.Parameters.Add("food_id_pk", food_id);
-    //        data.Load(myCommand.ExecuteReader());
-    //    }
-    //    finally
-    //    {
-    //        try
-    //        {
-    //            myCommand.Dispose();
-    //        }
-    //        catch { }
-
-    //        myConnection.Close();
-    //        myConnection.Dispose();
-    //    }
-    //    return data;
-    //}
-
-    //public DataTable Get_Details(int food_id)
-    //{
-    //    DataTable data = new DataTable();
-    //    string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
-    //                              FROM detail d
-    //                              JOIN food_detail_line fdl
-    //                                ON fdl.detail_id_fk = d.detail_id_pk
-    //                             WHERE fdl.food_id_fk = :food_id_fk";
-    //    OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-    //    OracleCommand myCommand = new OracleCommand(query_string, myConnection);
-
-    //    try
-    //    {
-    //        myConnection.Open();
-
-    //        myCommand.Parameters.Add("food_id_fk", food_id);
-    //        data.Load(myCommand.ExecuteReader());
-    //    }
-    //    finally
-    //    {
-    //        try
-    //        {
-    //            myCommand.Dispose();
-    //        }
-    //        catch { }
-
-    //        myConnection.Close();
-    //        myConnection.Dispose();
-    //    }
-    //    return data;
-    //}
-
     public float CalculateCost()
     {
         float cost = this.Price;

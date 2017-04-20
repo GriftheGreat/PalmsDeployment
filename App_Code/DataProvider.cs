@@ -251,6 +251,11 @@ public static class Data_Provider
 
         return result.Remove(result.LastIndexOf("<")); //REMOVES </string>
     }
+
+    public static string correctPrices(string badPrice)
+    {
+        return Convert.ToSingle(badPrice).ToString("0.00").Insert(Convert.ToSingle(badPrice).ToString("0.00").IndexOf("-") + 1, "$");
+    }
 }
 
 /// <summary>

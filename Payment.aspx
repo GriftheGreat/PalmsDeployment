@@ -194,6 +194,7 @@
             width: 100%;
             text-align: left;
             background-color: lightgray;
+            align-content: flex-end;
         }
 
         .payment-options-section table
@@ -368,22 +369,29 @@
 
                     if (IDNumberCheck.test(txtIDNumber.val())) {
                         txtIDNumber.removeClass("bad-data");
+                        $("#idNumComplaint").hide();
                     }
                     else {
                         txtIDNumber.addClass("bad-data");
+                        $("#idNumComplaint").show();
                         isValid = false;
                     }
 
                     if (PasswordCheck.test(txtPassword.val())) {
                         txtPassword.removeClass("bad-data");
+                        $("#idPassComplaint").hide();
                     }
                     else {
                         txtPassword.addClass("bad-data");
+                        $("#idPassComplaint").show();
                         isValid = false;
                     }
                 }
                 return isValid;// false stops postback
             });
+
+            $("#idNumComplaint").hide();
+            $("#idPassComplaint").hide();
         });
 
         function switchToTab(tabToOpen)
@@ -551,12 +559,18 @@
                 <div class="payment-options-section" tabSection="2">
                     <table>
                         <tr>
-                            <td>ID Number:</td>
+                            <td>ID Number: </td>
                             <td><asp:TextBox ID="txtIDNumber" runat="server" /></td>
                         </tr>
+                        <tr id="idNumComplaint">
+                            <td style="color:red">Enter your 6 digit ID number</td>
+                        </tr>
                         <tr>
-                            <td>Password:</td>
+                            <td id="password">Password:</td>
                             <td><asp:TextBox ID="txtPassword" runat="server" TextMode="Password" /></td>
+                        </tr>
+                        <tr id="idPassComplaint">
+                            <td style="color:red">Enter your 8 digit password</td>
                         </tr>
                     </table>
                 </div>

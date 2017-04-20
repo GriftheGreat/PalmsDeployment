@@ -37,7 +37,7 @@ public class CreditCard
         }
         else
         {
-            token = "Fail:Invalid credit card data";
+            token = "Fail:Invalid credit card data.";
         }
         return token + "\nownerName=" + ownerName + ":amount=" + amount;
     }

@@ -168,56 +168,41 @@
                 var locationPlaceContainer = $('#<%= this.locationPlaceContainer.ClientID %>');
                 var txtLocationPlace       = $('#<%= this.txtLocationPlace.ClientID %>');
                 var lblError               = $('#<%= this.lblError.ClientID %>');
+                var lblError2              = $('#<%= this.lblError2.ClientID %>');
+
+                lblError2.html("");
 
                 if (ddlDeliveryType.val() != "") {
                     ddlDeliveryType.removeClass("bad-data");
-                    lblError.html(lblError.html().replace("Please choose Pick Up or Delivery.", ""));
                 }
                 else {
                     ddlDeliveryType.addClass("bad-data");
                     isValid = false;
-                    if (lblError.html().indexOf("Please choose Pick Up or Delivery.") == -1) {
-                        if (lblError.html().length > 0) {
-                            lblError.html(lblError.html() + "<br />");
-                        }
-                        lblError.html(lblError.html() + "Please choose Pick Up or Delivery.");
-                    }
+                    lblError2.html(lblError2.html() + "<br />Please choose Pick Up or Delivery.");
                 }
 
                 if (ddlLocations.val() != "") {
                     ddlLocations.removeClass("bad-data");
-                    lblError.html(lblError.html().replace("Please choose your delivery Location.", ""));
                 }
                 else {
                     ddlLocations.addClass("bad-data");
                     isValid = false;
-                    if (lblError.html().indexOf("Please choose your delivery Location.") == -1) {
-                        if (lblError.html().length > 0) {
-                            lblError.html(lblError.html() + "<br />");
-                        }
-                        lblError.html(lblError.html() + "Please choose your delivery Location.");
-                    }
+                    lblError2.html(lblError2.html() + "<br />Please choose your delivery Location.");
                 }
 
                 if (locationPlaceContainer.is(':visible'))
                 {
                     if (txtLocationPlaceCheck.test(txtLocationPlace.val())) {
                         txtLocationPlace.removeClass("bad-data");
-                        lblError.html(lblError.html().replace("Please give your Residence Hall Room/Waveland Apartment number.", ""));
                     }
                     else {
                         txtLocationPlace.addClass("bad-data");
                         isValid = false;
-                        if (lblError.html().indexOf("Please give your Residence Hall Room/Waveland Apartment number.") == -1) {
-                            if (lblError.html().length > 0) {
-                                lblError.html(lblError.html() + "<br />");
-                            }
-                            lblError.html(lblError.html() + "Please give your Residence Hall Room/Waveland Apartment number.");
-                        }
+                        lblError2.html(lblError2.html() + "<br />Please give your Residence Hall Room/Waveland Apartment number.");
                     }
                 }
 
-                if (!(isValid))
+                if (!(isValid) || lblError.html().indexOf("cannot be delivered") != -1)
                 {
                     $('body,html').animate({
                         scrollTop: 0
@@ -275,7 +260,8 @@
                     The Cart allows you to modify your food how you like. When you are done, click Pay at the bottom to proceed.
                 </div>
                 <div>
-                    <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
+                    <asp:Label ID="lblError"  runat="server" Text="" CssClass="Error" />
+                    <asp:Label ID="lblError2" runat="server" Text="" CssClass="Error" />
                 </div>
                 <div class="payment-options-section" style="border-width: 2px 2px 2px 2px; background-color: sandybrown;">
                     <table>

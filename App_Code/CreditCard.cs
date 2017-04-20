@@ -22,7 +22,7 @@ public class CreditCard
         Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
         Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
         int expirationMonth     = Convert.ToInt32(expirationMonthDate.Substring(0, 2));
-        // Cut off point for calling it 19nn is 30
+        // if (expirationYear < 30) 20nn; else 19nn 
         int expirationYear      = System.Globalization.CultureInfo.CurrentCulture.Calendar.ToFourDigitYear(Convert.ToInt32(expirationMonthDate.Substring(3)));
         DateTime cardExpiration = new DateTime(expirationYear, expirationMonth + 1, 1);
 

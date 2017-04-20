@@ -20,31 +20,6 @@
         $(document).ready(function () {
             $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
-        <%--if($('#<%= this.hidOrderType.ClientID %>').val() == "")
-            {
-                $('body').one("click", 'input[chooseDetail]', function ()
-                {
-                    $('#modalOrderType').modal('show');
-                    $('input[chooseDetail]').on("click", normalPurchaseClick);
-
-                    var purchaseButton = $(this);
-                    var hidFoodID = purchaseButton.attr("chooseDetail");
-                    foodID = $('#' + hidFoodID).val();// assign global variable
-
-                    $('#modalDesc').text(purchaseButton.attr("descr"));
-                });
-            }
-            else
-            {
-                $('input[chooseDetail]').on("click", normalPurchaseClick);
-            }--%>
-
-        <%--$('#modalOrderType').on("hidden.bs.modal", function ()
-            {
-                putOptionsOnModal();// needs global variable
-                $('#modalFoodDetails').modal('show');
-            });--%>
-
             // set checkbox click events
             $('.item-detail-list input[type="checkbox"]').each(function ()
             {
@@ -141,8 +116,10 @@
 
                 // re-hide extras
                 DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
+
                 // remove all separators
                 DetailDiv.removeClass("BorderAboveDetail");
+
                 // uncheck all
                 DetailDiv.find('input[type="checkbox"]').prop('checked', '');
             });
@@ -243,12 +220,6 @@
                 }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
             }
         }
-
-    <%--function ClickOrderTypeChosen(type)
-        {
-            $('#<%= this.hidOrderType.ClientID %>').val(type);
-            $('#modalOrderType').modal('hide');
-        }--%>
 
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
@@ -510,7 +481,7 @@
                                 <div class="front">
                                     <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>' CssClass="card-front-name" />
-                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
+                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Data_Provider.correctPrices(Eval("food_cost").ToString()) %>' CssClass="card-front-price" />
                                 </div>
                                 <div class="back">
                                     <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
@@ -523,7 +494,7 @@
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
-                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%#  Data_Provider.correctPrices(Eval("food_cost").ToString()) %>' />
                                         <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" onclick="normalPurchaseClick(this);" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
                                         <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
                                     </div>
@@ -560,7 +531,7 @@
                                 <ItemTemplate>
                                     <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
                                         <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
-                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
+                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Data_Provider.correctPrices(Eval("detail_cost").ToString()) %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
                                         <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
                                         <asp:HiddenField ID="hidGroupName"    runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
@@ -578,24 +549,4 @@
             </div>
         </div>
     </div>
-
-<%--    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />--%>
-
-    <%-- Modal --%>
-<%--    <div id="modalOrderType" class="modal fade text-center" role="dialog">
-        <div class="modal-dialog">--%>
-            <%-- Modal content--%>
-<%--            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Delivery or Pick-Up?</h3>
-                </div>
-                <div class="modal-body">
-                    <input id="btnDelivery" name="btnDelivery" type="button" value="Delivery"     class="btn btn-danger" onclick="ClickOrderTypeChosen('Delivery');" />
-                    <input id="btnPickUp"   name="btnPickUp"   type="button" value="Pick-Up"      class="btn btn-danger" onclick="ClickOrderTypeChosen('PickUp');" />
-                    <input id="Button1"     name="Button1"     type="button" value="Choose Later" class="btn btn-danger" onclick="ClickOrderTypeChosen('');" />
-                </div>
-            </div>
-        </div>
-    </div>--%>
 </asp:Content>

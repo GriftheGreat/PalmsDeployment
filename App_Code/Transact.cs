@@ -282,14 +282,15 @@ public class TimeSlots : System.Web.Services.WebService
         string query = @"SELECT 'ASAP' AS time_slot, 'ASAP' AS time_slot_id_pk, 1 AS sort
                            FROM dual
                           UNION
-                         SELECT DISTINCT ts.time_slot_start_time AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort       --|| '-' || ts.time_slot_end_time 
+                         SELECT DISTINCT TO_CHAR(TO_DATE(ts.time_slot_start_time,'HH24:MI'), 'HH12:MI PM') AS time_slot, TO_CHAR(ts.time_slot_id_pk), 2 AS sort       --|| '-' || ts.time_slot_end_time 
                            FROM ticket tk
                            JOIN time_slot ts
                              ON ts.time_slot_id_pk = tk.time_slot_id_fk
                           WHERE TO_CHAR(ts.time_slot_date, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')--today
+                            AND ts.time_slot_start_time > TO_CHAR(SYSDATE, 'HH24:MI')
                             AND NOT EXISTS(SELECT 'yes'
-                                              FROM ""order""
-                                             WHERE ""order"".ticket_id_fk = tk.ticket_id_pk) --no orders have used that ticket yet
+                                             FROM ""order""
+                                            WHERE ""order"".ticket_id_fk = tk.ticket_id_pk) --no orders have used that ticket yet
                        ORDER BY sort";
         OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
         OracleCommand myCommand = new OracleCommand(query, myConnection);

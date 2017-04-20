@@ -147,11 +147,10 @@ public partial class Payment : System.Web.UI.Page
             #endregion
             #region Save_Credit_Card_Info
             string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
-                                                                                             MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
+                                                                                             tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                              paymentResultString,
                                                                                              paymentResultString.Contains("Pass:") ? "Y" : "N",
                                                                                              Request);
-            Response.Write(saveResultString);
             #endregion
 
             success = paymentResultString.Contains("Pass") && saveResultString.Contains("Pass");
@@ -173,7 +172,7 @@ public partial class Payment : System.Web.UI.Page
             //validate?
             #region SendSave_ID_Card_Info
             string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
-                                                                                                MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
+                                                                                                tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                 this.txtIDNumber.Text,
                                                                                                 this.txtPassword.Text,
                                                                                                 this.litPrice.Text.Replace("$", ""),
@@ -213,7 +212,7 @@ public partial class Payment : System.Web.UI.Page
 
                 //Pass:{"order_id" : "26", "order_number" : "1", "ASAP time" : "20:30-20:45"} Pass Pass
                 orderResultString = orderResultString.Remove(orderResultString.LastIndexOf("}")).Replace("Pass:{", "").Replace(": ", "#").Replace(" ", "").Replace("\"", "");
-                //order_id:26,order_number:1,ASAPtime:20:30-20:45
+                //order_id#26,order_number#1,ASAPtime#20:30-20:45
 
                 Session["orderNumber"] = orderResultString.Split("#,".ToCharArray())[3];
                 Session["ASAPTime"]    = orderResultString.Split("#,".ToCharArray())[5];
@@ -233,7 +232,7 @@ public partial class Payment : System.Web.UI.Page
                                                                                                            (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate
                                                                                                            Request);
                     string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
-                                                                                                     MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
+                                                                                                     tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                      paymentResultString,
                                                                                                      paymentResultString.Contains("Pass:") ? "Y" : "N",
                                                                                                      Request);
@@ -241,7 +240,7 @@ public partial class Payment : System.Web.UI.Page
                 else if (this.hidPaymentType.Value == "2") // PCC ID Card
                 {
                     string paymentResultString = Data_Provider.Transact_Interface.SendSave_ID_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
-                                                                                                        MyOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
+                                                                                                        tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                         this.txtIDNumber.Text,
                                                                                                         this.txtPassword.Text,
                                                                                                         (-(Convert.ToSingle(this.litPrice.Text.Replace("$", "")))).ToString(), // refund = negate

@@ -57,7 +57,7 @@
                 <asp:TemplateField>
                     <HeaderTemplate>Food Type</HeaderTemplate>
                     <ItemTemplate>
-                        <asp:DropDownList ID="foodTypeDDL" runat="server" DataSourceID="sqlFoodType" DataTextField="food_type_name" DataValueField="food_type_id_pk" SelectedValue='<%# Bind("food_type_id_fk") %>' />
+                        <asp:DropDownList ID="foodTypeDDL" runat="server" DataSourceID="sqlFoodType" DataTextField="food_type_name" DataValueField="food_type_id_pk" SelectedValue='<%# Bind("food_type_id_fk") %>'  Enabled="false"/>
                         <asp:SqlDataSource ID="sqlFoodType" runat="server"  ConnectionString="<%$ ConnectionStrings:SEI_DB_Connection.connectionString %>" ProviderName="<%$ ConnectionStrings:SEI_DB_Connection.providerName %>" SelectCommand="SELECT food_type_id_pk, food_type_name FROM food_type" />
                     </ItemTemplate>
                     <EditItemTemplate>

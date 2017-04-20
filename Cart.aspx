@@ -316,7 +316,7 @@
                                     <ItemTemplate>
                                         <asp:Panel ID="pnlDetail" runat="server">
                                             <asp:CheckBox     ID="chbAdded"     runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
-                                            <asp:Label        ID="lblcost"      runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("Cost").ToString() != "0" %>' />
+                                            <asp:Label        ID="lblcost"      runat="server" Text='<%# Data_Provider.correctPrices(Eval("Cost").ToString()) %>' Visible='<%# Eval("Cost").ToString() != "0" %>' />
                                             <asp:HiddenField  ID="hidGroupName" runat="server" Value='<%# Eval("GroupName") %>' />
                                             <asp:HiddenField  ID="hidDetailID"  runat="server" Value='<%# Eval("ID") %>' />
                                         </asp:Panel>

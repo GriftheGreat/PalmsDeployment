@@ -21,14 +21,17 @@ public class CreditCard
         Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
         Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
         Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
-        Convert.ToDateTime(expirationMonthDate);
+        int expirationMonth     = Convert.ToInt32(expirationMonthDate.Substring(0, 2));
+        // if (expirationYear < 30) 20nn; else 19nn 
+        int expirationYear      = System.Globalization.CultureInfo.CurrentCulture.Calendar.ToFourDigitYear(Convert.ToInt32(expirationMonthDate.Substring(3)));
+        DateTime cardExpiration = new DateTime(expirationYear, expirationMonth + 1, 1);
 
         if (CCNumberCheck.IsMatch           (CCNumber) &&
             expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
             cardSecurityCodeCheck.IsMatch   (cardSecurityCode) &&
             ownerNameCheck.IsMatch          (ownerName) &&
             amountCheck.IsMatch             (amount) &&
-            (expirationMonthDate.CompareTo(DateTime.Today.ToString("MM/yy"))) >= 0)
+            cardExpiration >= DateTime.Today)
         {
             // Logic for checking amount of money student has goes here.
             // To simulate, the "check" will randomly pass or fail.

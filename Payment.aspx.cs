@@ -100,7 +100,7 @@ public partial class Payment : System.Web.UI.Page
             if (MyOrder.Order_Elements != null)
             {
                 string cost = Math.Round(MyOrder.CalculateCost(), 2).ToString();
-                this.litPrice.Text = cost.Insert(cost.IndexOf("-") + 1, "$");
+                this.litPrice.Text = Data_Provider.correctPrices(cost);
 
                 this.rptItems.DataSource = MyOrder.Order_Elements;
                 this.rptItems.DataBind();

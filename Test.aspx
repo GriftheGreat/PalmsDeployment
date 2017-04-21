@@ -76,7 +76,7 @@
     <br />
 
     <input id="chb3" type="checkbox" onclick="$('#stuff3').toggle();" checked="checked" />
-    <label for="chb3" >Hide/Show URL path properties</label>
+    <label for="chb3" >Hide/Show Debug values</label>
     <div id="stuff3" style="display:none;">
         <pre><%= Session["v1"] %></pre><br />
         <pre><%= Session["v2"] %></pre><br />

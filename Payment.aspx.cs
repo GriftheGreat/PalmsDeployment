@@ -148,8 +148,9 @@ public partial class Payment : System.Web.UI.Page
                                                                                                    this.txtCreditCardOwnerName.Text,
                                                                                                    this.litPrice.Text.Replace("$", ""),
                                                                                                    Request);
+            paymentResultString = paymentResultString.Replace("&lt;", "<").Replace("&gt;", ">");
             #endregion
-Session["v1"] = paymentResultString;
+            Session["v1"] = paymentResultString;
             #region Save_Credit_Card_Info
             string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
                                                                                              tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),

@@ -94,13 +94,13 @@ ul.nav a:hover {
 /* Modal code starts here */
 .modal-content {
     background-color: sandybrown;
-
 }
 
 .modalButton {
     position: relative;
     background-color: orangered;
-    border: none;
+    border: none !important;
+    outline: none !important;
     margin-top: -70px;
     width: 100%;
     z-index: 103;
@@ -111,11 +111,11 @@ ul.nav a:hover {
 }
 
 .modalButton:visited {
-    background-color: orangered;
+     background-color: orangered;
 }
 
 .modalButton:hover {
-    background-color: rgba(13,86,55, .9);
+    background-color: rgba(13,86,55, .9) !important;
 }
 
 .modalButton:active {
@@ -124,14 +124,7 @@ ul.nav a:hover {
 
 .btn-info {
     background-color: orangered !important;
-
 }
-
-.btn-info.focus, .btn-info:focus {
-    border: none !important;
-}
-
-
 
 
 

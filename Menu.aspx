@@ -490,7 +490,7 @@
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
                     <div class="row">
-                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
                             <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
@@ -538,8 +538,12 @@
     </div>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
-        <div class="create-your-own-container">
-            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
+        <div class="container create-your-own-container">
+            <div class="row">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                    <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
+                </div>
+            </div>   
         </div>
     </asp:PlaceHolder>
 
@@ -598,4 +602,10 @@
             </div>
         </div>
     </div>--%>
+
+
+
+
+
 </asp:Content>
+

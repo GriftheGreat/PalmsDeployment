@@ -84,30 +84,6 @@ public class Detail
         this.GroupName   = "";
     }
 
-    //public Detail(int id)
-    //{
-    //    DataTable element;
-    //    float cost;
-    //    this.ID = id;
-
-    //    element = Get_Detail(this.ID);
-
-    //    if (element.Rows.Count == 1)
-    //    {
-    //        this.Description = element.Rows[0]["detail_descr"].ToString();
-    //        this.GroupName   = element.Rows[0]["group_name"].ToString();;
-
-    //        if (float.TryParse(element.Rows[0]["detail_cost"].ToString(), out cost))
-    //        {
-    //            this.Cost = cost;
-    //        }
-    //        else
-    //        {
-    //            this.Cost = 0.0f;
-    //        }
-    //    }
-    //}
-
     public Detail(bool chosen, float cost, string description, int id, string groupName)
     {
         this.Chosen      = chosen;
@@ -116,34 +92,4 @@ public class Detail
         this.ID          = id;
         this.GroupName   = groupName;
     }
-
-    //public DataTable Get_Detail(int id)
-    //{
-    //    DataTable data = new DataTable();
-    //    string query_string = @"SELECT d.detail_id_pk, d.detail_descr, d.detail_cost, d.group_name
-    //                              FROM detail d
-    //                             WHERE d.detail_id_pk = :detail_id_pk";
-    //    OracleConnection myConnection = new OracleConnection(ConfigurationManager.ConnectionStrings["SEI_DB_Connection"].ConnectionString);
-    //    OracleCommand myCommand = new OracleCommand(query_string, myConnection);
-
-    //    try
-    //    {
-    //        myConnection.Open();
-
-    //        myCommand.Parameters.Add("detail_id_pk", id);
-    //        data.Load(myCommand.ExecuteReader());
-    //    }
-    //    finally
-    //    {
-    //        try
-    //        {
-    //            myCommand.Dispose();
-    //        }
-    //        catch { }
-
-    //        myConnection.Close();
-    //        myConnection.Dispose();
-    //    }
-    //    return data;
-    //}
 }

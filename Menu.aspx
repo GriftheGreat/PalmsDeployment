@@ -20,33 +20,8 @@
         $(document).ready(function () {
             $('input[id*="hidFoodID"][value="' + <%= tabToReopen %> + '"]').parents('div[AccordionControl],div[AccordionControl2]').show();
 
-        <%--if($('#<%= this.hidOrderType.ClientID %>').val() == "")
-            {
-                $('body').one("click", 'input[chooseDetail]', function ()
-                {
-                    $('#modalOrderType').modal('show');
-                    $('input[chooseDetail]').on("click", normalPurchaseClick);
-
-                    var purchaseButton = $(this);
-                    var hidFoodID = purchaseButton.attr("chooseDetail");
-                    foodID = $('#' + hidFoodID).val();// assign global variable
-
-                    $('#modalDesc').text(purchaseButton.attr("descr"));
-                });
-            }
-            else
-            {
-                $('input[chooseDetail]').on("click", normalPurchaseClick);
-            }--%>
-
-        <%--$('#modalOrderType').on("hidden.bs.modal", function ()
-            {
-                putOptionsOnModal();// needs global variable
-                $('#modalFoodDetails').modal('show');
-            });--%>
-
             // set checkbox click events
-            $('.item-detail-list input[type="checkbox"]').each(function ()
+            $('.item-detail-list  input[type="checkbox"]').each(function ()
             {
                 var chb = $(this);
                 var chbGroup = chb.siblings('input[id*="hidGroupName"]').val();
@@ -89,20 +64,21 @@
                             }
                         });
                     }
-                    else if (chb.parent().siblings().find('input[id*="hidGroupName"][value="' + chbGroup + '"]').toArray().length > 0) // if there are others (not counting himself) in the same group
+                    else
                     {
+                        // Be normal  ...Naaa
+                        // all checkboxes are in a group or not; some are to be shown with any other of its group so those are TRUE in the if below
                         chb.on('click', function ()
                         {
-                            if (!$(this).prop('checked'))
+                            var Visible_hidGroupNames_InGroup = $(this).parent().siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value="' + chbGroup + '"]');
+                            if (Visible_hidGroupNames_InGroup.toArray().length > 0) // if there are others (not counting himself) in the same group (that are visible)
                             {
-                                $(this).prop('checked', 'checked')
+                                if (!$(this).prop('checked')) {
+                                    $(this).prop('checked', 'checked')
+                                }
+                                Visible_hidGroupNames_InGroup.siblings('input[type="checkbox"]').prop('checked', '');
                             }
-                            $(this).parent().siblings().find('input[id*="hidGroupName"][value="' + chbGroup + '"]').siblings('input[type="checkbox"]').prop('checked', '');
                         });
-                    }
-                    else // if this is the only detail with that group
-                    {
-                        // Be normal
                     }
                 }
             });
@@ -125,6 +101,9 @@
 
         function putOptionsOnModal()
         {
+            $('.item-detail-list').show();
+
+            // hide/show details to the selected food (see global variable)
             $('div[detail]').each(function ()
             {
                 var DetailDiv = $(this);
@@ -139,59 +118,75 @@
                     DetailDiv.hide();
                 }
 
-                // re-hide extras
-                DetailDiv.children('input[id*="hidGroupName"][value*="X"]').parent().hide();
                 // remove all separators
                 DetailDiv.removeClass("BorderAboveDetail");
+
+                // remove all group instructions
+                DetailDiv.removeClass("ExclusiveGroupInstructions");
+
                 // uncheck all
                 DetailDiv.find('input[type="checkbox"]').prop('checked', '');
             });
             $('#<%= this.hidChosenFoodId.ClientID %>').val(foodID);
 
-            // add separator line between checkbox groups
-            var currentDetail = "";
-            $('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
-            {
-                var group = $(this).find('input[id*="hidGroupName"]').first().val();
-
-                // VVV added this to check first of groups VVV
-                if (!(group == null || group == "") && $(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+            if ($('.item-detail-list').children(':not(div[style*="display: none;"])').toArray().length == 0) {
+                $('.item-detail-list').hide();
+            }
+            else {
+                // add separator line between and instruction for checkbox groups (checking the default/first of necessary groups)
+                var currentDetail = "";
+                $('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
                 {
-                    var detailsInGroup = $('.item-detail-list').find(':not(div[style*="display: none;"]) input[id*="hidGroupName"][value*="' + group + '"]');
-                    var detailInGroupToCheck = detailsInGroup.first();
+                    var group = $(this).find('input[id*="hidGroupName"]').first().val();
+                    var NumberWithThisGroup = $(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length;
 
-                    // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
-                    detailsInGroup.each(function ()
+                    // VVV added this to check first of groups VVV
+                    if (!(group == null || group == "") && NumberWithThisGroup > 0)
                     {
-                        if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
+                        var detailsInGroup = $('.item-detail-list').find(':not(div[style*="display: none;"]) input[id*="hidGroupName"][value*="' + group + '"]');
+                        var detailInGroupToCheck = detailsInGroup.first();
+
+                        // set group instructions
+                        detailInGroupToCheck.parent().addClass("ExclusiveGroupInstructions");
+
+                        // try to find a detail in this group that has 'Whole' as its text (because that is the default price)
+                        detailsInGroup.each(function ()
                         {
-                            detailInGroupToCheck = $(this);
-                        }
-                    });
+                            if ($(this).siblings('label').first().html() == "Whole" || $(this).siblings('label').first().html() == "16\"")
+                            {
+                                detailInGroupToCheck = $(this);
+                            }
+                        });
 
-                    detailInGroupToCheck.siblings('input[type="checkbox"]').prop('checked', 'checked');
-                }
-                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        detailInGroupToCheck.siblings('input[type="checkbox"]').prop('checked', 'checked');
+                    }
+                    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-                $(this).removeClass("BorderAboveDetail");
-
-                if (currentDetail == null || currentDetail == "")
-                {
-                    if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+                    // VVV added this to check all normal checkboxes (and singles with a group) VVV
+                    if ((group == null || group == "") || (NumberWithThisGroup == 0 && group.indexOf("X") == -1))
                     {
-                        currentDetail = group;
-                        if (!(group == null || group == "") && index != 0)
+                        $(this).find('input[type="checkbox"]').prop('checked', 'checked');
+                    }
+                    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                    if (currentDetail == null || currentDetail == "")
+                    {
+                        if (NumberWithThisGroup > 0)
                         {
-                            $(this).addClass("BorderAboveDetail");
+                            currentDetail = group;
+                            if (!(group == null || group == "") && index != 0)
+                            {
+                                $(this).addClass("BorderAboveDetail");
+                            }
                         }
                     }
-                }
-                else if (currentDetail != group && group.indexOf("X") == -1)
-                {
-                    $(this).addClass("BorderAboveDetail");
-                    currentDetail = group;
-                }
-            });
+                    else if (currentDetail != group && group.indexOf("X") == -1)
+                    {
+                        $(this).addClass("BorderAboveDetail");
+                        currentDetail = group;
+                    }
+                });
+            }
 
             foodID = null;// clear global variable
         }
@@ -243,12 +238,6 @@
                 }, 410); // The slide animation's default duration is 400. Specifying 410 ensures the collapse animation is done by the time we scroll.
             }
         }
-
-    <%--function ClickOrderTypeChosen(type)
-        {
-            $('#<%= this.hidOrderType.ClientID %>').val(type);
-            $('#modalOrderType').modal('hide');
-        }--%>
 
         // Toggle the state of a "Choose you own pizza" button where there are no possibilty to 
         // apply to only half a pizza
@@ -413,32 +402,36 @@
                 <div class="modal-body">
                     
                     <h1 class="CYOP-Header">Select size:</h1>
-                    <asp:Label id="CYOP_01"  runat="server" customID="CYOP_01" type="size" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="true" >8''</asp:Label><span style="width:10px;">&nbsp;</span> 
-                    <asp:Label id="CYOP_02"  runat="server" customID="CYOP_02" type="size" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this)" value="false"  >16''</asp:Label>            
+                    <asp:Label id="CYOP_01"  runat="server" customID="CYOP_01" type="size" class="btn CYOP-Button"                      onclick="ToggleCYOP(this)" value="true" >8''</asp:Label><span style="width:10px;">&nbsp;</span> 
+                    <asp:Label id="CYOP_02"  runat="server" customID="CYOP_02" type="size" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this)" value="false"  >16''</asp:Label>            
 
                     <h1 class="CYOP-Header">Choose Your Crust:</h1>
-                    <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
-                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Pan Crust</asp:Label><span style="width:10px;">&nbsp;</span>
-                    <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button" onclick="ToggleCYOP(this)" value="false">Stuffed Crust +$1.00</asp:Label>
+                    <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-whole"   onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Pan Crust</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Stuffed Crust +$1.00</asp:Label>
                     <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
                     <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>
 
                     <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
-                    <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole" onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
-                    <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
-                    <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
-                    <asp:Label id="CYOP_21" runat="server" customID="CYOP_21" type="sauce" class="btn CYOP-Button" onclick="ToggleCYOP(this);" value="false" state="none">Spinach Alfredo</asp:Label>
+                    <br /><br />
+                    <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
+                    <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
+                    <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
+                    <asp:Label id="CYOP_21" runat="server" customID="CYOP_21" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Spinach Alfredo</asp:Label>
+                    <br /><br />
 
                     <h1 class="CYOP-Header">Choose Your Toppings:</h1>
-                    <p id="instructions" style="color:rgba(13,86,55, .9); font-weight: bold;">Click a topping multiple times to apply to only one side of the pizza</p>
+                    <p id="instructions" style="color:rgba(13,86,55, .9); background-color:rgba(242,241,239, .9); font-weight: bold;">Click a topping multiple times to apply to only one side of the pizza</p>
+                    <br />
                     <h3>Real Meat</h3>
                     <asp:Label id="CYOP_06"  name="Bacon"            runat="server" customID="CYOP_06" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Bacon</asp:Label>
                     <asp:Label id="CYOP_07"  name="Beef"             runat="server" customID="CYOP_07" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Beef</asp:Label>
                     <asp:Label id="CYOP_08"  name="Canadian Bacon"   runat="server" customID="CYOP_08" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Canadian Bacon</asp:Label>
                     <asp:Label id="CYOP_09"  name="Italian Sausage"  runat="server" customID="CYOP_09" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Italian Sausage</asp:Label>
-                    <asp:Label id="CYOP_10" name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
+                    <asp:Label id="CYOP_10"  name="Pepperoni"        runat="server" customID="CYOP_10" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this);" type="meat" value="false" state="none">Pepperoni</asp:Label>
 
                     <div id="placeholder3" runat="server" class="CYOP-placeholder">&ensp;&ensp;&ensp;&ensp;&ensp;</div>
+                    <br />
                     <h3 class="CYOP-Header3">Fresh vegetable</h3> 
                     <asp:Label name="Fresh Sliced Onions"   id="CYOP_11" runat="server" customID="CYOP_11" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Fresh Sliced Onions</asp:Label>
                     <asp:Label name="Green Pepper"          id="CYOP_12" runat="server" customID="CYOP_12" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Green Pepper</asp:Label>
@@ -449,8 +442,8 @@
                     <asp:Label name="Baby Portabella Mushrooms" style="font-size: 2.5vmin" id="CYOP_17" runat="server" customID="CYOP_17" type="vegetable" class="btn CYOP-Button" onclick="ToggleCYOPHalves(this)" value="false" state="none">Baby Portabella<br /> Mushrooms</asp:Label>
                     <br /> <br />
                     <div>
-                        <asp:HiddenField ID="hidPizzaBtnValues" runat="server" value="CYOP_02,CYOP_03,CYOP_18" />
-                        <asp:Button  ID="AddPizzaToCart" runat="server" class="btn btn-success btn-block" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
+                        <asp:HiddenField ID="hidPizzaBtnValues" runat="server" value="CYOP_02,CYOP_03,CYOP_18" /> <!-- These are the preselected toppings -->
+                        <asp:Button ID="AddPizzaToCart" runat="server" class="btn btn-success btn-block" Text="Add to Cart" OnClick="AddPizzaToCart_Click" />
                     </div>
                 </div>
               </div>
@@ -510,7 +503,7 @@
                                 <div class="front">
                                     <%# string.IsNullOrEmpty(Eval("image_path").ToString()) ? "" : "<img class=\"card-image\" src=\"Includes/images/Menu Items/" + Eval("image_path").ToString() +"\" />" %>
                                     <asp:Label           ID="lblfrontfood_name"   runat="server" Text='<%# Eval("food_name") %>' CssClass="card-front-name" />
-                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' CssClass="card-front-price" />
+                                    <asp:Label           ID="lblfrontprice"       runat="server" Text='<%# Data_Provider.correctPrices(Eval("food_cost").ToString()) %>' CssClass="card-front-price" />
                                 </div>
                                 <div class="back">
                                     <asp:HiddenField     ID="hidFoodID"           runat="server" Value='<%# Eval("food_id_pk") %>' />
@@ -523,7 +516,7 @@
                                         </h4>
                                     </div>
                                     <div class="addToCartButton">
-                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%# Eval("food_cost_1").ToString().Insert(Eval("food_cost_1").ToString().IndexOf("-") + 1,"$") %>' />
+                                        <asp:Label       ID="lblprice" runat="server" style="color: white;"                     Text='<%#  Data_Provider.correctPrices(Eval("food_cost").ToString()) %>' />
                                         <input           id="Button2"  runat="server" class="btn btn-sm btn-danger text-center" value="View" type="button" onclick="normalPurchaseClick(this);" Descr='<%# Eval("food_descr") %>' chooseDetail='<%# ((HtmlInputButton)sender).NamingContainer.FindControl("hidFoodID").ClientID %>' />
                                         <%# (Eval("is_deliverable") != null &&  Eval("is_deliverable").ToString() == "Y") ? "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/deliver icon 2.png\" style=\"float: button;\" title=\"Deliverable\" />" : "<img alt=\"deliverable\" src=\"" + URL.root(Request) + "Includes/images/delivery/non_delivery_icon.png\" style=\"float: bottom;\" title=\"Can't be delivered\" />" %>
                                     </div>
@@ -564,7 +557,7 @@
                                 <ItemTemplate>
                                     <asp:Panel ID="pnlDetail" runat="server" detail='<%# ((Panel)sender).FindControl("hidFoodIds").ClientID %>'>
                                         <asp:CheckBox    ID="chbChooseDetail" runat="server" Text='<%# Eval("detail_descr") %>' />
-                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Eval("detail_cost").ToString().Insert(Eval("detail_cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
+                                        <asp:Label       ID="lblDetailCost"   runat="server" Text='<%# Data_Provider.correctPrices(Eval("detail_cost").ToString()) %>' Visible='<%# Eval("detail_cost").ToString() != "0" %>' />
                                         <asp:HiddenField ID="hidDetailID"     runat="server" Value='<%# Eval("detail_id_pk") %>' />
                                         <asp:HiddenField ID="hidGroupName"    runat="server" Value='<%# Eval("group_name") %>' />
                                         <asp:HiddenField ID="hidFoodIds"      runat="server" Value='<%# Eval("FoodIDs") %>' />
@@ -582,30 +575,4 @@
             </div>
         </div>
     </div>
-
-<%--    <asp:HiddenField ID="hidOrderType" runat="server" Value="" />--%>
-
-    <%-- Modal --%>
-<%--    <div id="modalOrderType" class="modal fade text-center" role="dialog">
-        <div class="modal-dialog">--%>
-            <%-- Modal content--%>
-<%--            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Delivery or Pick-Up?</h3>
-                </div>
-                <div class="modal-body">
-                    <input id="btnDelivery" name="btnDelivery" type="button" value="Delivery"     class="btn btn-danger" onclick="ClickOrderTypeChosen('Delivery');" />
-                    <input id="btnPickUp"   name="btnPickUp"   type="button" value="Pick-Up"      class="btn btn-danger" onclick="ClickOrderTypeChosen('PickUp');" />
-                    <input id="Button1"     name="Button1"     type="button" value="Choose Later" class="btn btn-danger" onclick="ClickOrderTypeChosen('');" />
-                </div>
-            </div>
-        </div>
-    </div>--%>
-
-
-
-
-
 </asp:Content>
-

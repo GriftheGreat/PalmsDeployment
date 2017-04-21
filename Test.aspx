@@ -72,4 +72,17 @@
         Request.Url.GetLeftPart(UriPartial.Path)      <pre><%= Request.Url.GetLeftPart(UriPartial.Path) %></pre><br />
         Request.Url.LocalPath                         <pre><%= Request.Url.LocalPath %></pre><br />
     </div>
+    <br />
+    <br />
+
+    <input id="chb3" type="checkbox" onclick="$('#stuff3').toggle();" checked="checked" />
+    <label for="chb3" >Hide/Show Debug values</label>
+    <div id="stuff3" style="display:none;">
+        <pre><%= Session["v1"] %></pre><br />
+        <pre><%= Session["v2"] %></pre><br />
+        <pre><%= Session["v3"] %></pre><br />
+        <pre><%= Session["v4"] %></pre><br />
+        <pre><%= Session["v5"] %></pre><br />
+        <pre><%= Session["v6"] %></pre><br />
+    </div>
 </asp:Content>

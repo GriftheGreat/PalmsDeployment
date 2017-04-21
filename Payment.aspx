@@ -31,7 +31,7 @@
 	        color:#fff;
         }
 
-        .help-tip:hover p {
+        .help-tip.active p {
             z-index: 100;
 	        display:block;
 	        transform-origin: 100% 0%;
@@ -44,8 +44,8 @@
 	        display: none;
 	        text-align: left;
 	        background-color: #1E2021;
-	        padding: 20px;
-	        width: 300px;
+	        padding: 5px;
+	        width: 185px;
 	        position: absolute;
 	        border-radius: 3px;
 	        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -55,7 +55,7 @@
 	        line-height: 1.4;
         }
 
-        .help-tip p:before { /* The pointer of the tooltip */
+        .help-tip.active p:before { /* The pointer of the tooltip */
 	        position: absolute;
 	        content: '';
 	        width:0;
@@ -66,7 +66,7 @@
 	        top:-12px;
         }
 
-        .help-tip p:after { /* Prevents the tooltip from being hidden */
+        .help-tip.active p:after { /* Prevents the tooltip from being hidden */
 	        width:100%;
 	        height:40px;
 	        content:'';
@@ -75,7 +75,7 @@
 	        left:0;
         }
 
-        .help-tip-click p {
+        .help-tip.active p {
             z-index: 100;
 	        display:block;
 	        transform-origin: 100% 0%;
@@ -194,6 +194,7 @@
             width: 100%;
             text-align: left;
             background-color: lightgray;
+            align-content: flex-end;
         }
 
         .payment-options-section table
@@ -235,6 +236,27 @@
     <script type="text/javascript">
         $(document).ready(function () {
             switchToTab(<%= tabToReopen %>);
+
+            $('.help-tip').each(function ()
+            {
+                $(this).on('click', function ()
+                {
+                    if (!$(this).hasClass('active'))
+                    {
+                        $(this).addClass('active');
+                    }
+                });
+
+                $(this).on('mouseover', function ()
+                {
+                    $(this).addClass('active');
+                });
+
+                $(this).on('mouseout', function ()
+                {
+                    $(this).removeClass('active');
+                });
+            });
 
             $('#<%= this.lnkSubmit.ClientID %>').on('click', function ()
             {
@@ -347,22 +369,29 @@
 
                     if (IDNumberCheck.test(txtIDNumber.val())) {
                         txtIDNumber.removeClass("bad-data");
+                        $("#idNumComplaint").hide();
                     }
                     else {
                         txtIDNumber.addClass("bad-data");
+                        $("#idNumComplaint").show();
                         isValid = false;
                     }
 
                     if (PasswordCheck.test(txtPassword.val())) {
                         txtPassword.removeClass("bad-data");
+                        $("#idPassComplaint").hide();
                     }
                     else {
                         txtPassword.addClass("bad-data");
+                        $("#idPassComplaint").show();
                         isValid = false;
                     }
                 }
                 return isValid;// false stops postback
             });
+
+            $("#idNumComplaint").hide();
+            $("#idPassComplaint").hide();
         });
 
         function switchToTab(tabToOpen)
@@ -410,18 +439,6 @@
             else
             {
                 $('#<%= this.locationPlaceContainer.ClientID %>').hide();
-            }
-        }
-
-        function helpClick(tip)
-        {
-            if ($(tip).hasClass('help-tip-click'))
-            {
-                $(tip).removeClass('help-tip-click');
-            }
-            else
-            {
-                $(tip).addClass('help-tip-click');
             }
         }
     </script>
@@ -511,29 +528,29 @@
                     <table>
                         <tr>
                             <td>Credit Card Number:</td>
-                            <td class="help-tip" onclick="helpClick(this);">
+                            <td class="help-tip">
 	                            <p>Must be 16 digits long</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardNumber"    class="inputText"       runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
-                            <td class="help-tip" onclick="helpClick(this);">
+                            <td class="help-tip">
 	                            <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardSecurityCode"   class="inputText"          runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
-                            <td class="help-tip" onclick="helpClick(this);">
+                            <td class="help-tip">
 	                            <p>Format: mm/yy</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardExpDate"    class="inputText"      runat="server" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
-                            <td class="help-tip" onclick="helpClick(this);">
-	                            <p>Format: Firstname Lastname</p>
+                            <td class="help-tip">
+	                            <p>First and last name.</p>
                             </td>
                             <td><asp:TextBox ID="txtCreditCardOwnerName"    class="inputText"            runat="server" /></td>
                         </tr>
@@ -542,12 +559,18 @@
                 <div class="payment-options-section" tabSection="2">
                     <table>
                         <tr>
-                            <td>ID Number:</td>
+                            <td>ID Number: </td>
                             <td><asp:TextBox ID="txtIDNumber" runat="server" /></td>
                         </tr>
+                        <tr id="idNumComplaint">
+                            <td style="color:red">Enter your 6 digit ID number</td>
+                        </tr>
                         <tr>
-                            <td>Password:</td>
+                            <td id="password">Password:</td>
                             <td><asp:TextBox ID="txtPassword" runat="server" TextMode="Password" /></td>
+                        </tr>
+                        <tr id="idPassComplaint">
+                            <td style="color:red">Enter your 8 digit password</td>
                         </tr>
                     </table>
                 </div>

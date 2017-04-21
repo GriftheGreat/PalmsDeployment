@@ -38,6 +38,11 @@
         {
             border: 2px solid rgb(200, 25, 25);
         }
+
+        .ExclusiveGroupInstructions::before
+        {
+            background-color: initial;
+        }
     </style>
 </asp:Content>
 
@@ -49,6 +54,9 @@
             var currentDetail = ""; // have to clear currentDetail per each food in cart
             $('div.row').each(function ()
             {
+                $(this).find('.item-detail-list').show();
+
+                // hide/show details to the selected food (see global variable)
                 $(this).find('.item-detail-list input[type="checkbox"]').each(function ()
                 {
                     var chb = $(this);
@@ -106,30 +114,46 @@
                     }
                 });
 
-                currentDetail = "";
-                $(this).find('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
-                {
-                    var group = $(this).find('input[id*="hidGroupName"]').first().val();
-
-                    $(this).removeClass("BorderAboveDetail");
-
-                    if (currentDetail == null || currentDetail == "")
+                if ($(this).find('.item-detail-list').children(':not(div[style*="display: none;"])').toArray().length == 0) {
+                    $(this).find('.item-detail-list').hide();
+                }
+                else {
+                    // add separator line between and instruction for checkbox groups (checking the default/first of necessary groups)
+                    currentDetail = "";
+                    $(this).find('.item-detail-list').children(':not(div[style*="display: none;"])').each(function (index)
                     {
-                        if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
+                        var group = $(this).find('input[id*="hidGroupName"]').first().val();
+
+                        // VVV set group instructions and remove all separators VVV
+                        if (!(group == null || group == "") && $(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0) {
+                            var detailsInGroup = $('.item-detail-list').find(':not(div[style*="display: none;"]) input[id*="hidGroupName"][value*="' + group + '"]');
+                            var detailInGroupToCheck = detailsInGroup.first();
+
+                            // set group instructions
+                            detailInGroupToCheck.parent().addClass("ExclusiveGroupInstructions");
+                        }
+
+                        $(this).removeClass("BorderAboveDetail");
+                        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                        if (currentDetail == null || currentDetail == "")
                         {
-                            currentDetail = group;
-                            if (!(group == null || group == "") && index != 0)
+                            if ($(this).siblings(':not(div[style*="display: none;"])').find('input[id*="hidGroupName"][value*="' + group + '"]').toArray().length > 0)
                             {
-                                $(this).addClass("BorderAboveDetail");
+                                currentDetail = group;
+                                if (!(group == null || group == "") && index != 0)
+                                {
+                                    $(this).addClass("BorderAboveDetail");
+                                }
                             }
                         }
-                    }
-                    else if (currentDetail != group && group.indexOf("X") == -1)
-                    {
-                        $(this).addClass("BorderAboveDetail");
-                        currentDetail = group;
-                    }
-                });
+                        else if (currentDetail != group && group.indexOf("X") == -1)
+                        {
+                            $(this).addClass("BorderAboveDetail");
+                            currentDetail = group;
+                        }
+                    });
+                }
             });
 
             // validate delivery location
@@ -144,56 +168,41 @@
                 var locationPlaceContainer = $('#<%= this.locationPlaceContainer.ClientID %>');
                 var txtLocationPlace       = $('#<%= this.txtLocationPlace.ClientID %>');
                 var lblError               = $('#<%= this.lblError.ClientID %>');
+                var lblError2              = $('#<%= this.lblError2.ClientID %>');
+
+                lblError2.html("");
 
                 if (ddlDeliveryType.val() != "") {
                     ddlDeliveryType.removeClass("bad-data");
-                    lblError.html(lblError.html().replace("Please choose Pick Up or Delivery.", ""));
                 }
                 else {
                     ddlDeliveryType.addClass("bad-data");
                     isValid = false;
-                    if (lblError.html().indexOf("Please choose Pick Up or Delivery.") == -1) {
-                        if (lblError.html().length > 0) {
-                            lblError.html(lblError.html() + "<br />");
-                        }
-                        lblError.html(lblError.html() + "Please choose Pick Up or Delivery.");
-                    }
+                    lblError2.html(lblError2.html() + "<br />Please choose Pick Up or Delivery.");
                 }
 
                 if (ddlLocations.val() != "") {
                     ddlLocations.removeClass("bad-data");
-                    lblError.html(lblError.html().replace("Please choose your delivery Location.", ""));
                 }
                 else {
                     ddlLocations.addClass("bad-data");
                     isValid = false;
-                    if (lblError.html().indexOf("Please choose your delivery Location.") == -1) {
-                        if (lblError.html().length > 0) {
-                            lblError.html(lblError.html() + "<br />");
-                        }
-                        lblError.html(lblError.html() + "Please choose your delivery Location.");
-                    }
+                    lblError2.html(lblError2.html() + "<br />Please choose your delivery Location.");
                 }
 
                 if (locationPlaceContainer.is(':visible'))
                 {
                     if (txtLocationPlaceCheck.test(txtLocationPlace.val())) {
                         txtLocationPlace.removeClass("bad-data");
-                        lblError.html(lblError.html().replace("Please give your Residence Hall Room/Waveland Apartment number.", ""));
                     }
                     else {
                         txtLocationPlace.addClass("bad-data");
                         isValid = false;
-                        if (lblError.html().indexOf("Please give your Residence Hall Room/Waveland Apartment number.") == -1) {
-                            if (lblError.html().length > 0) {
-                                lblError.html(lblError.html() + "<br />");
-                            }
-                            lblError.html(lblError.html() + "Please give your Residence Hall Room/Waveland Apartment number.");
-                        }
+                        lblError2.html(lblError2.html() + "<br />Please give your Residence Hall Room/Waveland Apartment number.");
                     }
                 }
 
-                if (!(isValid))
+                if (!(isValid) || lblError.html().indexOf("cannot be delivered") != -1)
                 {
                     $('body,html').animate({
                         scrollTop: 0
@@ -251,7 +260,8 @@
                     The Cart allows you to modify your food how you like. When you are done, click Pay at the bottom to proceed.
                 </div>
                 <div>
-                    <asp:Label   ID="lblError"       runat="server" Text="" CssClass="Error" />
+                    <asp:Label ID="lblError"  runat="server" Text="" CssClass="Error" />
+                    <asp:Label ID="lblError2" runat="server" Text="" CssClass="Error" />
                 </div>
                 <div class="payment-options-section" style="border-width: 2px 2px 2px 2px; background-color: sandybrown;">
                     <table>
@@ -292,6 +302,7 @@
                         <div class="col-lg-12 cart-item">
                             <div class="front card-front <%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? "cannot-deliver" : "" %>">
                                 <%# (Eval("ImagePath") != null && Eval("ImagePath").ToString() != "") ? "<img class=\"card-image\" src=\"" + URL.root(Request) + "Includes/images/Menu Items/" + Eval("ImagePath").ToString() +"\" />" : "" %>
+                                
                             </div>
                             <asp:Label         ID="litFoodName"    runat="server" Text='<%# Eval("Name").ToString() + ":" %>' CssClass="food-name" />
 
@@ -305,14 +316,15 @@
                                     <ItemTemplate>
                                         <asp:Panel ID="pnlDetail" runat="server">
                                             <asp:CheckBox     ID="chbAdded"     runat="server" Text='<%# Eval("Description") %>' Checked='<%# Eval("Chosen") %>' />
-                                            <asp:Label        ID="lblcost"      runat="server" Text='<%# Eval("Cost").ToString().Insert(Eval("Cost").ToString().IndexOf("-") + 1,"$") %>' Visible='<%# Eval("Cost").ToString() != "0" %>' />
+                                            <asp:Label        ID="lblcost"      runat="server" Text='<%# Data_Provider.correctPrices(Eval("Cost").ToString()) %>' Visible='<%# Eval("Cost").ToString() != "0" %>' />
                                             <asp:HiddenField  ID="hidGroupName" runat="server" Value='<%# Eval("GroupName") %>' />
                                             <asp:HiddenField  ID="hidDetailID"  runat="server" Value='<%# Eval("ID") %>' />
                                         </asp:Panel>
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </div>
-                            <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" />
+                            <asp:Label         ID="Label1" runat="server" CssClass="Error" Text="This item cannot be delivered, choose &quot;Pick Up&quot; or remove from cart" Visible='<%# (MyOrder.Type == "Delivery" && Eval("Deliverable") != null && Eval("Deliverable").ToString() != "Y") ? true : false %>'/>
+                            <asp:LinkButton    ID="lnkRemoveItem"  runat="server" Text="Remove" OnClick="lnkRemoveItem_Click" CssClass="remove-button" style="min-width:55px;min-height:35px;"/>
                         </div>
                     </div>
                 </ItemTemplate>

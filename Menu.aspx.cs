@@ -49,12 +49,6 @@ public partial class Menu : System.Web.UI.Page
     {
         string menu = "PG";
         this.plhCreateYourOwnPizza.Visible = false;
-
-        //if (MyOrder != null)
-        //{
-        //    this.hidOrderType.Value = MyOrder.Type;
-        //}
-
         if (Request.QueryString["menu"] == "PapaJohns")
         {
             menu = "PJ";
@@ -297,9 +291,8 @@ public partial class Menu : System.Web.UI.Page
         details.Columns.Add("groupName");
 
         #region sizes
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_01") != -1 ? "Y" : "N", "-6.5", "8\"", "177", "size"));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_02") != -1 ? "Y" : "N", "0", "16\"", "178", "size"));
-
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_01") != -1 ? "Y" : "N", "-6.5",   "8\"",  "177", "size"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_02") != -1 ? "Y" : "N", "0",      "16\"", "178", "size"));
         #endregion
 
         #region crusts
@@ -310,26 +303,26 @@ public partial class Menu : System.Web.UI.Page
 
         #region sauce
         details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_18") != -1 ? "Y" : "N", "0", "Original Pizza Sauce", "183", "sau"));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_19") != -1 ? "Y" : "N", "0", "Ranch Sauce", "94", "sau"));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_20") != -1 ? "Y" : "N", "0", "BBQ Sauce", "85", "sau"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_19") != -1 ? "Y" : "N", "0", "Ranch Sauce",           "94", "sau"));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_20") != -1 ? "Y" : "N", "0", "BBQ Sauce",             "85", "sau"));
         details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_21") != -1 ? "Y" : "N", "0", "Spinach Alfredo Sauce", "89", "sau"));
         #endregion
 
         #region meats
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+left") != -1 ? "Y" : "N", "0", "Bacon (left)", "198", ""));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+right") != -1 ? "Y" : "N", "0", "Bacon", "40", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+left")  != -1 ? "Y" : "N", "0", "Bacon (left)", "198",  ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_06+right") != -1 ? "Y" : "N", "0", "Bacon",        "40",   ""));
 
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+left") != -1 ? "Y" : "N", "0", "Beef (left)", "207", ""));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+right") != -1 ? "Y" : "N", "0", "Beef", "72", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+left")  != -1 ? "Y" : "N", "0", "Beef (left)",  "207", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_07+right") != -1 ? "Y" : "N", "0", "Beef",         "72",   ""));
 
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+left") != -1 ? "Y" : "N", "0", "Canadian Bacon (left)", "209", ""));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+right") != -1 ? "Y" : "N", "0", "Canadian Bacon", "75", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+left")    != -1 ? "Y" : "N", "0", "Canadian Bacon (left)",    "209",  ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_8+right")   != -1 ? "Y" : "N", "0", "Canadian Bacon",           "75",   ""));
 
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+left") != -1 ? "Y" : "N", "0", "Italian Sausage (left)", "208", ""));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+right") != -1 ? "Y" : "N", "0", "Italian Sausage", "74", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+left")    != -1 ? "Y" : "N", "0", "Italian Sausage (left)",   "208",  ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_9+right")   != -1 ? "Y" : "N", "0", "Italian Sausage",          "74",   ""));
 
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+left") != -1 ? "Y" : "N", "0", "Pepperoni (left)", "201", ""));
-        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+right") != -1 ? "Y" : "N", "0", "Pepperoni", "64", ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+left")  != -1 ? "Y" : "N", "0", "Pepperoni (left)", "201",  ""));
+        details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_10+right") != -1 ? "Y" : "N", "0", "Pepperoni",        "64",   ""));
         #endregion
 
         #region vegetables 
@@ -355,38 +348,21 @@ public partial class Menu : System.Web.UI.Page
         details.Rows.Add(get_new_row(details.NewRow(), this.hidPizzaBtnValues.Value.IndexOf("CYOP_17+whole") != -1 || this.hidPizzaBtnValues.Value.IndexOf("CYOP_17+right") != -1 ? "Y" : "N", "0", "Baby portabello Mushrooms", "69", ""));
         #endregion
 
-
-        string output = "";
-        int index = 1;
-
-        foreach (DataRow row in details.Rows)
-        {
-            output += index.ToString() + ": ";
-            output += string.Join(",", row.ItemArray);
-            output += "\n";
-            index++;
-            
-        }
         if (tempOrder == null)
         {
-            tempOrder = new Order("");// this.hidOrderType.Value);
+            tempOrder = new Order(""); // this.hidOrderType.Value);
         }
-
-        //tempOrder.Location = (this.hidOrderType.Value == "PickUp" ? "Palm's Grille" : "");
-        //tempOrder.TimeSlot = (this.hidOrderType.Value == "PickUp" ? "ASAP" : "");
-
-        tempOrder.Order_Elements.Add(new Order_Element("Y", // is_deliverable
-                                               130, //id 
-                                               "/Papa Johns/PJ_TheWorksPizza.jpg",// image path
-                                               "", // food description
-                                               details, //detail array
-                                               "Create Your Own", // food name
-                                               11.99f)); //price
-
+        tempOrder.Order_Elements.Add(new Order_Element( "Y",        // is_deliverable
+                                                        130,        // food_id 
+                                                        "/Papa Johns/PJ_TheWorksPizza.jpg",// image path
+                                                        "",         // food description
+                                                        details,    // detail array
+                                                        "Create Your Own", // food name
+                                                        11.99f));   // price
         MyOrder = tempOrder;
     }
 
-    DataRow get_new_row(DataRow newRow, string chosen, string cost, string description,string id, string groupname)
+    DataRow get_new_row(DataRow newRow, string chosen, string cost, string description, string id, string groupname)
     {
         newRow["chosen"]      = chosen;
         newRow["cost"]        = cost;

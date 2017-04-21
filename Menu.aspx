@@ -412,8 +412,8 @@
                     <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
                     <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>
 
-                    <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
                     <br /><br />
+                    <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
                     <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
                     <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
                     <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>

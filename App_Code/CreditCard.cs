@@ -41,29 +41,29 @@ public class CreditCard
             DateTime cardExpiration = new DateTime(expirationYear, expirationMonth, 1);
 
             #region
-            if (CCNumberCheck.IsMatch(CCNumber))
+            if (!CCNumberCheck.IsMatch(CCNumber))
             {
-                token = (token.Length > 0 ? ",<br />" : "") + "Please give a credit card number of 16 numbers";
+                token += (token.Length > 0 ? ",<br />" : "") + "Please give a credit card number of 16 numbers";
             }
 
-            if (expirationMonthDateCheck.IsMatch(expirationMonthDate))
+            if (!expirationMonthDateCheck.IsMatch(expirationMonthDate))
             {
-                token = (token.Length > 0 ? ",<br />" : "") + "Please give a expiration date that is a two digit month, slach ('/'), and two digit year";
+                token += (token.Length > 0 ? ",<br />" : "") + "Please give a expiration date that is a two digit month, slach ('/'), and two digit year";
             }
 
-            if (cardSecurityCodeCheck.IsMatch(cardSecurityCode))
+            if (!cardSecurityCodeCheck.IsMatch(cardSecurityCode))
             {
-                token = (token.Length > 0 ? ",<br />" : "") + "Please give a security code of 3 or 4 numbers";
+                token += (token.Length > 0 ? ",<br />" : "") + "Please give a security code of 3 or 4 numbers";
             }
 
-            if (ownerNameCheck.IsMatch(ownerName))
+            if (!ownerNameCheck.IsMatch(ownerName))
             {
-                token = (token.Length > 0 ? ",<br />" : "") + "Please do not include symbols in name";
+                token += (token.Length > 0 ? ",<br />" : "") + "Please do not include symbols in name";
             }
 
-            if (cardExpiration >= DateTime.Today)
+            if (cardExpiration < DateTime.Today)
             {
-                token = (token.Length > 0 ? ",<br />" : "") + "Cannot process order using a card with an expiration date of " + cardExpiration.Year.ToString();
+                token += (token.Length > 0 ? ",<br />" : "") + "Cannot process order using a card with an expiration date of " + cardExpiration.Year.ToString();
             }
             #endregion
 
@@ -88,6 +88,6 @@ public class CreditCard
         {
             token = "Fail:Invalid credit card data." + ex.Message;
         }
-        return token + "\nownerName=" + ownerName + ":amount=" + amount;
+        return token + "\nownerName=" + ownerName + ", amount=" + amount;
     }
 }

@@ -114,21 +114,24 @@ public partial class Payment : System.Web.UI.Page
 
     protected void lnkSubmit_Click(object sender, EventArgs e)
     {
-        Response.Write("start lnkSubmit_Click");
+        for(int x = 1; x <= 6; x++)
+        {
+            Session["v" + x.ToString()] = "";
+        }
         bool success = false;
-        this.lblError.Text = "";
         string location = this.ddlLocations.SelectedValue;
         Order tempOrder = MyOrder;
 
         #region gather order payment info
         tempOrder.CustomerFirstName = this.txtFirstName.Text;
         tempOrder.CustomerLastName  = this.txtLastName.Text;
+        tempOrder.Time              = DateTime.Now;
         tempOrder.Type              = this.ddlDeliveryType.SelectedValue;
         tempOrder.TimeSlot          = this.ddlTimes.SelectedValue;
-        tempOrder.Location          = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
-                                       this.ddlLocations.SelectedValue == "Sports Center" ||
-                                       this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :
-                                                                                                 this.ddlLocations.SelectedValue + " " + this.txtLocationPlace.Text);
+        tempOrder.Location          = (location == "Palm's Grille" ||
+                                       location == "Sports Center" ||
+                                       location == "Campus House Lobby" ? location :
+                                                                          location + " " + this.txtLocationPlace.Text);
         MyOrder = tempOrder; // saving the delivery type is important on this page
         #endregion
 
@@ -146,15 +149,19 @@ public partial class Payment : System.Web.UI.Page
                                                                                                    this.litPrice.Text.Replace("$", ""),
                                                                                                    Request);
             #endregion
+Session["v1"] = paymentResultString;
             #region Save_Credit_Card_Info
             string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
                                                                                              tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                              paymentResultString,
-                                                                                             paymentResultString.Contains("Pass:") ? "Y" : "N",
+                                                                                             paymentResultString.Contains("Pass") ? "Y" : "N",
                                                                                              Request);
             #endregion
+Session["v2"] = saveResultString;
 
             success = paymentResultString.Contains("Pass") && saveResultString.Contains("Pass");
+Session["v3"] = "success = " + success;
+Session["v4"] = "Fail = " + (paymentResultString.Contains("Fail") && saveResultString.Contains("Fail"));
 
             #region error messages
             if (paymentResultString.Contains("Fail"))
@@ -179,8 +186,10 @@ public partial class Payment : System.Web.UI.Page
                                                                                                 this.litPrice.Text.Replace("$", ""),
                                                                                                 Request);
             #endregion
+Session["v2"] = paymentResultString;
 
             success = paymentResultString.Contains("Pass");
+Session["v3"] = "success = " + success;
 
             #region error message
             if (paymentResultString.Contains("Fail"))
@@ -201,19 +210,21 @@ public partial class Payment : System.Web.UI.Page
             success = false;
         }
         #endregion
-
+Session["v4"] = "(!checkFoodDeliverability() || string.IsNullOrEmpty(tempOrder.Type) || string.IsNullOrEmpty(tempOrder.Location)) = " + (!checkFoodDeliverability() || string.IsNullOrEmpty(tempOrder.Type) || string.IsNullOrEmpty(tempOrder.Location));
+Session["v5"] = "success = " + success;
         #region send order or refund
         if (success)
         {
             string orderResultString = Data_Provider.Transact_Interface.Send_Order_Info(tempOrder, Request);
+Session["v6"] = "orderResultString = " + orderResultString;
             if (orderResultString.Contains("Pass"))
             {
                 Session.Remove("order");
                 Session.Remove("orderItemNumber");
 
-                //Pass:{"order_id" : "26", "order_number" : "1", "ASAP time" : "20:30-20:45"} Pass Pass
+                //Pass:{"order_id" : "26", "order_number" : "1", "ASAP time" : "08:30 PM"} Pass Pass
                 orderResultString = orderResultString.Remove(orderResultString.LastIndexOf("}")).Replace("Pass:{", "").Replace(": ", "#").Replace(" ", "").Replace("\"", "");
-                //order_id#26,order_number#1,ASAPtime#20:30-20:45
+                //order_id#26,order_number#1,ASAPtime#08:30PM
 
                 Session["orderNumber"] = orderResultString.Split("#,".ToCharArray())[3];
                 Session["ASAPTime"]    = orderResultString.Split("#,".ToCharArray())[5];
@@ -235,7 +246,7 @@ public partial class Payment : System.Web.UI.Page
                     string saveResultString = Data_Provider.Transact_Interface.Save_Credit_Card_Info(this.txtFirstName.Text + " " + this.txtLastName.Text,
                                                                                                      tempOrder.Time.ToString("yyyyMMdd HH:mm:ss"),
                                                                                                      paymentResultString,
-                                                                                                     paymentResultString.Contains("Pass:") ? "Y" : "N",
+                                                                                                     paymentResultString.Contains("Pass") ? "Y" : "N",
                                                                                                      Request);
                 }
                 else if (this.hidPaymentType.Value == "2") // PCC ID Card

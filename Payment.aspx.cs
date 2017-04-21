@@ -62,6 +62,10 @@ public partial class Payment : System.Web.UI.Page
             this.ddlTimes.Enabled = true;
             this.ddlTimes.DataSource = Data_Provider.Transact_Interface.Get_Times("", Request);
             this.ddlTimes.DataBind();
+            if (this.ddlTimes.Items.FindByValue(MyOrder.TimeSlot) != null)
+            {
+                this.ddlTimes.SelectedValue = MyOrder.TimeSlot;
+            }
 
             if (location != null)
             {
@@ -70,7 +74,7 @@ public partial class Payment : System.Web.UI.Page
                     this.ddlLocations.SelectedValue = location;
                     this.ddlLocations.SelectedItem.Enabled = true;
                     this.ddlLocations.Enabled = false;
-                    this.ddlTimes.Enabled = false;
+                    //this.ddlTimes.Enabled = false;
                 }
                 else if (location == "Sports Center" || location == "Campus House Lobby")
                 {
@@ -120,7 +124,7 @@ public partial class Payment : System.Web.UI.Page
         tempOrder.CustomerFirstName = this.txtFirstName.Text;
         tempOrder.CustomerLastName  = this.txtLastName.Text;
         tempOrder.Type              = this.ddlDeliveryType.SelectedValue;
-        tempOrder.TimeSlot          = "ASAP";
+        tempOrder.TimeSlot          = this.ddlTimes.SelectedValue;
         tempOrder.Location          = (this.ddlLocations.SelectedValue == "Palm's Grille" ||
                                        this.ddlLocations.SelectedValue == "Sports Center" ||
                                        this.ddlLocations.SelectedValue == "Campus House Lobby" ? this.ddlLocations.SelectedValue :
@@ -255,10 +259,10 @@ public partial class Payment : System.Web.UI.Page
         {
             Order tempOrder = MyOrder;
             tempOrder.Type = this.ddlDeliveryType.SelectedValue;
-            tempOrder.Location = this.txtFirstName.Text;
-            tempOrder.Location = this.txtLastName.Text;
+            tempOrder.CustomerFirstName = this.txtFirstName.Text;
+            tempOrder.CustomerLastName = this.txtLastName.Text;
             tempOrder.Location = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "Palm's Grille" : "");
-            tempOrder.TimeSlot = (this.ddlDeliveryType.SelectedValue == "PickUp" ? "ASAP" : "");
+            tempOrder.TimeSlot = ""; //(this.ddlDeliveryType.SelectedValue == "PickUp" ? "ASAP" : "");
             MyOrder = tempOrder;
 
             this.lblError.Text = "";
@@ -298,7 +302,7 @@ public partial class Payment : System.Web.UI.Page
             }
             if (!allFoodsMatchType)
             {
-                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more foods cannot be delivered. Please remove them or choose Pick-Up.";
+                this.lblError.Text += (this.lblError.Text.Length > 0 ? "<br />" : "") + "One or more items cannot be delivered. Please remove them or choose Pick-Up.";
             }
         }
         return allFoodsMatchType;

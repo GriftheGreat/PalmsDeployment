@@ -18,7 +18,7 @@
         <div class="row ">
 	        <h1 style="font-size: 32pt;">Thank You!</h1>
             <h2>Your order number is: <asp:Label ID="lblOrderNumber" runat="server" /></h2>
-            <asp:Label ID="lblASAPTime" runat="server" Text="Your order will be ready between " Visible="false" />
+            <asp:Label ID="lblASAPTime" runat="server" Text="Your order will be ready at " Visible="false" />
         </div>
     </div>
 </asp:Content>

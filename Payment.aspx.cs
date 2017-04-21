@@ -110,6 +110,7 @@ public partial class Payment : System.Web.UI.Page
 
     protected void lnkSubmit_Click(object sender, EventArgs e)
     {
+        Response.Write("start lnkSubmit_Click");
         bool success = false;
         this.lblError.Text = "";
         string location = this.ddlLocations.SelectedValue;

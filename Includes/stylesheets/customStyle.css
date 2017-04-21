@@ -12,6 +12,11 @@ body {
     
 }
 
+.aboveBackgroundImages {
+    position: relative;
+    z-index: 101;
+}
+
 .palmsgo_left, .palmsgo_right {
      height: 320px;
      width: 200px;
@@ -23,10 +28,6 @@ body {
 
 .palmsgo_left {
     left: 5px;
-}
-
-.carousel {
-    z-index: 101;
 }
 
 .palmsgo_right {

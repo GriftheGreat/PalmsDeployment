@@ -63,7 +63,7 @@
             </nav>
             <%-- Navigation ending --%>
         </header>
-        <div class="gradient">
+        <div class="aboveBackgroundImages">
             <asp:ContentPlaceHolder ID="Content" runat="server">
             </asp:ContentPlaceHolder>   
         </div>

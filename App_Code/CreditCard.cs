@@ -20,7 +20,7 @@ public class CreditCard
         Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/[0-9]{2,2}$");
         Regex cardSecurityCodeCheck    = new Regex("^[0-9]{3,4}$");
         Regex ownerNameCheck           = new Regex("^[^\\\\\\/?^!@#$%&*+=<>;:)(}{\\[\\]]+$");
-        Regex amountCheck              = new Regex("^-{0,1}[0-9]*\\.{0,1}[0-9]{0,2}$");
+        Regex amountCheck              = new Regex("^-{0,1}[0-9]{1,2}\\.{0,1}[0-9]{0,2}$");
 
         try
         {
@@ -51,6 +51,11 @@ public class CreditCard
             if (!ownerNameCheck.IsMatch(ownerName))
             {
                 token += (token.Length > 0 ? ",<br />" : "") + "Please do not include symbols in name";
+            }
+
+            if (!amountCheck.IsMatch(amount))
+            {
+                token += (token.Length > 0 ? ",<br />" : "") + "Amount is too large; Please remove some food";
             }
 
             if (cardExpiration < DateTime.Today)

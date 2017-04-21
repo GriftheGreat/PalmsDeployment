@@ -63,12 +63,16 @@
             </nav>
             <%-- Navigation ending --%>
         </header>
-        <div>
+        <div class="gradient">
             <asp:ContentPlaceHolder ID="Content" runat="server">
-            </asp:ContentPlaceHolder>
-
-            
+            </asp:ContentPlaceHolder>   
         </div>
+
+        <div>
+            <img alt="Palms Go" src="Includes/images/palmsgo_left.png" class="palmsgo_left img-responsive" />
+            <img alt="Palms Go" src="Includes/images/palmsgo_right.png" class="palmsgo_right img-responsive" />
+        </div>
+
         <footer>
             <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

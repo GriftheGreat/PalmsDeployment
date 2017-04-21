@@ -412,8 +412,8 @@
                     <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
                     <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>
 
-                    <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
                     <br /><br />
+                    <h1 class ="CYOP-Header">Choose Your Sauce:</h1>
                     <asp:Label id="CYOP_18" runat="server" customID="CYOP_18" type="sauce" class="btn CYOP-Button CYOP-Button-whole"    onclick="ToggleCYOP(this);" value="true"  state="none">Original</asp:Label>
                     <asp:Label id="CYOP_19" runat="server" customID="CYOP_19" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">Ranch</asp:Label>
                     <asp:Label id="CYOP_20" runat="server" customID="CYOP_20" type="sauce" class="btn CYOP-Button"                      onclick="ToggleCYOP(this);" value="false" state="none">BBQ</asp:Label>
@@ -483,7 +483,7 @@
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhNormalHeader"      runat="server" Visible="true">
                     <div class="row">
-                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-0.5col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 text-center" style="margin-bottom: 10px;">
                             <div class="HeaderButton" onclick="AccordionTrigger('<%# Eval("food_type_name") %>');">
                 </asp:PlaceHolder>
                 <asp:PlaceHolder ID="plhBigHeader"         runat="server" Visible="false"><%-- This is for our beverages we want to show as a big category when it is not --%>
@@ -529,8 +529,12 @@
         </asp:Repeater>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
-        <div class="create-your-own-container">
-            <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
+        <div class="container create-your-own-container">
+            <div class="row">
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
+                    <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
+                </div>
+            </div>   
         </div>
     </asp:PlaceHolder>
         <div class="spaceAroundCategories"></div>

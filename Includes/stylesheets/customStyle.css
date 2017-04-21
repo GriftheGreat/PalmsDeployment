@@ -1,8 +1,39 @@
-﻿body {
+﻿html{
+    
+}
+body {
+    height: 100%;
     font-size: 22px;
     font-family: 'Josefin Sans', sans-serif;
-    background-color: rgba(242,241,239, .9);
+    /*background-color: rgba(13,86,55, .9);*/
+
+
+    
+    
 }
+
+.palmsgo_left, .palmsgo_right {
+     height: 320px;
+     width: 200px;
+     opacity: .4;
+     bottom: 0;
+     position: fixed;
+     z-index: 100;
+}
+
+.palmsgo_left {
+    left: 5px;
+}
+
+.carousel {
+    z-index: 101;
+}
+
+.palmsgo_right {
+    right: 5px;
+}
+
+
 
 /* Navigation bar css code starts here */
 .navbar {
@@ -63,20 +94,40 @@ ul.nav a:hover {
 /* Modal code starts here */
 .modal-content {
     background-color: sandybrown;
-
 }
 
 .modalButton {
-    position: fixed;
-    right: 25px;
-    top: 110px;
+    position: relative;
     background-color: orangered;
-    border: none;
+    border: none !important;
+    outline: none !important;
+    margin-top: -70px;
+    width: 100%;
+    z-index: 103;
+}
+
+.modalButton:link {
+    background-color: orangered;
+}
+
+.modalButton:visited {
+     background-color: orangered;
 }
 
 .modalButton:hover {
-    background-color: rgba(13,86,55, .9);
+    background-color: rgba(13,86,55, .9) !important;
 }
+
+.modalButton:active {
+    background-color: orangered;
+}
+
+.btn-info {
+    background-color: orangered !important;
+}
+
+
+
 
 .modal-dialog {
    max-width: 920px; 
@@ -96,16 +147,15 @@ ul.nav a:hover {
 
 @media (max-width: 450px)
 {
-  .modalSizing {
-    width: 100%;
-  }
+    .modalSizing {
+        width: 100%;
+    }
     .modalButton {
-        top: -20px;
-      width:  76%;
-      position: relative;
-      margin-left: 69px;
-      background-color: orangered;
-      border: none;
+        width:  100%;
+        position: relative;
+        background-color: orangered;
+         border: none;
+        z-index: 103;
     }
 
     .modalButton:hover {

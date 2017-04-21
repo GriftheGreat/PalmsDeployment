@@ -18,6 +18,10 @@ body
     color: red;
 }
 
+.carousel-inner{
+     height: 100%;
+}
+
 .fill {
     width: 100%;
     position: relative;  

@@ -527,14 +527,14 @@
                 </div>
             </ItemTemplate>
         </asp:Repeater>
-        <div class="spaceAroundCategories"></div>
-    </div>
 
     <asp:PlaceHolder ID="plhCreateYourOwnPizza" runat="server"><%-- set Visible in Page_Load --%>
         <div class="create-your-own-container">
             <button type="button" class="btn btn-info btn-lg modalButton" data-toggle="modal" data-target="#modalCreateYourOwnPizza">Create Your Own Pizza</button>
         </div>
     </asp:PlaceHolder>
+        <div class="spaceAroundCategories"></div>
+    </div>
 
     <%-- Modal --%>
     <div id="modalFoodDetails" class="modal fade text-center" role="dialog">

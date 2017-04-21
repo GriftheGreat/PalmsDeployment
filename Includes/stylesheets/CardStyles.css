@@ -1,5 +1,6 @@
 ﻿.info-card {
-    padding-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 	-webkit-perspective: 1000px;
     -moz-perspective: 1000px;
     perspective: 1000px;

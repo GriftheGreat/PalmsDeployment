@@ -29,16 +29,8 @@ public class CreditCard
             // if (expirationYear < 30) 20nn; else 19nn 
             int expirationYear = System.Globalization.CultureInfo.CurrentCulture.Calendar.ToFourDigitYear(Convert.ToInt32(expirationMonthDate.Substring(3)));
 
-            if(expirationMonth == 12)
-            {
-                expirationYear += 1;
-            }
-            else
-            {
-                expirationMonth += 1;
-            }
-
             DateTime cardExpiration = new DateTime(expirationYear, expirationMonth, 1);
+            cardExpiration = cardExpiration.AddMonths(1);
 
             #region
             if (!CCNumberCheck.IsMatch(CCNumber))
@@ -63,7 +55,7 @@ public class CreditCard
 
             if (cardExpiration < DateTime.Today)
             {
-                token += (token.Length > 0 ? ",<br />" : "") + "Cannot process order using a card with an expiration date of " + cardExpiration.Year.ToString();
+                token += (token.Length > 0 ? ",<br />" : "") + "Cannot process order using a card with an expiration date of " + cardExpiration.AddMonths(-1).Month.ToString() + "/" + cardExpiration.AddMonths(-1).Year.ToString();
             }
             #endregion
 

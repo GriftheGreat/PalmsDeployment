@@ -14,7 +14,7 @@ public class CreditCard
     [WebMethod]
     public string Process_Credit_Card(string CCNumber, string expirationMonthDate, string ownerName, string cardSecurityCode, string amount)
     {
-        string token;
+        string token = "";
 
         Regex CCNumberCheck            = new Regex("^[0-9]{16,16}$");
         Regex expirationMonthDateCheck = new Regex("^(0[1-9]|1[0-2])\\/[0-9]{2,2}$");
@@ -40,12 +40,39 @@ public class CreditCard
 
             DateTime cardExpiration = new DateTime(expirationYear, expirationMonth, 1);
 
+            #region
+            if (CCNumberCheck.IsMatch(CCNumber))
+            {
+                token = (token.Length > 0 ? ",<br />" : "") + "Please give a credit card number of 16 numbers";
+            }
+
+            if (expirationMonthDateCheck.IsMatch(expirationMonthDate))
+            {
+                token = (token.Length > 0 ? ",<br />" : "") + "Please give a expiration date that is a two digit month, slach ('/'), and two digit year";
+            }
+
+            if (cardSecurityCodeCheck.IsMatch(cardSecurityCode))
+            {
+                token = (token.Length > 0 ? ",<br />" : "") + "Please give a security code of 3 or 4 numbers";
+            }
+
+            if (ownerNameCheck.IsMatch(ownerName))
+            {
+                token = (token.Length > 0 ? ",<br />" : "") + "Please do not include symbols in name";
+            }
+
+            if (cardExpiration >= DateTime.Today)
+            {
+                token = (token.Length > 0 ? ",<br />" : "") + "Cannot process order using a card with an expiration date of " + cardExpiration.Year.ToString();
+            }
+            #endregion
+
             if (CCNumberCheck.IsMatch(CCNumber) &&
-                expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
-                cardSecurityCodeCheck.IsMatch(cardSecurityCode) &&
-                ownerNameCheck.IsMatch(ownerName) &&
-                amountCheck.IsMatch(amount) &&
-                cardExpiration >= DateTime.Today)
+            expirationMonthDateCheck.IsMatch(expirationMonthDate) &&
+            cardSecurityCodeCheck.IsMatch(cardSecurityCode) &&
+            ownerNameCheck.IsMatch(ownerName) &&
+            amountCheck.IsMatch(amount) &&
+            cardExpiration >= DateTime.Today)
             {
                 // Logic for checking amount of money student has goes here.
                 // To simulate, the "check" will randomly pass or fail.
@@ -54,7 +81,7 @@ public class CreditCard
             }
             else
             {
-                token = "Fail:Invalid credit card data.";
+                token = "Fail:" + token + ".";
             }
         }
         catch(Exception ex)

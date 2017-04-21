@@ -407,7 +407,7 @@
 
                     <h1 class="CYOP-Header">Choose Your Crust:</h1>
                     <asp:Label id="CYOP_03"  runat="server" customID="CYOP_03" type="crust" class="btn CYOP-Button CYOP-Button-whole"   onclick="ToggleCYOP(this)" value="true">Thin Crust</asp:Label><span style="width:10px;">&nbsp;</span>
-                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Pan Crus</asp:Label><span style="width:10px;">&nbsp;</span>
+                    <asp:Label id="CYOP_04"  runat="server" customID="CYOP_04" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Pan Crust</asp:Label><span style="width:10px;">&nbsp;</span>
                     <asp:Label id="CYOP_05"  runat="server" customID="CYOP_05" type="crust" class="btn CYOP-Button"                     onclick="ToggleCYOP(this)" value="false">Stuffed Crust +$1.00</asp:Label>
                     <asp:Label id="placeholder_1"  runat="server" customID="CYOP-placeholder" ></asp:Label>
                     <asp:Label id="placeholder_2"  runat="server" customID="CYOP-placeholder" ></asp:Label>

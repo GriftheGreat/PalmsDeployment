@@ -68,10 +68,11 @@
             </asp:ContentPlaceHolder>   
         </div>
 
-        <div>
-            <img alt="Palms Go" src="Includes/images/palmsgo_left.png" class="palmsgo_left img-responsive" />
-            <img alt="Palms Go" src="Includes/images/palmsgo_right.png" class="palmsgo_right img-responsive" />
-        </div>
+        <asp:ContentPlaceHolder ID="Modals" runat="server">
+        </asp:ContentPlaceHolder>   
+
+        <img alt="Palms Go" src="Includes/images/palmsgo_left.png" class="palmsgo_left img-responsive" />
+        <img alt="Palms Go" src="Includes/images/palmsgo_right.png" class="palmsgo_right img-responsive" />
 
         <footer>
             <%-- jQuery (necessary for Bootstrap's JavaScript plugins) --%>

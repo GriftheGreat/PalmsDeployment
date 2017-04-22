@@ -30,6 +30,15 @@ public partial class Payment : System.Web.UI.Page
         }
         this.lblError.Text = "";
         checkFoodDeliverability(); // put here to be checked before a button click function clears lblError (and re-checks)
+
+        if (!Page.IsPostBack)
+        {
+            if (Request.ServerVariables["HTTP_REFERER"] != null && !Request.ServerVariables["HTTP_REFERER"].ToString().Contains(Request.Url.LocalPath))
+            {
+                Session["referURL2"] = Request.ServerVariables["HTTP_REFERER"].ToString();
+            }
+        }
+
     }
 
     protected void Page_PreRender(object sender, EventArgs e)
@@ -109,6 +118,20 @@ public partial class Payment : System.Web.UI.Page
                 this.rptItems.DataSource = MyOrder.Order_Elements;
                 this.rptItems.DataBind();
             }
+        }
+    }
+
+    protected void lnkBack_Click(object sender, EventArgs e)
+    {
+        if (Session["referURL2"] != null && !string.IsNullOrEmpty(Session["referURL2"].ToString()))
+        {
+            string refer = Session["referURL2"].ToString();
+            Session.Remove("referURL2");
+            Response.Redirect(refer, true);
+        }
+        else
+        {
+            Response.Redirect(URL.root(Request) + "Payment.aspx", true);
         }
     }
 
@@ -222,6 +245,7 @@ Session["v6"] = "orderResultString = " + orderResultString;
             {
                 Session.Remove("order");
                 Session.Remove("orderItemNumber");
+                Session.Remove("referURL2");
 
                 //Pass:{"order_id" : "26", "order_number" : "1", "ASAP time" : "08:30 PM"} Pass Pass
                 orderResultString = orderResultString.Remove(orderResultString.LastIndexOf("}")).Replace("Pass:{", "").Replace(": ", "#").Replace(" ", "").Replace("\"", "");

@@ -41,6 +41,17 @@ public partial class Cart : System.Web.UI.Page
                 }
                 MyOrder = tempOrder;
             }
+            else
+            {
+                if (Request.ServerVariables["HTTP_REFERER"] != null)
+                {
+                    string refer = Request.ServerVariables["HTTP_REFERER"].ToString();
+                    if (!refer.Contains(Request.Url.LocalPath) && !refer.Contains("Payment"))
+                    {
+                        Session["referURL"] = refer;
+                    }
+                }
+            }
             this.rptItems.DataSource = MyOrder.Order_Elements;
             this.rptItems.DataBind();
         }
@@ -122,14 +133,33 @@ public partial class Cart : System.Web.UI.Page
 
         ((Label)e.Item.FindControl("lblfrontprice")).Text = Data_Provider.correctPrices(((Order_Element)e.Item.DataItem).CalculateCost().ToString());
 
+        rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
+        rpt.DataBind();
+
         if (((Order_Element)e.Item.DataItem).ID == 130)
         {
-            rpt.DataSource = null;
+            foreach(RepeaterItem item in rpt.Items)
+            {
+                ((CheckBox)item.FindControl("chbAdded")).Enabled = false;
+                if (!((CheckBox)item.FindControl("chbAdded")).Checked)
+                {
+                    ((Panel)item.FindControl("pnlDetail")).Visible = false;
+                }
+            }
+        }
+    }
+
+    protected void lnkBack_Click(object sender, EventArgs e)
+    {
+        if (Session["referURL"] != null && !string.IsNullOrEmpty(Session["referURL"].ToString()))
+        {
+            string refer = Session["referURL"].ToString();
+            Session.Remove("referURL");
+            Response.Redirect(refer, true);
         }
         else
         {
-            rpt.DataSource = ((Order_Element)e.Item.DataItem).Details;
-            rpt.DataBind();
+            Response.Redirect(URL.root(Request) + "Cart.aspx", true);
         }
     }
 

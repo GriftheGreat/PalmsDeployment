@@ -155,6 +155,10 @@
             width: 80%
         }
 
+        .inputLabel {
+            width: 50%;
+        }
+
         .inputText {
             width: 100%;
         }
@@ -369,21 +373,17 @@
 
                     if (IDNumberCheck.test(txtIDNumber.val())) {
                         txtIDNumber.removeClass("bad-data");
-                        $("#idNumComplaint").hide();
                     }
                     else {
                         txtIDNumber.addClass("bad-data");
-                        $("#idNumComplaint").show();
                         isValid = false;
                     }
 
                     if (PasswordCheck.test(txtPassword.val())) {
                         txtPassword.removeClass("bad-data");
-                        $("#idPassComplaint").hide();
                     }
                     else {
                         txtPassword.addClass("bad-data");
-                        $("#idPassComplaint").show();
                         isValid = false;
                     }
                 }
@@ -529,51 +529,53 @@
                         <tr>
                             <td>Credit Card Number:</td>
                             <td class="help-tip">
-	                            <p>Must be 16 digits long</p>
+	                            <p>Must be 16 digits long.</p>
                             </td>
-                            <td><asp:TextBox ID="txtCreditCardNumber"    class="inputText"       runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardNumber"       runat="server" class="inputText" placeholder="################" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Security Code:</td>
                             <td class="help-tip">
 	                            <p>Must be 3 or 4 digits long. The security code is found on the back of your credit card.</p>
                             </td>
-                            <td><asp:TextBox ID="txtCreditCardSecurityCode"   class="inputText"          runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardSecurityCode" runat="server" class="inputText" placeholder="### or ####" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Exp. Date:</td>
                             <td class="help-tip">
-	                            <p>Format: mm/yy</p>
+	                            <p>April 2017 would be 04/17.</p>
                             </td>
-                            <td><asp:TextBox ID="txtCreditCardExpDate"    class="inputText"      runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardExpDate"      runat="server" class="inputText" placeholder="##/##" /></td>
                         </tr>
                         <tr>
                             <td>Credit Card Owner Name:</td>
                             <td class="help-tip">
 	                            <p>First and last name.</p>
                             </td>
-                            <td><asp:TextBox ID="txtCreditCardOwnerName"    class="inputText"            runat="server" /></td>
+                            <td><asp:TextBox ID="txtCreditCardOwnerName"    runat="server" class="inputText" /></td>
                         </tr>
                     </table>
                 </div>
                 <div class="payment-options-section" tabSection="2">
                     <table>
                         <tr>
-                            <td>ID Number: </td>
-                            <td><asp:TextBox ID="txtIDNumber" runat="server" /></td>
-                        </tr>
-                        <tr id="idNumComplaint">
-                            <td style="color:red">Enter your 6 digit ID number</td>
+                            <td class="inputLabel">ID Number: </td>
+                            <td class="help-tip">
+	                            <p>Enter your 6 digit ID number.</p>
+                            </td>
+                            <td><asp:TextBox ID="txtIDNumber" runat="server" class="inputText" placeholder="######" /></td>
                         </tr>
                         <tr>
-                            <td id="password">Password:</td>
-                            <td><asp:TextBox ID="txtPassword" runat="server" TextMode="Password" /></td>
-                        </tr>
-                        <tr id="idPassComplaint">
-                            <td style="color:red">Enter your 8 digit password</td>
+                            <td class="inputLabel" id="password">Password:</td>
+                            <html>why id ^^^^</html>
+                            <td class="help-tip">
+	                            <p>Enter your 8 digit password.</p>
+                            </td>
+                            <td><asp:TextBox ID="txtPassword" runat="server" class="inputText" TextMode="Password" placeholder="########" /></td>
                         </tr>
                     </table>
                 </div>
+                <asp:LinkButton ID="lnkBack"   runat="server" Text="Back"   OnClick="lnkBack_Click"   CssClass="payment-submit-button" /><span style="width:10px;">&nbsp;</span>
                 <asp:LinkButton ID="lnkSubmit" runat="server" Text="Submit" OnClick="lnkSubmit_Click" CssClass="payment-submit-button" />
             </div>
         </div>

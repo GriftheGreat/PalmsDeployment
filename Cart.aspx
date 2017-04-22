@@ -296,7 +296,7 @@
                     </table>
                 </div>
             </div>
-            <asp:Repeater ID="rptItems" runat="server" OnItemDataBound="rptItems_ItemDataBound">
+            <asp:Repeater       ID="rptItems"    runat="server" OnItemDataBound="rptItems_ItemDataBound">
                 <ItemTemplate>
                     <div class="row">
                         <div class="col-lg-12 cart-item">
@@ -330,7 +330,8 @@
                 </ItemTemplate>
             </asp:Repeater>
             <div class="row" style="text-align: center;">
-                <asp:LinkButton ID="lnkGoPay"    runat="server" Text="Pay" OnClick="lnkGoPay_Click" CssClass="payment-submit-button" />
+                <asp:LinkButton ID="lnkBack"     runat="server" Text="Back" OnClick="lnkBack_Click"  CssClass="payment-submit-button" /><span style="width:10px;">&nbsp;</span>
+                <asp:LinkButton ID="lnkGoPay"    runat="server" Text="Pay"  OnClick="lnkGoPay_Click" CssClass="payment-submit-button" />
             </div>
         </asp:PlaceHolder>
     </div>

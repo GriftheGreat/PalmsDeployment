@@ -12,7 +12,6 @@ public partial class ManagerUI : System.Web.UI.Page
         {
             FillGridView();
         }
-
     }
 
     public DataTable Get_Food()
